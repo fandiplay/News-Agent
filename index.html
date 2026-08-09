@@ -1,0 +1,1990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global News — Live Feed & AI Monetary Analysis</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js">
+    </script>
+    <style>
+        :root {
+            --bg-primary: #0B0E11;
+            --bg-surface: #202630;
+            --bg-surface-dark: #1F2430;
+            --bg-surface-hover: #29313D;
+            --text-primary: #FFFFFF;
+            --text-secondary: #EAECEF;
+            --text-tertiary: #A6A6A6;
+            --text-dark: #202630;
+            --text-muted: #606B77;
+            --accent-gold: #FCD535;
+            --accent-gold-hover: #E8C21D;
+            --accent-blue: #1F8DF9;
+            --accent-success: #2EBD85;
+            --accent-danger: #F6465D;
+            --border-default: #2B3139;
+            --border-hover: #3F4A57;
+            --radius-sm: 4px;
+            --radius-md: 10px;
+            --radius-lg: 16px;
+            --radius-pill: 50px;
+            --shadow-1: 0 1px 3px rgba(0, 0, 0, 0.12);
+            --shadow-4: 0 8px 24px rgba(0, 0, 0, 0.25);
+            --font-family: 'BinanceNova', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+            --font-mono: 'Menlo', 'Monaco', 'Consolas', monospace;
+            --font-size-h3: 20px;
+            --font-size-body: 14px;
+            --font-size-small: 12px;
+            --font-weight-regular: 400;
+            --font-weight-medium: 500;
+            --font-weight-bold: 600;
+            --font-weight-extrabold: 700;
+            --transition: 0.2s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg-primary);
+            font-family: var(--font-family);
+            color: var(--text-secondary);
+            line-height: 1.5;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-surface-dark);
+            border-bottom: 1px solid var(--border-default);
+            padding: 12px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(6px);
+            background: rgba(31, 36, 48, 0.92);
+        }
+        .header-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .header-left {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .logo {
+            font-weight: var(--font-weight-extrabold);
+            font-size: 1.4rem;
+            letter-spacing: -0.5px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .logo .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-gold);
+            border-radius: 50%;
+            animation: pulse-dot 1.6s infinite;
+        }
+        @keyframes pulse-dot {
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(252, 213, 53, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 0 8px rgba(252, 213, 53, 0);
+            }
+        }
+        .header-source {
+            font-size: 11px;
+            color: var(--text-tertiary);
+            margin-left: 4px;
+            letter-spacing: 0.2px;
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .article-count-badge {
+            background: var(--bg-surface-hover);
+            color: var(--text-tertiary);
+            padding: 6px 12px;
+            border-radius: var(--radius-pill);
+            font-weight: var(--font-weight-medium);
+            font-size: var(--font-size-small);
+            border: 1px solid var(--border-default);
+            white-space: nowrap;
+        }
+
+        /* Buttons: Pill Style */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            border: none;
+            border-radius: var(--radius-pill);
+            cursor: pointer;
+            font-weight: var(--font-weight-bold);
+            font-size: var(--font-size-small);
+            transition: all var(--transition);
+            white-space: nowrap;
+            height: 40px;
+            padding: 0 20px;
+            font-family: var(--font-family);
+        }
+        .btn-primary {
+            background: var(--accent-gold);
+            color: var(--text-dark);
+        }
+        .btn-primary:hover {
+            background: var(--accent-gold-hover);
+            opacity: 0.9;
+        }
+        .btn-primary:disabled {
+            background: #A89000;
+            color: #606B77;
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-default);
+        }
+        .btn-ghost:hover {
+            background: rgba(234, 236, 239, 0.1);
+            border-color: var(--text-secondary);
+        }
+        .btn-icon {
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            border-radius: 50%;
+            font-size: 16px;
+        }
+        .btn-icon.active {
+            background: var(--accent-blue);
+            border-color: var(--accent-blue);
+            color: #FFFFFF;
+        }
+
+        .spinner-small {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ========== CALENDAR NAVBAR ========== */
+        .calendar-section {
+            background: var(--bg-surface-dark);
+            border-bottom: 1px solid var(--border-default);
+            position: sticky;
+            top: 72px;
+            z-index: 99;
+            backdrop-filter: blur(6px);
+            background: rgba(31, 36, 48, 0.95);
+        }
+        .calendar-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+        .calendar-tabs-row {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            padding: 10px 0;
+            position: relative;
+        }
+        .calendar-tabs-row::-webkit-scrollbar {
+            display: none;
+        }
+        .calendar-tab {
+            flex: 0 0 auto;
+            min-width: 80px;
+            padding: 10px 16px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: var(--radius-md);
+            transition: all var(--transition);
+            border: 1px solid transparent;
+            background: transparent;
+            color: var(--text-tertiary);
+            font-family: var(--font-family);
+            font-size: var(--font-size-small);
+            font-weight: var(--font-weight-medium);
+            position: relative;
+            white-space: nowrap;
+            user-select: none;
+        }
+        .calendar-tab:hover {
+            background: var(--bg-surface-hover);
+            color: var(--text-secondary);
+            border-color: var(--border-hover);
+        }
+        .calendar-tab.active {
+            background: rgba(252, 213, 53, 0.1);
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+            font-weight: var(--font-weight-bold);
+            box-shadow: 0 0 16px rgba(252, 213, 53, 0.08);
+        }
+        .calendar-tab .tab-day {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            opacity: 0.7;
+            display: block;
+        }
+        .calendar-tab .tab-date {
+            font-size: 22px;
+            font-weight: var(--font-weight-extrabold);
+            line-height: 1;
+            display: block;
+            margin: 2px 0;
+        }
+        .calendar-tab .tab-month {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            opacity: 0.7;
+            display: block;
+        }
+        .calendar-tab .tab-event-dot {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background: var(--accent-gold);
+            border-radius: 50%;
+            margin-top: 3px;
+            opacity: 0;
+            transition: opacity var(--transition);
+        }
+        .calendar-tab.has-events .tab-event-dot {
+            opacity: 1;
+        }
+        .calendar-tab.active .tab-event-dot {
+            background: var(--accent-gold);
+            box-shadow: 0 0 8px rgba(252, 213, 53, 0.6);
+        }
+        .calendar-nav-btn {
+            flex: 0 0 auto;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 1px solid var(--border-default);
+            background: var(--bg-surface);
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition);
+            z-index: 2;
+        }
+        .calendar-nav-btn:hover {
+            background: var(--bg-surface-hover);
+            border-color: var(--text-secondary);
+        }
+        .calendar-nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        /* Calendar Event Panel */
+        .calendar-event-panel {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease, border 0.4s ease;
+            border-top: 0px solid var(--border-default);
+            background: var(--bg-surface);
+            border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+        }
+        .calendar-event-panel.open {
+            max-height: 520px;
+            border-top: 1px solid var(--border-default);
+            overflow-y: auto;
+        }
+        .calendar-event-panel-inner {
+            padding: 0 20px;
+            transition: padding 0.4s ease;
+        }
+        .calendar-event-panel.open .calendar-event-panel-inner {
+            padding: 16px 20px;
+        }
+        .calendar-event-panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .calendar-event-panel-title {
+            font-weight: var(--font-weight-extrabold);
+            font-size: 15px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .calendar-event-panel-count {
+            background: rgba(252, 213, 53, 0.15);
+            color: var(--accent-gold);
+            padding: 3px 10px;
+            border-radius: var(--radius-pill);
+            font-size: 11px;
+            font-weight: var(--font-weight-bold);
+        }
+        .calendar-event-close {
+            background: none;
+            border: 1px solid var(--border-default);
+            color: var(--text-tertiary);
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition);
+        }
+        .calendar-event-close:hover {
+            background: var(--bg-surface-hover);
+            color: var(--text-primary);
+        }
+        .calendar-event-time-group {
+            margin-bottom: 14px;
+        }
+        .calendar-event-time-label {
+            font-size: 11px;
+            font-weight: var(--font-weight-extrabold);
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .calendar-event-time-label::before {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-gold);
+            opacity: 0.5;
+        }
+        .calendar-event-time-label.special {
+            color: var(--accent-blue);
+        }
+        .calendar-event-time-label.special::before {
+            background: var(--accent-blue);
+            opacity: 0.7;
+        }
+        .calendar-event-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            border-radius: var(--radius-md);
+            margin-bottom: 4px;
+            transition: all var(--transition);
+            border-left: 2px solid transparent;
+            font-size: var(--font-size-small);
+        }
+        .calendar-event-item:hover {
+            background: var(--bg-surface-hover);
+            border-left-color: var(--border-hover);
+        }
+        .calendar-event-item.important {
+            border-left-color: var(--accent-danger);
+            background: rgba(246, 70, 93, 0.04);
+        }
+        .calendar-event-item.important:hover {
+            background: rgba(246, 70, 93, 0.08);
+        }
+        .calendar-event-currency {
+            flex: 0 0 auto;
+            padding: 3px 9px;
+            border-radius: var(--radius-pill);
+            font-weight: var(--font-weight-extrabold);
+            font-size: 11px;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+            min-width: 42px;
+            text-align: center;
+        }
+        .calendar-event-name {
+            flex: 1;
+            color: var(--text-secondary);
+            font-weight: var(--font-weight-medium);
+            line-height: 1.3;
+        }
+        .calendar-event-impact {
+            flex: 0 0 auto;
+            font-size: 10px;
+            opacity: 0.7;
+        }
+        .calendar-event-star {
+            color: var(--accent-danger);
+            margin-left: 2px;
+            font-size: 10px;
+        }
+        .calendar-no-events {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-tertiary);
+            font-size: var(--font-size-small);
+        }
+        .calendar-loading {
+            text-align: center;
+            padding: 16px;
+            color: var(--text-tertiary);
+        }
+
+        /* ========== MAIN CONTENT ========== */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px 24px 60px;
+        }
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-tertiary);
+        }
+        .loading .spinner {
+            display: inline-block;
+            width: 36px;
+            height: 36px;
+            border: 3px solid #333;
+            border-top-color: var(--accent-gold);
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            margin-bottom: 16px;
+        }
+        .error-box {
+            background: rgba(246, 70, 93, 0.1);
+            color: var(--accent-danger);
+            padding: 16px 20px;
+            border-radius: var(--radius-lg);
+            text-align: center;
+            border: 1px solid var(--accent-danger);
+            font-weight: var(--font-weight-medium);
+        }
+
+        /* Article Card */
+        .article-card {
+            background: var(--bg-surface);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-default);
+            margin-bottom: 20px;
+            overflow: hidden;
+            transition: all var(--transition);
+            animation: fadeInUp 0.4s ease forwards;
+            opacity: 0;
+        }
+        .article-card:hover {
+            background: var(--bg-surface-hover);
+            border-color: var(--border-hover);
+            box-shadow: var(--shadow-1);
+        }
+        .article-card.translated {
+            border-left: 4px solid var(--accent-success);
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(18px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .article-body {
+            padding: 24px;
+        }
+        .article-headline {
+            font-size: var(--font-size-h3);
+            font-weight: var(--font-weight-bold);
+            line-height: 1.4;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            letter-spacing: -0.2px;
+        }
+        .article-meta {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px;
+            font-size: var(--font-size-small);
+            color: var(--text-tertiary);
+            margin-bottom: 12px;
+        }
+        .article-meta .source {
+            background: rgba(31, 141, 249, 0.1);
+            color: var(--accent-blue);
+            padding: 4px 10px;
+            border-radius: var(--radius-pill);
+            font-weight: var(--font-weight-bold);
+        }
+        .article-meta .time {
+            font-weight: var(--font-weight-medium);
+        }
+        .article-meta .comment-count {
+            background: rgba(252, 213, 53, 0.1);
+            color: var(--accent-gold);
+            padding: 4px 10px;
+            border-radius: var(--radius-pill);
+            font-weight: var(--font-weight-bold);
+        }
+        .article-snippet {
+            font-size: var(--font-size-body);
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        .translate-btn {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-pill);
+            height: 36px;
+            padding: 0 16px;
+            font-weight: var(--font-weight-medium);
+            font-size: var(--font-size-small);
+            cursor: pointer;
+            transition: all var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: var(--font-family);
+        }
+        .translate-btn:hover {
+            background: rgba(234, 236, 239, 0.1);
+            border-color: var(--text-secondary);
+        }
+        .translate-btn.active {
+            background: var(--accent-blue);
+            border-color: var(--accent-blue);
+            color: #FFFFFF;
+        }
+        .translate-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Comments */
+        .comments-section {
+            margin-top: 20px;
+            border-top: 1px solid var(--border-default);
+            padding-top: 16px;
+        }
+        .comments-label {
+            font-weight: var(--font-weight-extrabold);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--text-tertiary);
+            margin-bottom: 12px;
+        }
+        .comment-item {
+            background: var(--bg-surface-dark);
+            border-radius: var(--radius-md);
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            font-size: var(--font-size-small);
+            color: var(--text-secondary);
+            border-left: 3px solid var(--border-default);
+            transition: var(--transition);
+        }
+        .comment-item:hover {
+            border-left-color: var(--accent-gold);
+            background: #29313D;
+        }
+        .comment-item.translated-comment {
+            border-left-color: var(--accent-success);
+        }
+        .comment-user {
+            font-weight: var(--font-weight-extrabold);
+            color: var(--text-primary);
+            margin-bottom: 4px;
+            font-size: var(--font-size-small);
+        }
+        .translation-badge {
+            display: inline-block;
+            background: var(--accent-success);
+            color: #FFFFFF;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: var(--radius-pill);
+            font-weight: var(--font-weight-extrabold);
+            margin-right: 6px;
+            vertical-align: middle;
+        }
+
+        /* AI Modal */
+        .ai-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 200;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .ai-modal-overlay.active {
+            display: flex;
+        }
+        .ai-modal {
+            background: var(--bg-surface);
+            border-radius: var(--radius-lg);
+            max-width: 700px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-4);
+            border: 1px solid var(--border-default);
+            animation: modalIn 0.3s ease;
+        }
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+        .ai-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            background: var(--bg-surface-dark);
+            border-bottom: 1px solid var(--border-default);
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+        }
+        .ai-modal-title {
+            font-weight: var(--font-weight-extrabold);
+            font-size: 1.2rem;
+            color: var(--accent-gold);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .ai-modal-close {
+            background: none;
+            border: none;
+            font-size: 1.6rem;
+            cursor: pointer;
+            color: var(--text-tertiary);
+            line-height: 1;
+            padding: 0 8px;
+        }
+        .ai-modal-close:hover {
+            color: var(--text-primary);
+        }
+        .ai-modal-content {
+            padding: 24px;
+            font-size: var(--font-size-body);
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+        .ai-modal-content h1,
+        .ai-modal-content h2,
+        .ai-modal-content h3 {
+            color: var(--text-primary);
+            margin: 20px 0 12px;
+            font-weight: var(--font-weight-bold);
+        }
+        .ai-modal-content h3 {
+            font-size: 18px;
+            color: var(--accent-gold);
+        }
+        .ai-modal-content ul,
+        .ai-modal-content ol {
+            padding-left: 24px;
+            margin: 8px 0;
+        }
+        .ai-modal-content li {
+            margin-bottom: 6px;
+        }
+        .ai-modal-content strong {
+            color: var(--accent-gold);
+        }
+        .ai-modal-content em {
+            color: var(--accent-danger);
+            font-style: normal;
+        }
+        .ai-modal-content code {
+            background: var(--bg-surface-dark);
+            padding: 2px 8px;
+            border-radius: var(--radius-sm);
+            font-family: var(--font-mono);
+            font-size: 0.9em;
+            color: var(--accent-blue);
+        }
+        .ai-modal-content blockquote {
+            border-left: 4px solid var(--accent-gold);
+            padding-left: 16px;
+            margin: 16px 0;
+            color: var(--text-tertiary);
+            background: rgba(252, 213, 53, 0.05);
+            padding: 12px;
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+        }
+        .ai-modal-loading {
+            text-align: center;
+            padding: 32px;
+            color: var(--text-tertiary);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .container {
+                padding: 16px;
+            }
+            .article-body {
+                padding: 20px;
+            }
+            .calendar-inner {
+                padding: 0 12px;
+            }
+            .calendar-tab {
+                min-width: 68px;
+                padding: 8px 10px;
+            }
+            .calendar-tab .tab-date {
+                font-size: 18px;
+            }
+        }
+        @media (max-width: 768px) {
+            .header {
+                padding: 12px 16px;
+            }
+            .header-inner {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .header-right {
+                width: 100%;
+                justify-content: flex-start;
+            }
+            .btn {
+                height: 36px;
+                padding: 0 16px;
+                font-size: 11px;
+            }
+            .btn-icon {
+                width: 36px;
+                height: 36px;
+            }
+            .article-headline {
+                font-size: 18px;
+            }
+            .container {
+                padding: 12px;
+            }
+            .article-body {
+                padding: 16px;
+            }
+            .ai-modal {
+                border-radius: var(--radius-md);
+            }
+            .calendar-section {
+                top: 100px;
+            }
+            .calendar-tab {
+                min-width: 60px;
+                padding: 6px 8px;
+            }
+            .calendar-tab .tab-date {
+                font-size: 16px;
+            }
+            .calendar-tab .tab-day {
+                font-size: 9px;
+            }
+            .calendar-tab .tab-month {
+                font-size: 9px;
+            }
+            .calendar-event-panel.open {
+                max-height: 400px;
+            }
+        }
+
+        /* ========== AI SETTINGS MODAL ========== */
+        .settings-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            z-index: 210;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .settings-modal-overlay.active { display: flex; }
+        .settings-modal {
+            background: var(--bg-surface);
+            border-radius: var(--radius-lg);
+            max-width: 560px; width: 100%;
+            max-height: 90vh; overflow-y: auto;
+            box-shadow: var(--shadow-4);
+            border: 1px solid var(--border-default);
+            animation: modalIn 0.3s ease;
+        }
+        .settings-modal-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 24px;
+            background: var(--bg-surface-dark);
+            border-bottom: 1px solid var(--border-default);
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+        }
+        .settings-modal-title {
+            font-weight: var(--font-weight-extrabold);
+            font-size: 1.1rem; color: var(--text-primary);
+            display: flex; align-items: center; gap: 8px;
+        }
+        .settings-modal-body { padding: 24px; }
+        .settings-field { margin-bottom: 16px; }
+        .settings-field label {
+            display: block;
+            font-size: var(--font-size-small);
+            font-weight: var(--font-weight-bold);
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+        .settings-field label .optional { color: var(--text-tertiary); font-weight: var(--font-weight-regular); }
+        .settings-field input[type="text"],
+        .settings-field input[type="password"],
+        .settings-field input[type="number"],
+        .settings-field textarea,
+        .settings-field select {
+            width: 100%; padding: 10px 14px;
+            background: var(--bg-surface-dark);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            font-family: var(--font-family);
+            font-size: var(--font-size-body);
+            transition: border var(--transition);
+        }
+        .settings-field input:focus, .settings-field textarea:focus {
+            outline: none; border-color: var(--accent-gold);
+        }
+        .settings-field textarea { resize: vertical; min-height: 80px; }
+        .settings-field .hint {
+            font-size: 11px; color: var(--text-tertiary);
+            margin-top: 4px;
+        }
+        .settings-modal-footer {
+            display: flex; gap: 8px; justify-content: flex-end;
+            padding: 16px 24px;
+            border-top: 1px solid var(--border-default);
+            background: var(--bg-surface-dark);
+            border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+            flex-wrap: wrap;
+        }
+        .btn-secondary {
+            background: var(--bg-surface-hover);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-default);
+        }
+        .btn-secondary:hover { border-color: var(--text-secondary); }
+        .btn-danger {
+            background: rgba(246,70,93,0.15);
+            color: var(--accent-danger);
+            border: 1px solid rgba(246,70,93,0.3);
+        }
+        .btn-danger:hover { background: rgba(246,70,93,0.25); }
+        .settings-status {
+            padding: 10px 14px; border-radius: var(--radius-md);
+            font-size: var(--font-size-small); margin-bottom: 16px;
+            display: none;
+        }
+        .settings-status.success {
+            display: block;
+            background: rgba(46,189,133,0.1); color: var(--accent-success);
+            border: 1px solid rgba(46,189,133,0.3);
+        }
+        .settings-status.error {
+            display: block;
+            background: rgba(246,70,93,0.1); color: var(--accent-danger);
+            border: 1px solid rgba(246,70,93,0.3);
+        }
+        .btn-sm { height: 32px; padding: 0 14px; font-size: 11px; }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-inner">
+            <div class="header-left">
+                <div class="logo">
+                    <span class="dot"></span> Global Economics News
+                </div>
+                <p class="header-source">Data berita dari Forex Factory & Kalender Ekonomi</p>
+            </div>
+            <div class="header-right">
+                <span class="article-count-badge" id="article-count">— articles</span>
+                <button class="btn btn-primary" id="ai-analysis-btn" onclick="analyzeMonetaryPolicy()" title="Analisis AI (API default)">
+                    <span id="ai-btn-text">🧠 Analisis AI</span>
+                </button>
+                <button class="btn btn-ghost" id="ai-agent-btn" onclick="analyzeWithAgent()" title="Analisis dengan AI Agent (custom API)">
+                    🤖 AI Agent
+                </button>
+                <button class="btn btn-icon btn-ghost" onclick="openAISettings()" title="Pengaturan AI Agent">⚙️</button>
+                <button class="btn btn-icon btn-ghost" onclick="fetchNews()" title="Refresh feed">↻</button>
+                <button class="btn btn-icon btn-ghost" id="translate-all-btn" onclick="toggleTranslateAll()" title="Terjemahkan semua">🇮🇩</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ========== CALENDAR NAVBAR SECTION ========== -->
+    <section class="calendar-section" id="calendar-section">
+        <div class="calendar-inner">
+            <div class="calendar-tabs-row" id="calendar-tabs-row">
+                <button class="calendar-nav-btn" id="cal-nav-left" onclick="scrollCalendarTabs(-1)" title="Scroll kiri">◂</button>
+                <div id="calendar-tabs-container" style="display:flex;gap:4px;overflow:hidden;flex:1;scroll-behavior:smooth;">
+                    <!-- Date tabs injected by JS -->
+                </div>
+                <button class="calendar-nav-btn" id="cal-nav-right" onclick="scrollCalendarTabs(1)" title="Scroll kanan">▸</button>
+            </div>
+        </div>
+        <!-- Event Panel -->
+        <div class="calendar-event-panel" id="calendar-event-panel">
+            <div class="calendar-event-panel-inner" id="calendar-event-panel-inner">
+                <!-- Events injected by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Modal -->
+    <div class="ai-modal-overlay" id="ai-modal-overlay">
+        <div class="ai-modal" id="ai-modal">
+            <div class="ai-modal-header">
+                <div class="ai-modal-title">🧠 Analisis Kebijakan Moneter AI</div>
+                <button class="ai-modal-close" onclick="closeAIModal()">&times;</button>
+            </div>
+            <div class="ai-modal-content" id="ai-modal-content">
+                <!-- konten dinamis -->
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Settings Modal -->
+    <div class="settings-modal-overlay" id="settings-modal-overlay">
+        <div class="settings-modal">
+            <div class="settings-modal-header">
+                <div class="settings-modal-title">⚙️ Pengaturan AI Agent</div>
+                <button class="ai-modal-close" onclick="closeAISettings()">&times;</button>
+            </div>
+            <div class="settings-modal-body">
+                <div class="settings-status" id="settings-status"></div>
+                <div class="settings-field">
+                    <label for="set-base-url">Base URL</label>
+                    <input type="text" id="set-base-url" placeholder="https://api.example.com/v1/chat/completions">
+                    <div class="hint">Endpoint OpenAI-compatible (POST)</div>
+                </div>
+                <div class="settings-field">
+                    <label for="set-api-key">API Key</label>
+                    <input type="password" id="set-api-key" placeholder="sk-... / thk_live_...">
+                </div>
+                <div class="settings-field">
+                    <label for="set-cors-proxy">CORS Proxy <span class="optional">(opsional — wajib kalau API diblokir CORS)</span></label>
+                    <input type="text" id="set-cors-proxy" placeholder="https://api.allorigins.win/raw?url=">
+                    <div class="hint">Contoh: https://api.allorigins.win/raw?url= — dipakai jika muncul "Failed to fetch" karena CORS</div>
+                </div>
+                <div class="settings-field">
+                    <label for="set-model">Model <span id="model-loading-hint" style="color:var(--text-tertiary);font-weight:400;"></span></label>
+                    <div style="display:flex;gap:8px;">
+                        <select id="set-model" style="flex:1;">
+                            <option value="">— pilih model —</option>
+                        </select>
+                        <button class="btn btn-secondary btn-sm" id="load-models-btn" onclick="loadModels()" title="Muat daftar model dari API">🔃 Muat</button>
+                    </div>
+                    <div class="hint">Masukkan Base URL + API Key valid, lalu otomatis muat model & pilih</div>
+                </div>
+                <div class="settings-field">
+                    <label for="set-temperature">Temperature</label>
+                    <input type="number" id="set-temperature" min="0" max="2" step="0.1" placeholder="0.7">
+                </div>
+                <div class="settings-field">
+                    <label for="set-timeout">Timeout (detik)</label>
+                    <input type="number" id="set-timeout" min="5" max="120" placeholder="30">
+                </div>
+                <div class="settings-field">
+                    <label for="set-system-prompt">System Prompt</label>
+                    <textarea id="set-system-prompt" rows="4" placeholder="Kamu adalah analis kebijakan moneter..."></textarea>
+                </div>
+            </div>
+            <div class="settings-modal-footer">
+                <button class="btn btn-danger btn-sm" onclick="resetAISettings()">🗑️ Reset</button>
+                <button class="btn btn-secondary btn-sm" id="test-agent-btn" onclick="testAgentConnection()">🔌 Tes Koneksi</button>
+                <button class="btn btn-secondary btn-sm" onclick="closeAISettings()">Tutup</button>
+                <button class="btn btn-primary btn-sm" onclick="saveAISettings()">💾 Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container" id="news-container">
+        <div class="loading">
+            <div class="spinner"></div>
+            <p>Mengambil berita terbaru…</p>
+        </div>
+    </main>
+
+    <script src="js/settings.js"></script>
+    <script src="js/ai.js"></script>
+    <script src="js/ai-agent.js"></script>
+    <script>
+        const API_URL = 'https://api.tokocoding.my.id/api/ff';
+        const CALENDAR_API_URL = 'https://api.tokocoding.my.id/api/kalender';
+        const container = document.getElementById('news-container');
+        const countEl = document.getElementById('article-count');
+        const translateAllBtn = document.getElementById('translate-all-btn');
+        const aiBtn = document.getElementById('ai-analysis-btn');
+        const aiBtnText = document.getElementById('ai-btn-text');
+        const aiModalOverlay = document.getElementById('ai-modal-overlay');
+        const aiModalContent = document.getElementById('ai-modal-content');
+
+        let allArticlesData = [];
+        let globalTranslated = false;
+        let translationInProgress = false;
+        let aiAnalysisInProgress = false;
+
+        // ========== CALENDAR DATA & LOGIC ==========
+        let calendarData = {}; // { "Wed Jul 29": [ {time, currency, event, important}, ... ], ... }
+        let calendarDatesOrder = []; // ordered list of date strings
+        let selectedCalendarDate = null;
+        let calendarEventPanelOpen = false;
+
+        const currencyColorMap = {
+            'USD': { bg: 'rgba(31,141,249,0.18)', text: '#1F8DF9', border: 'rgba(31,141,249,0.35)' },
+            'EUR': { bg: 'rgba(46,189,133,0.18)', text: '#2EBD85', border: 'rgba(46,189,133,0.35)' },
+            'JPY': { bg: 'rgba(246,70,93,0.18)', text: '#F6465D', border: 'rgba(246,70,93,0.35)' },
+            'GBP': { bg: 'rgba(168,85,247,0.18)', text: '#A855F7', border: 'rgba(168,85,247,0.35)' },
+            'AUD': { bg: 'rgba(245,158,11,0.18)', text: '#F59E0B', border: 'rgba(245,158,11,0.35)' },
+            'CAD': { bg: 'rgba(236,72,153,0.18)', text: '#EC4899', border: 'rgba(236,72,153,0.35)' },
+            'CHF': { bg: 'rgba(20,184,166,0.18)', text: '#14B8A6', border: 'rgba(20,184,166,0.35)' },
+            'NZD': { bg: 'rgba(6,182,212,0.18)', text: '#06B6D4', border: 'rgba(6,182,212,0.35)' },
+            'CNY': { bg: 'rgba(251,146,60,0.18)', text: '#FB923C', border: 'rgba(251,146,60,0.35)' },
+        };
+
+        const importantEventKeywords = [
+            'Federal Funds Rate', 'FOMC Statement', 'FOMC Press Conference', 'BOJ Policy Rate',
+            'Monetary Policy Statement', 'BOJ Outlook Report', 'Official Bank Rate', 'MPC Official',
+            'BOE Monetary Policy Report', 'Non-Farm', 'NFP', 'CPI', 'GDP', 'Unemployment Rate',
+            'Payrolls', 'ECB Press Conference', 'BOC Summary', 'RBA Gov', 'BOJ Press Conference',
+            'Advance GDP', 'Core PCE', 'Employment Cost Index', 'CB Consumer Confidence'
+        ];
+
+        function isImportantEvent(eventName) {
+            return importantEventKeywords.some(keyword =>
+                eventName.toLowerCase().includes(keyword.toLowerCase())
+            );
+        }
+
+        function getCurrencyStyle(currency) {
+            const upper = (currency || '').toUpperCase().trim();
+            if (currencyColorMap[upper]) return currencyColorMap[upper];
+            return { bg: 'rgba(166,166,166,0.15)', text: '#A6A6A6', border: 'rgba(166,166,166,0.3)' };
+        }
+
+        function parseCalendarData(rawData) {
+            const calendar = {};
+            let currentDate = null;
+            let currentTime = null;
+            const dateRegex =
+                /^(Sun|Mon|Tue|Wed|Thu|Fri|Sat)\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{1,2}$/;
+            const timeRegex = /^\d{1,2}:\d{2}(am|pm)$/;
+
+            for (const item of rawData) {
+                const label = (item.label || '').trim();
+                const v1 = (item.value1 || '').trim();
+                const v2 = (item.value2 || '').trim();
+                const v3 = (item.value3 || '').trim();
+                const v4 = (item.value4 || '').trim();
+
+                // Case 1: Pure date header
+                if (dateRegex.test(label) && !v1 && !v2 && !v3 && !v4) {
+                    currentDate = label;
+                    currentTime = null;
+                    if (!calendar[currentDate]) calendar[currentDate] = [];
+                    continue;
+                }
+
+                // Case 2: Date label with event (value1 = time)
+                if (dateRegex.test(label) && v1 && timeRegex.test(v1)) {
+                    currentDate = label;
+                    currentTime = v1;
+                    if (!calendar[currentDate]) calendar[currentDate] = [];
+                    const eventName = v3 || v4 || '';
+                    calendar[currentDate].push({
+                        time: v1,
+                        currency: v2 || '',
+                        event: eventName,
+                        important: isImportantEvent(eventName),
+                    });
+                    continue;
+                }
+
+                // Case 3: Empty label - continuation of same time
+                if (label === '' && currentDate) {
+                    const eventName = v3 || v4 || '';
+                    calendar[currentDate].push({
+                        time: currentTime || '',
+                        currency: v1 || '',
+                        event: eventName,
+                        important: isImportantEvent(eventName),
+                    });
+                    continue;
+                }
+
+                // Case 4: Time label or special
+                if ((timeRegex.test(label) || label === 'All Day' || label === 'Tentative') && currentDate) {
+                    currentTime = label;
+                    const eventName = v3 || v4 || '';
+                    calendar[currentDate].push({
+                        time: label,
+                        currency: v1 || '',
+                        event: eventName,
+                        important: isImportantEvent(eventName),
+                    });
+                    continue;
+                }
+            }
+            return calendar;
+        }
+
+        function groupEventsByTime(events) {
+            const grouped = [];
+            let currentGroup = null;
+            for (const ev of events) {
+                if (!currentGroup || currentGroup.time !== ev.time) {
+                    currentGroup = { time: ev.time, events: [ev] };
+                    grouped.push(currentGroup);
+                } else {
+                    currentGroup.events.push(ev);
+                }
+            }
+            return grouped;
+        }
+
+        function buildCalendarTabs() {
+            const tabsContainer = document.getElementById('calendar-tabs-container');
+            if (!tabsContainer) return;
+            tabsContainer.innerHTML = '';
+
+            calendarDatesOrder.forEach(dateStr => {
+                const events = calendarData[dateStr] || [];
+                const hasEvents = events.length > 0;
+                const parts = dateStr.split(' ');
+                const dayName = parts[0] || '';
+                const monthName = parts[1] || '';
+                const dateNum = parts[2] || '';
+
+                const tab = document.createElement('button');
+                tab.className = 'calendar-tab' + (hasEvents ? ' has-events' : '');
+                if (dateStr === selectedCalendarDate && calendarEventPanelOpen) {
+                    tab.classList.add('active');
+                }
+                tab.innerHTML = `
+                    <span class="tab-day">${dayName}</span>
+                    <span class="tab-date">${dateNum}</span>
+                    <span class="tab-month">${monthName}</span>
+                    <span class="tab-event-dot"></span>
+                `;
+                tab.title = `${dateStr} — ${hasEvents ? events.length + ' event' + (events.length > 1 ? 's' : '') : 'No events'}`;
+                tab.addEventListener('click', () => toggleCalendarDate(dateStr));
+                tabsContainer.appendChild(tab);
+            });
+        }
+
+        function toggleCalendarDate(dateStr) {
+            if (selectedCalendarDate === dateStr && calendarEventPanelOpen) {
+                closeCalendarPanel();
+                return;
+            }
+            selectedCalendarDate = dateStr;
+            calendarEventPanelOpen = true;
+            renderEventPanel(dateStr);
+            buildCalendarTabs();
+            document.getElementById('calendar-event-panel').classList.add('open');
+        }
+
+        function closeCalendarPanel() {
+            calendarEventPanelOpen = false;
+            document.getElementById('calendar-event-panel').classList.remove('open');
+            buildCalendarTabs();
+        }
+
+        function renderEventPanel(dateStr) {
+            const panelInner = document.getElementById('calendar-event-panel-inner');
+            if (!panelInner) return;
+            const events = calendarData[dateStr] || [];
+            const grouped = groupEventsByTime(events);
+
+            if (events.length === 0) {
+                panelInner.innerHTML = `
+                    <div class="calendar-event-panel-header">
+                        <div class="calendar-event-panel-title">📅 ${dateStr}</div>
+                        <button class="calendar-event-close" onclick="closeCalendarPanel()">✕</button>
+                    </div>
+                    <div class="calendar-no-events">Tidak ada event ekonomi untuk tanggal ini.</div>`;
+                return;
+            }
+
+            let html = `
+                <div class="calendar-event-panel-header">
+                    <div class="calendar-event-panel-title">
+                        📅 ${dateStr}
+                        <span class="calendar-event-panel-count">${events.length} event${events.length > 1 ? 's' : ''}</span>
+                    </div>
+                    <button class="calendar-event-close" onclick="closeCalendarPanel()">✕</button>
+                </div>`;
+
+            grouped.forEach(group => {
+                const timeClass = (group.time === 'All Day' || group.time === 'Tentative') ? ' special' : '';
+                html +=
+                    `<div class="calendar-event-time-group">
+                    <div class="calendar-event-time-label${timeClass}">🕐 ${group.time || 'TBA'}</div>`;
+                group.events.forEach(ev => {
+                    const cs = getCurrencyStyle(ev.currency);
+                    const importantClass = ev.important ? ' important' : '';
+                    const starHtml = ev.important ? '<span class="calendar-event-star">⭐</span>' : '';
+                    html += `
+                        <div class="calendar-event-item${importantClass}">
+                            <span class="calendar-event-currency" style="background:${cs.bg};color:${cs.text};border:1px solid ${cs.border};">${escapeHTML(ev.currency)}</span>
+                            <span class="calendar-event-name">${escapeHTML(ev.event)}${starHtml}</span>
+                        </div>`;
+                });
+                html += `</div>`;
+            });
+
+            panelInner.innerHTML = html;
+        }
+
+        function scrollCalendarTabs(direction) {
+            const tabsContainer = document.getElementById('calendar-tabs-container');
+            if (!tabsContainer) return;
+            const scrollAmount = 200;
+            tabsContainer.scrollBy({
+                left: direction * scrollAmount,
+                behavior: 'smooth'
+            });
+        }
+
+        async function fetchCalendarData() {
+            const tabsContainer = document.getElementById('calendar-tabs-container');
+            if (tabsContainer) {
+                tabsContainer.innerHTML =
+                    '<div class="calendar-loading" style="width:100%;text-align:center;padding:12px;">Memuat kalender...</div>';
+            }
+            try {
+                const response = await fetch(CALENDAR_API_URL);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                const json = await response.json();
+                if (!json.ok || !Array.isArray(json.data)) throw new Error('Invalid calendar API response');
+
+                calendarData = parseCalendarData(json.data);
+                calendarDatesOrder = Object.keys(calendarData).sort((a, b) => {
+                    // Sort by date
+                    const dateA = new Date(a + ' 2026');
+                    const dateB = new Date(b + ' 2026');
+                    return dateA - dateB;
+                });
+
+                // Auto-select a date: try today first, otherwise first date
+                const today = new Date();
+                const todayStr = today.toLocaleDateString('en-US', {
+                    weekday: 'short',
+                    month: 'short',
+                    day: 'numeric'
+                }).replace(/,/g, '');
+                // Try matching
+                let matchedDate = null;
+                const todayParts = todayStr.split(' ');
+                if (todayParts.length >= 3) {
+                    const todayFormatted = `${todayParts[0]} ${todayParts[1]} ${todayParts[2]}`;
+                    if (calendarDatesOrder.includes(todayFormatted)) {
+                        matchedDate = todayFormatted;
+                    }
+                }
+                if (!matchedDate && calendarDatesOrder.length > 0) {
+                    // Find closest date
+                    const todayTime = today.getTime();
+                    let closestDate = calendarDatesOrder[0];
+                    let closestDiff = Infinity;
+                    for (const d of calendarDatesOrder) {
+                        const dTime = new Date(d + ' 2026').getTime();
+                        const diff = Math.abs(dTime - todayTime);
+                        if (diff < closestDiff) {
+                            closestDiff = diff;
+                            closestDate = d;
+                        }
+                    }
+                    matchedDate = closestDate;
+                }
+
+                selectedCalendarDate = matchedDate;
+                calendarEventPanelOpen = true;
+                buildCalendarTabs();
+                if (selectedCalendarDate) {
+                    renderEventPanel(selectedCalendarDate);
+                    document.getElementById('calendar-event-panel').classList.add('open');
+                }
+            } catch (err) {
+                console.error('Calendar fetch error:', err);
+                if (tabsContainer) {
+                    tabsContainer.innerHTML =
+                        '<span style="color:#F6465D;font-size:11px;padding:12px;">⚠️ Gagal memuat kalender. <button onclick="fetchCalendarData()" style="color:#FCD535;background:none;border:none;cursor:pointer;text-decoration:underline;">Coba lagi</button></span>';
+                }
+            }
+        }
+
+        // ========== TRANSLATION HELPERS ==========
+        async function translateText(text, targetLang = 'id', sourceLang = 'en') {
+            if (!text || text.trim().length === 0) return text;
+            if (text.length > 1500) {
+                const chunks = [];
+                let remaining = text;
+                while (remaining.length > 0) {
+                    if (remaining.length <= 1500) { chunks.push(remaining); break; }
+                    let breakPoint = remaining.lastIndexOf('.', 1400);
+                    if (breakPoint === -1 || breakPoint < 500) breakPoint = remaining.lastIndexOf(' ', 1400);
+                    if (breakPoint === -1 || breakPoint < 500) breakPoint = 1400;
+                    chunks.push(remaining.substring(0, breakPoint + 1));
+                    remaining = remaining.substring(breakPoint + 1);
+                }
+                const translatedChunks = await Promise.all(chunks.map(chunk => translateSingleChunk(chunk,
+                    targetLang, sourceLang)));
+                return translatedChunks.join(' ');
+            }
+            return await translateSingleChunk(text, targetLang, sourceLang);
+        }
+
+        async function translateSingleChunk(text, targetLang, sourceLang) {
+            const url =
+                `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLang}&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`;
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Translation API failed');
+                const data = await response.json();
+                if (data && data[0] && Array.isArray(data[0])) {
+                    return data[0].map(segment => segment[0]).join('');
+                }
+                return text;
+            } catch (err) {
+                console.warn('Translation error:', err);
+                return text;
+            }
+        }
+
+        // ========== PARSER ==========
+        function parseNewsItem(item) {
+            const title = item.newsblock__title || 'Untitled Article';
+            const body = item.newsblock__body || '';
+            const sourceMatch = body.match(/From\s+([^\|\n]+)/i);
+            const source = sourceMatch ? sourceMatch[1].trim() : '';
+            const timeMatch = body.match(/\|\s*(\d+\s*(?:hr|min|hour|minute|day)s?\s*(?:\d+\s*(?:min|hr|hour|minute)s?)?\s*ago)/i);
+            const time = timeMatch ? timeMatch[1].trim() : '';
+            const commentMatch = body.match(/(\d+)\s*comments?/i);
+            const commentCount = commentMatch ? parseInt(commentMatch[1], 10) : 0;
+            let snippet = body
+                .replace(/\|\s*\d+\s*(?:hr|min|hour|minute|day)s?\s*(?:\d+\s*(?:min|hr|hour|minute)s?)?\s*ago\s*\|?/gi, '')
+                .replace(/From\s+[^\s\|\n]+/i, '')
+                .replace(/\d+\s*comments?/gi, '')
+                .replace(/\|/g, '')
+                .replace(/\s+/g, ' ')
+                .trim();
+            if (snippet.length > 200) snippet = snippet.substring(0, 200) + '...';
+            return { headline: title, source, time, commentCount, snippet };
+        }
+
+        function parseComments(bodyString) {
+            if (!bodyString || typeof bodyString !== 'string' || bodyString.trim() === '') return [];
+            // In the new API format, comments are not provided separately.
+            return [];
+        }
+
+        function escapeHTML(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        // ========== ARTICLE CARD BUILDER ==========
+        function buildArticleCardHTML(item, index, isTranslated = false, translatedData = null) {
+            const flexData = translatedData || parseNewsItem(item);
+            const comments = parseComments(item.newsblock__body);
+            const cardId = `article-${index}`;
+
+            let metaHTML = '';
+            if (flexData.source) metaHTML += `<span class="source">${escapeHTML(flexData.source)}</span>`;
+            if (flexData.time) metaHTML +=
+                `<span class="time">🕐 ${escapeHTML(flexData.time)}</span>`;
+            if (flexData.commentCount > 0) metaHTML +=
+                `<span class="comment-count">💬 ${flexData.commentCount} comment${flexData.commentCount !== 1 ? 's' : ''}</span>`;
+
+            let commentsHTML = '';
+            if (comments.length > 0) {
+                commentsHTML = `
+                    <div class="comments-section" id="comments-${index}">
+                        <div class="comments-label">🗨️ Top Comments</div>
+                        ${comments.map((c, ci) => `
+                            <div class="comment-item" id="comment-${index}-${ci}">
+                                <div class="comment-user">@${escapeHTML(c.user)}</div>
+                                <div class="comment-text" data-original="${escapeHTML(c.text)}">${escapeHTML(c.text)}</div>
+                            </div>
+                        `).join('')}
+                    </div>`;
+            } else if (flexData.commentCount > 0) {
+                commentsHTML = `
+                    <div class="comments-section" id="comments-${index}">
+                        <div class="comments-label">🗨️ Comments</div>
+                        <p class="no-comments" style="color: #A6A6A6;">No comment preview available.</p>
+                    </div>`;
+            }
+
+            const translatedClass = isTranslated ? ' translated' : '';
+            const badgeHTML = isTranslated ? '<span class="translation-badge">ID</span> ' : '';
+
+            return `
+                <article class="article-card${translatedClass}" id="${cardId}" data-index="${index}">
+                    <div class="article-body">
+                        <h2 class="article-headline" data-original="${escapeHTML(parseNewsItem(item).headline)}">
+                            ${badgeHTML}${escapeHTML(flexData.headline)}
+                        </h2>
+                        ${metaHTML ? `<div class="article-meta">${metaHTML}</div>` : ''}
+                        ${flexData.snippet ? `<p class="article-snippet" data-original="${escapeHTML(parseNewsItem(item).snippet)}">${escapeHTML(flexData.snippet)}</p>` : ''}
+                        <button class="translate-btn" id="translate-btn-${index}" onclick="toggleArticleTranslation(${index})" title="Terjemahkan artikel ini ke Bahasa Indonesia">
+                            🇮🇩 Terjemahkan
+                        </button>
+                        ${commentsHTML}
+                    </div>
+                </article>
+            `;
+        }
+
+        // ========== ARTICLE TRANSLATION ==========
+        async function toggleArticleTranslation(index) {
+            if (translationInProgress) return;
+            const btn = document.getElementById(`translate-btn-${index}`);
+            const card = document.getElementById(`article-${index}`);
+            if (!card) return;
+            const isCurrentlyTranslated = card.classList.contains('translated');
+
+            if (isCurrentlyTranslated) {
+                revertArticleTranslation(index);
+                updateGlobalButtonState();
+                return;
+            }
+
+            translationInProgress = true;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-small"></span> Menerjemahkan…';
+
+            try {
+                const item = allArticlesData[index];
+                const flexData = parseNewsItem(item);
+                const comments = parseComments(item.newsblock__body);
+
+                const translatedHeadline = await translateText(flexData.headline);
+                let translatedSnippet = '';
+                if (flexData.snippet) translatedSnippet = await translateText(flexData.snippet);
+
+                const headlineEl = card.querySelector('.article-headline');
+                headlineEl.textContent = translatedHeadline;
+                headlineEl.classList.add('translated-text');
+                if (!headlineEl.querySelector('.translation-badge')) {
+                    const badge = document.createElement('span');
+                    badge.className = 'translation-badge';
+                    badge.textContent = 'ID';
+                    headlineEl.prepend(badge);
+                }
+
+                const snippetEl = card.querySelector('.article-snippet');
+                if (snippetEl && translatedSnippet) {
+                    snippetEl.textContent = translatedSnippet;
+                    snippetEl.classList.add('translated-text');
+                }
+
+                const commentTexts = card.querySelectorAll('.comment-text');
+                for (const ct of commentTexts) {
+                    const original = ct.getAttribute('data-original');
+                    if (original) {
+                        const translatedComment = await translateText(original);
+                        ct.textContent = translatedComment;
+                        ct.classList.add('translated-text');
+                    }
+                }
+                const commentItems = card.querySelectorAll('.comment-item');
+                commentItems.forEach(ci => ci.classList.add('translated-comment'));
+
+                card.classList.add('translated');
+                btn.classList.add('active');
+                btn.innerHTML = '🇮🇩 Kembali ke Asli';
+            } catch (err) {
+                console.error('Translation failed', err);
+                btn.innerHTML = '🇮🇩 Terjemahkan (gagal)';
+            } finally {
+                btn.disabled = false;
+                translationInProgress = false;
+                updateGlobalButtonState();
+            }
+        }
+
+        function revertArticleTranslation(index) {
+            const card = document.getElementById(`article-${index}`);
+            const btn = document.getElementById(`translate-btn-${index}`);
+            if (!card || !btn) return;
+            const item = allArticlesData[index];
+            const flexData = parseNewsItem(item);
+
+            const headlineEl = card.querySelector('.article-headline');
+            const badge = headlineEl ? headlineEl.querySelector('.translation-badge') : null;
+            if (badge) badge.remove();
+            if (headlineEl) {
+                headlineEl.textContent = flexData.headline;
+                headlineEl.classList.remove('translated-text');
+            }
+
+            const snippetEl = card.querySelector('.article-snippet');
+            if (snippetEl) {
+                snippetEl.textContent = flexData.snippet;
+                snippetEl.classList.remove('translated-text');
+            }
+
+            const commentTexts = card.querySelectorAll('.comment-text');
+            commentTexts.forEach(ct => {
+                const original = ct.getAttribute('data-original');
+                if (original) {
+                    ct.textContent = original;
+                    ct.classList.remove('translated-text');
+                }
+            });
+            const commentItems = card.querySelectorAll('.comment-item');
+            commentItems.forEach(ci => ci.classList.remove('translated-comment'));
+
+            card.classList.remove('translated');
+            btn.classList.remove('active');
+            btn.innerHTML = '🇮🇩 Terjemahkan';
+        }
+
+        // ========== TRANSLATE ALL ==========
+        async function toggleTranslateAll() {
+            if (translationInProgress) return;
+            if (globalTranslated) {
+                for (let i = 0; i < allArticlesData.length; i++) {
+                    const card = document.getElementById(`article-${i}`);
+                    if (card && card.classList.contains('translated')) revertArticleTranslation(i);
+                }
+                globalTranslated = false;
+                translateAllBtn.classList.remove('active');
+            } else {
+                globalTranslated = true;
+                translateAllBtn.classList.add('active');
+                translateAllBtn.disabled = true;
+                for (let i = 0; i < allArticlesData.length; i++) {
+                    const card = document.getElementById(`article-${i}`);
+                    if (card && !card.classList.contains('translated')) {
+                        try { await toggleArticleTranslation(i); } catch (e) { console.warn('Failed', i); }
+                        await new Promise(resolve => setTimeout(resolve, 300));
+                    }
+                }
+                translateAllBtn.disabled = false;
+                translationInProgress = false;
+            }
+            updateGlobalButtonState();
+        }
+
+        function updateGlobalButtonState() {
+            const cards = document.querySelectorAll('.article-card');
+            const allTranslated = cards.length > 0 && Array.from(cards).every(c => c.classList.contains('translated'));
+            if (allTranslated) {
+                globalTranslated = true;
+                translateAllBtn.classList.add('active');
+            } else {
+                globalTranslated = false;
+                translateAllBtn.classList.remove('active');
+            }
+        }
+
+        // ========== AI MONETARY ANALYSIS ==========
+        function closeAIModal() {
+            aiModalOverlay.classList.remove('active');
+            aiModalContent.innerHTML = '';
+        }
+
+        function buildAnalysisPrompt() {
+            const headlines = allArticlesData.map(item => parseNewsItem(item).headline);
+            const numberedHeadlines = headlines.map((h, i) => `${i+1}. ${h}`).join('\n');
+            return `Berikut adalah headline berita ekonomi global terbaru:\n${numberedHeadlines}\n\nBerdasarkan headline di atas, berikan analisis singkat tentang arah kebijakan moneter ke depan, sentimen pasar (bullish/bearish/netral), serta sebutkan pair/aset yang mungkin terpengaruh (contoh: XAUUSD, EURUSD, OILUSD). Jawab HANYA dalam format JSON: {"kesimpulan": "markdown string"}. Gunakan emoji 📈 (bullish) dan 📉 (bearish) jika relevan.`;
+        }
+
+        function openModalWithSpinner(title, message) {
+            const titleEl = document.querySelector('.ai-modal-title');
+            if (titleEl) titleEl.textContent = title;
+            aiModalOverlay.classList.add('active');
+            aiModalContent.innerHTML =
+                `<div class="ai-modal-loading"><div class="spinner"></div><p>${escapeHTML(message)}</p></div>`;
+        }
+
+        function resetModalTitle() {
+            const titleEl = document.querySelector('.ai-modal-title');
+            if (titleEl) titleEl.textContent = '🧠 Analisis Kebijakan Moneter AI';
+        }
+
+        // ---- AI Biasa (API default) ----
+        async function analyzeMonetaryPolicy() {
+            if (aiAnalysisInProgress) return;
+            if (!allArticlesData || allArticlesData.length === 0) {
+                alert('Belum ada berita untuk dianalisis. Silakan refresh feed terlebih dahulu.');
+                return;
+            }
+
+            aiAnalysisInProgress = true;
+            aiBtn.disabled = true;
+            aiBtnText.innerHTML = '<span class="spinner-small"></span> Menganalisis...';
+            openModalWithSpinner('🧠 Analisis Kebijakan Moneter AI', 'AI sedang menganalisis kebijakan moneter berdasarkan headline...');
+
+            try {
+                const userPrompt = buildAnalysisPrompt();
+                const systemPrompt =
+                    'Kamu adalah analis kebijakan moneter profesional. Berikan kesimpulan dalam bahasa Indonesia yang informatif dan terstruktur dengan markdown, termasuk poin-poin utama, indikator bullish/bearish, dan daftar pair yang terpengaruh. Pastikan output adalah JSON valid tanpa teks lain.';
+
+                const rawAnswer = await AIDefault.ask(userPrompt, systemPrompt);
+                const markdown = AIDefault.extractMarkdown(rawAnswer);
+                aiModalContent.innerHTML = marked.parse(markdown);
+            } catch (err) {
+                console.error('AI analysis error:', err);
+                aiModalContent.innerHTML =
+                    `<p style="color:#F6465D;">Gagal mendapatkan analisis AI: ${escapeHTML(err.message)}</p>`;
+            } finally {
+                aiAnalysisInProgress = false;
+                aiBtn.disabled = false;
+                aiBtnText.textContent = '🧠 Analisis AI';
+            }
+        }
+
+        // ---- AI Agent (Custom API) ----
+        const aiAgentBtn = document.getElementById('ai-agent-btn');
+
+        async function analyzeWithAgent() {
+            if (aiAnalysisInProgress) return;
+            if (!allArticlesData || allArticlesData.length === 0) {
+                alert('Belum ada berita untuk dianalisis. Silakan refresh feed terlebih dahulu.');
+                return;
+            }
+            if (!AISettings.isAgentConfigured()) {
+                openAISettings();
+                showSettingsStatus('Isi Base URL dan Model terlebih dahulu, lalu simpan.', 'error');
+                return;
+            }
+
+            aiAnalysisInProgress = true;
+            aiAgentBtn.disabled = true;
+            aiAgentBtn.innerHTML = '<span class="spinner-small"></span> Menganalisis...';
+            const cfg = AISettings.getAgent();
+            openModalWithSpinner(`🤖 AI Agent — ${cfg.model}`, 'AI Agent sedang menganalisis berdasarkan headline...');
+
+            try {
+                const userPrompt = buildAnalysisPrompt();
+                const rawAnswer = await AIAgent.ask(userPrompt);
+                const markdown = AIDefault.extractMarkdown(rawAnswer);
+                aiModalContent.innerHTML = marked.parse(markdown);
+            } catch (err) {
+                console.error('AI Agent error:', err);
+                aiModalContent.innerHTML =
+                    `<p style="color:#F6465D;">AI Agent gagal: ${escapeHTML(err.message)}</p>`;
+            } finally {
+                aiAnalysisInProgress = false;
+                aiAgentBtn.disabled = false;
+                aiAgentBtn.innerHTML = '🤖 AI Agent';
+                resetModalTitle();
+            }
+        }
+
+        // ========== AI SETTINGS MODAL ==========
+        const settingsOverlay = document.getElementById('settings-modal-overlay');
+        const settingsStatus = document.getElementById('settings-status');
+        const modelSelect = document.getElementById('set-model');
+        const loadModelsBtn = document.getElementById('load-models-btn');
+        let modelsLoadTimer = null;
+
+        function populateModelSelect(models, selected) {
+            const current = selected || modelSelect.value || '';
+            const list = Array.isArray(models) ? models.slice() : [];
+            if (current && !list.includes(current)) list.unshift(current);
+            modelSelect.innerHTML = '';
+            if (list.length === 0) {
+                const opt = document.createElement('option');
+                opt.value = '';
+                opt.textContent = '— pilih model —';
+                modelSelect.appendChild(opt);
+            } else {
+                list.forEach(m => {
+                    const opt = document.createElement('option');
+                    opt.value = m;
+                    opt.textContent = m;
+                    modelSelect.appendChild(opt);
+                });
+                modelSelect.value = current || list[0];
+            }
+        }
+
+        function openAISettings() {
+            const cfg = AISettings.getAgent();
+            document.getElementById('set-base-url').value = cfg.baseUrl || '';
+            document.getElementById('set-api-key').value = cfg.apiKey || '';
+            document.getElementById('set-cors-proxy').value = cfg.corsProxy || '';
+            populateModelSelect([], cfg.model || '');
+            document.getElementById('set-temperature').value = cfg.temperature != null ? cfg.temperature : '';
+            document.getElementById('set-timeout').value = cfg.timeout != null ? cfg.timeout : '';
+            document.getElementById('set-system-prompt').value = cfg.systemPrompt || '';
+            hideSettingsStatus();
+            settingsOverlay.classList.add('active');
+            if (cfg.baseUrl && cfg.apiKey) {
+                scheduleAutoLoadModels();
+            }
+        }
+
+        function closeAISettings() {
+            settingsOverlay.classList.remove('active');
+        }
+
+        function showSettingsStatus(msg, type) {
+            settingsStatus.textContent = msg;
+            settingsStatus.className = 'settings-status ' + type;
+        }
+
+        function hideSettingsStatus() {
+            settingsStatus.className = 'settings-status';
+            settingsStatus.textContent = '';
+        }
+
+        function collectSettingsForm() {
+            return {
+                baseUrl: document.getElementById('set-base-url').value.trim(),
+                apiKey: document.getElementById('set-api-key').value.trim(),
+                corsProxy: document.getElementById('set-cors-proxy').value.trim(),
+                model: modelSelect.value.trim(),
+                temperature: parseFloat(document.getElementById('set-temperature').value) || 0.7,
+                timeout: parseInt(document.getElementById('set-timeout').value, 10) || 30,
+                systemPrompt: document.getElementById('set-system-prompt').value.trim(),
+            };
+        }
+
+        function saveAISettings() {
+            const cfg = collectSettingsForm();
+            if (!cfg.baseUrl) {
+                showSettingsStatus('Base URL wajib diisi.', 'error');
+                return;
+            }
+            if (!cfg.model) {
+                showSettingsStatus('Pilih model terlebih dahulu (klik 🔃 Muat jika kosong).', 'error');
+                return;
+            }
+            AISettings.saveAgent(cfg);
+            showSettingsStatus('✅ Pengaturan berhasil disimpan.', 'success');
+        }
+
+        function scheduleAutoLoadModels() {
+            clearTimeout(modelsLoadTimer);
+            const baseUrl = document.getElementById('set-base-url').value.trim();
+            const apiKey = document.getElementById('set-api-key').value.trim();
+            if (baseUrl && apiKey) {
+                modelsLoadTimer = setTimeout(loadModels, 600);
+            }
+        }
+
+        async function loadModels() {
+            const baseUrl = document.getElementById('set-base-url').value.trim();
+            const apiKey = document.getElementById('set-api-key').value.trim();
+            if (!baseUrl || !apiKey) {
+                showSettingsStatus('Isi Base URL dan API Key dulu, lalu klik 🔃 Muat.', 'error');
+                return;
+            }
+
+            // Simpan URL + key dulu supaya AIAgent.listModels() bisa membaca
+            AISettings.saveAgent({ ...AISettings.getAgent(), baseUrl, apiKey, corsProxy: document.getElementById('set-cors-proxy').value.trim() });
+
+            loadModelsBtn.disabled = true;
+            loadModelsBtn.innerHTML = '<span class="spinner-small"></span>';
+            const hint = document.getElementById('model-loading-hint');
+            if (hint) hint.textContent = 'memuat...';
+            showSettingsStatus('Memuat daftar model...', 'success');
+            try {
+                const models = await AIAgent.listModels();
+                populateModelSelect(models, '');
+                showSettingsStatus(`✅ ${models.length} model ditemukan. Pilih model lalu Simpan.`, 'success');
+            } catch (err) {
+                console.error('Load models error:', err);
+                showSettingsStatus(`❌ Gagal memuat model: ${escapeHTML(err.message)}`, 'error');
+            } finally {
+                loadModelsBtn.disabled = false;
+                loadModelsBtn.innerHTML = '🔃 Muat';
+                if (hint) hint.textContent = '';
+            }
+        }
+
+        async function testAgentConnection() {
+            const testBtn = document.getElementById('test-agent-btn');
+            // Simpan dulu config yang sedang diisi
+            AISettings.saveAgent(collectSettingsForm());
+
+            testBtn.disabled = true;
+            testBtn.innerHTML = '<span class="spinner-small"></span> Menguji...';
+            showSettingsStatus('Menghubungi AI Agent...', 'success');
+            try {
+                const reply = await AIAgent.testConnection();
+                showSettingsStatus(`✅ Koneksi berhasil! Respons: "${escapeHTML(reply.substring(0, 80))}"`, 'success');
+            } catch (err) {
+                showSettingsStatus(`❌ Gagal: ${escapeHTML(err.message)}`, 'error');
+            } finally {
+                testBtn.disabled = false;
+                testBtn.innerHTML = '🔌 Tes Koneksi';
+            }
+        }
+
+        function resetAISettings() {
+            if (!confirm('Reset semua pengaturan AI Agent ke default?')) return;
+            AISettings.reset();
+            openAISettings();
+            showSettingsStatus('Pengaturan direset ke default.', 'success');
+        }
+
+        // ========== FETCH NEWS ==========
+        async function fetchNews() {
+            container.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Mengambil berita terbaru…</p>
+                </div>`;
+            countEl.textContent = '— articles';
+            globalTranslated = false;
+            translateAllBtn.classList.remove('active');
+            allArticlesData = [];
+
+            try {
+                const response = await fetch(API_URL);
+                if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                const json = await response.json();
+                if (!json.ok || !Array.isArray(json.data)) throw new Error('Invalid API response structure.');
+
+                const articles = json.data;
+                allArticlesData = articles;
+                container.innerHTML = '';
+
+                if (articles.length === 0) {
+                    container.innerHTML =
+                        '<p style="text-align:center;color:#A6A6A6;padding:40px;">Tidak ada artikel ditemukan.</p>';
+                    countEl.textContent = '0 artikel';
+                    return;
+                }
+
+                articles.forEach((item, i) => {
+                    const cardHTML = buildArticleCardHTML(item, i, false);
+                    container.insertAdjacentHTML('beforeend', cardHTML);
+                });
+
+                const cards = container.querySelectorAll('.article-card');
+                cards.forEach((card, i) => { card.style.animationDelay = `${i * 0.05}s`; });
+
+                countEl.textContent = `${articles.length} artikel`;
+            } catch (err) {
+                console.error('Fetch error:', err);
+                container.innerHTML = `
+                    <div class="error-box">
+                        ⚠️ Gagal memuat berita: ${escapeHTML(err.message)}<br>
+                        <small>Silakan periksa koneksi Anda dan coba lagi.</small>
+                        <br><br>
+                        <button class="btn btn-primary" onclick="fetchNews()">🔄 Coba Lagi</button>
+                    </div>`;
+                countEl.textContent = 'Error';
+            }
+        }
+
+        // ========== EVENT LISTENERS ==========
+        aiModalOverlay.addEventListener('click', (e) => {
+            if (e.target === aiModalOverlay) closeAIModal();
+        });
+
+        settingsOverlay.addEventListener('click', (e) => {
+            if (e.target === settingsOverlay) closeAISettings();
+        });
+
+        // Auto-load model saat Base URL + API Key diisi
+        document.getElementById('set-base-url').addEventListener('input', scheduleAutoLoadModels);
+        document.getElementById('set-api-key').addEventListener('input', scheduleAutoLoadModels);
+
+        // Close calendar panel when clicking outside (optional)
+        document.addEventListener('click', function(e) {
+            const calendarSection = document.getElementById('calendar-section');
+            const eventPanel = document.getElementById('calendar-event-panel');
+            if (calendarEventPanelOpen && eventPanel && calendarSection &&
+                !calendarSection.contains(e.target) && e.target !== eventPanel) {
+                // Don't auto-close; user might want to scroll news while seeing calendar
+            }
+        });
+
+        // ========== INITIALIZATION ==========
+        function init() {
+            fetchCalendarData();
+            fetchNews();
+        }
+
+        init();
+
+        // Auto-refresh news every 5 minutes
+        setInterval(fetchNews, 5 * 60 * 1000);
+        // Refresh calendar every 30 minutes
+        setInterval(fetchCalendarData, 30 * 60 * 1000);
+    </script>
+</body>
+</html>
