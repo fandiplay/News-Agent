@@ -13,8 +13,7 @@ const AISettings = (() => {
         systemPrompt:
             'Kamu adalah analis kebijakan moneter profesional. Berikan kesimpulan dalam bahasa Indonesia yang informatif dan terstruktur dengan markdown, termasuk poin-poin utama, indikator bullish/bearish, dan daftar pair yang terpengaruh.',
         temperature: 0.7,
-        timeout: 30,          // ubah dari 30000 ke 30 (detik) agar konsisten dengan input form
-        corsProxy: 'https://corsproxy.io/?url=',   // ← TAMBAHKAN default proxy
+        timeout: 30,          // dalam detik, konsisten dengan input form
     },
 };
 

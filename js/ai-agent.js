@@ -1,44 +1,14 @@
 /**
  * ai-agent.js — AI Agent (Custom API via pengaturan)
+ * Menggunakan endpoint Vercel server-side (/api/agent/*) untuk menghindari CORS.
  * Mendukung format OpenAI-compatible:
- *   POST {baseUrl}
- *   Headers: Authorization: Bearer {apiKey}
- *   Body: { model, messages: [{role, content}], temperature }
+ *   POST /api/agent/chat  → proxy ke {baseUrl}
+ *   GET  /api/agent/models → proxy ke {baseUrl}/models
  */
 const AIAgent = (() => {
 
     /**
-     * Bungkus URL dengan CORS proxy jika dikonfigurasi.
-     * Proxy dimasukkan user di pengaturan, contoh:
-     *   https://corsproxy.io/?url=
-     *   https://api.allorigins.win/raw?url=
-     *   https://api.codetabs.com/v1/proxy?quest=
-     */
-    function withProxy(url) {
-        const proxy = (AISettings.getAgent().corsProxy || '').trim();
-        if (!proxy) return url;
-        return proxy.endsWith('=') ? proxy + encodeURIComponent(url) : proxy + encodeURIComponent(url);
-    }
-
-    /**
-     * Konversi error fetch menjadi pesan yang jelas (terutama CORS).
-     */
-    function describeFetchError(e, url) {
-    if (e.name === 'AbortError') return null;
-    const corsHint =
-        '⚠️ Diblokir CORS oleh browser. ' +
-        'Solusi: buka ⚙️ Pengaturan AI → isi "CORS Proxy" dengan https://corsproxy.io/?url= ' +
-        '(atau proxy lain), lalu Simpan dan coba lagi.';
-    if (e instanceof TypeError && e.message.includes('Failed to fetch')) {
-        return `CORS BLOCKED — ${corsHint}`;
-    }
-    if (e instanceof TypeError) {
-        return `Gagal terhubung ke ${url} — ${corsHint} (${e.message})`;
-    }
-    return `Gagal menghubungi AI Agent: ${e.message}`;
-}
-    /**
-     * Mengirim chat completion ke endpoint custom.
+     * Mengirim chat completion ke endpoint Vercel proxy.
      * @param {string} userPrompt — prompt dari user
      * @returns {Promise<string>} jawaban AI
      */
@@ -59,26 +29,22 @@ const AIAgent = (() => {
         messages.push({ role: 'user', content: userPrompt });
 
         const body = {
+            baseUrl: cfg.baseUrl,
+            apiKey: cfg.apiKey || '',
             model: cfg.model,
             messages,
             temperature: parseFloat(cfg.temperature) || 0.7,
         };
 
-        const headers = { 'Content-Type': 'application/json' };
-        if (cfg.apiKey && cfg.apiKey.trim() !== '') {
-            headers['Authorization'] = `Bearer ${cfg.apiKey}`;
-        }
-
-        const url = withProxy(cfg.baseUrl);
         const timeoutMs = (Number(cfg.timeout) || 30) * 1000;
         const controller = new AbortController();
         const timer = setTimeout(() => controller.abort(), timeoutMs);
 
         let response;
         try {
-            response = await fetch(url, {
+            response = await fetch('/api/agent/chat', {
                 method: 'POST',
-                headers,
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(body),
                 signal: controller.signal,
             });
@@ -87,7 +53,7 @@ const AIAgent = (() => {
             if (e.name === 'AbortError') {
                 throw new Error(`Timeout setelah ${timeoutMs / 1000}s. Coba perbesar timeout di Pengaturan AI.`);
             }
-            throw new Error(describeFetchError(e, cfg.baseUrl));
+            throw new Error(`Gagal menghubungi server: ${e.message}`);
         }
         clearTimeout(timer);
 
@@ -95,8 +61,7 @@ const AIAgent = (() => {
             let errMsg = `HTTP ${response.status}`;
             try {
                 const errBody = await response.json();
-                if (errBody?.error?.message) errMsg += `: ${errBody.error.message}`;
-                else if (errBody?.message) errMsg += `: ${errBody.message}`;
+                if (errBody?.error) errMsg += `: ${errBody.error}`;
             } catch (e) { /* abaikan */ }
             throw new Error(errMsg);
         }
@@ -127,55 +92,41 @@ const AIAgent = (() => {
     }
 
     /**
-     * Ambil daftar model dari endpoint OpenAI-compatible.
-     * Base URL seperti: https://tokenharbor.ai/v1/chat/completions
-     * -> endpoint models: https://tokenharbor.ai/v1/models
+     * Ambil daftar model dari endpoint Vercel proxy.
      * @returns {Promise<string[]>} daftar id model
      */
     async function listModels() {
         const cfg = AISettings.getAgent();
-        const baseUrl = (cfg.baseUrl || '').trim().replace(/\/+$/, '');
+        const baseUrl = (cfg.baseUrl || '').trim();
+        const apiKey = (cfg.apiKey || '').trim();
 
-        let modelsUrl;
-        if (baseUrl.endsWith('/chat/completions')) {
-            modelsUrl = baseUrl.replace(/\/chat\/completions$/, '') + '/models';
-        } else if (baseUrl.endsWith('/models')) {
-            modelsUrl = baseUrl;
-        } else {
-            modelsUrl = baseUrl + '/models';
-        }
+        const params = new URLSearchParams({ baseUrl });
+        if (apiKey) params.set('apiKey', apiKey);
 
-        const headers = {};
-        if (cfg.apiKey && cfg.apiKey.trim() !== '') {
-            headers['Authorization'] = `Bearer ${cfg.apiKey.trim()}`;
-        }
-
-        const url = withProxy(modelsUrl);
         const timeoutMs = (Number(cfg.timeout) || 30) * 1000;
         const controller = new AbortController();
         const timer = setTimeout(() => controller.abort(), timeoutMs);
 
         let response;
         try {
-            response = await fetch(url, { method: 'GET', headers, signal: controller.signal });
+            response = await fetch(`/api/agent/models?${params}`, {
+                method: 'GET',
+                signal: controller.signal,
+            });
         } catch (e) {
             clearTimeout(timer);
             if (e.name === 'AbortError') {
                 throw new Error(`Timeout setelah ${timeoutMs / 1000}s. Coba perbesar timeout.`);
             }
-            throw new Error(describeFetchError(e, modelsUrl));
+            throw new Error(`Gagal menghubungi server: ${e.message}`);
         }
         clearTimeout(timer);
 
         if (!response.ok) {
             let errMsg = `HTTP ${response.status}`;
-            if (response.status === 401 || response.status === 403) {
-                errMsg += ' — API Key tidak valid / tidak punya akses.';
-            }
             try {
                 const errBody = await response.json();
-                if (errBody?.error?.message) errMsg += `: ${errBody.error.message}`;
-                else if (errBody?.message) errMsg += `: ${errBody.message}`;
+                if (errBody?.error) errMsg += `: ${errBody.error}`;
             } catch (e) { /* abaikan */ }
             throw new Error(errMsg);
         }

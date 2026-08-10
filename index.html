@@ -1131,11 +1131,6 @@
                 <input type="password" id="set-api-key" placeholder="sk-... / thk_live_...">
             </div>
             <div class="settings-field">
-                <label for="set-cors-proxy">CORS Proxy <span class="optional">(opsional — wajib kalau API diblokir CORS)</span></label>
-                <input type="text" id="set-cors-proxy" placeholder="https://api.allorigins.win/raw?url=">
-                <div class="hint">Contoh: https://api.allorigins.win/raw?url= — dipakai jika muncul "Failed to fetch" karena CORS</div>
-            </div>
-            <div class="settings-field">
                 <label for="set-model">Model <span id="model-loading-hint" style="color:var(--text-tertiary);font-weight:400;"></span></label>
                 <div style="display:flex;gap:8px;">
                     <select id="set-model" style="flex:1;">
@@ -1871,7 +1866,6 @@
         const cfg = AISettings.getAgent();
         document.getElementById('set-base-url').value = cfg.baseUrl || '';
         document.getElementById('set-api-key').value = cfg.apiKey || '';
-        document.getElementById('set-cors-proxy').value = cfg.corsProxy || '';
         populateModelSelect([], cfg.model || '');
         document.getElementById('set-temperature').value = cfg.temperature != null ? cfg.temperature : '';
         document.getElementById('set-timeout').value = cfg.timeout != null ? cfg.timeout : '';
@@ -1905,7 +1899,6 @@
         return {
             baseUrl: document.getElementById('set-base-url').value.trim(),
             apiKey: document.getElementById('set-api-key').value.trim(),
-            corsProxy: document.getElementById('set-cors-proxy').value.trim(),
             model: modelSelect.value.trim(),
             temperature: parseFloat(document.getElementById('set-temperature').value) || 0.7,
             timeout: parseInt(document.getElementById('set-timeout').value, 10) || 30,
@@ -1948,8 +1941,7 @@
         AISettings.saveAgent({
             ...AISettings.getAgent(),
             baseUrl,
-            apiKey,
-            corsProxy: document.getElementById('set-cors-proxy').value.trim()
+            apiKey
         });
 
         loadModelsBtn.disabled = true;
