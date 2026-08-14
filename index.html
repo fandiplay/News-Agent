@@ -65,7 +65,7 @@
             display: inline-block;
             white-space: nowrap;
             animation: fx-scroll 100s linear infinite;
-            padding-left: 100px; /* beri ruang untuk label LIVE FX */
+            padding-left: 100px;
         }
 
         .fx-ticker:hover .fx-ticker-content {
@@ -114,7 +114,6 @@
             border-radius: 12px;
         }
 
-        /* Warna khusus untuk beberapa mata uang agar lebih hidup */
         .fx-ticker-item[data-code="USD"] .fx-pair { color: #006241; }
         .fx-ticker-item[data-code="EUR"] .fx-pair { color: #00754A; }
         .fx-ticker-item[data-code="JPY"] .fx-pair { color: #C82014; }
@@ -124,13 +123,96 @@
         .fx-ticker-item[data-code="CHF"] .fx-pair { color: #3A6B5B; }
         .fx-ticker-item[data-code="NZD"] .fx-pair { color: #1E3932; }
         .fx-ticker-item[data-code="CNY"] .fx-pair { color: #B3915C; }
-        .fx-ticker-item[data-code="IDR"] .fx-pair { color: #C82014; } /* tambahan IDR merah */
+        .fx-ticker-item[data-code="IDR"] .fx-pair { color: #C82014; }
 
-        /* Responsif */
         @media (max-width: 768px) {
             .fx-ticker::before { display: none; }
             .fx-ticker-content { padding-left: 0; }
             .fx-ticker-item { margin-right: 10px; padding: 4px 10px; font-size: 11px; }
+        }
+
+        /* ===== Forex Session Tracker ===== */
+        .forex-session-tracker {
+            background: var(--surface-cool);
+            border-bottom: 1px solid var(--hairline);
+            padding: 8px 0;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+            z-index: 99;
+            position: relative;
+        }
+
+        .session-tracker-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 0 16px;
+            scrollbar-width: thin;
+        }
+
+        .session-tracker-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--starbucks-green);
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-right: 8px;
+        }
+
+        .session-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--surface-white);
+            border: 1px solid var(--input-border);
+            border-radius: 16px;
+            padding: 5px 12px;
+            font-size: 11px;
+            font-weight: 600;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+        }
+
+        .session-item:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+            border-color: var(--green-accent);
+        }
+
+        .session-name {
+            color: var(--text-black);
+            font-weight: 700;
+        }
+
+        .session-time {
+            color: var(--text-black-soft);
+            font-size: 10px;
+        }
+
+        .session-status {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .session-status.open {
+            background: var(--green-accent);
+            color: #fff;
+        }
+
+        .session-status.closed {
+            background: var(--surface-ceramic);
+            color: var(--text-black-soft);
+            border: 1px solid var(--input-border);
         }
 
         /* ===== Root Variables & Global Styles ===== */
@@ -278,6 +360,26 @@
             align-items: center;
             gap: 8px;
             flex-wrap: wrap;
+        }
+
+        /* ===== Jam PM/AM ===== */
+        .clock {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--starbucks-green);
+            background: var(--green-light);
+            padding: 6px 14px;
+            border-radius: var(--radius-pill);
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .clock i {
+            font-size: 12px;
+            opacity: 0.8;
         }
 
         .article-count-badge {
@@ -566,6 +668,7 @@
             .header { padding: 12px 16px; }
             .header-inner { flex-direction: column; align-items: flex-start; }
             .header-right { width: 100%; justify-content: flex-start; }
+            .clock { font-size: 12px; padding: 4px 10px; }
             .btn { height: 36px; padding: 0 16px; font-size: 11px; }
             .btn-icon { width: 36px; height: 36px; }
             .article-headline { font-size: 18px; }
@@ -578,6 +681,11 @@
             .calendar-tab .tab-day { font-size: 9px; }
             .calendar-tab .tab-month { font-size: 9px; }
             .calendar-event-panel.open { max-height: 400px; }
+            .forex-session-tracker { padding: 6px 0; }
+            .session-tracker-inner { padding: 0 12px; gap: 6px; }
+            .session-item { padding: 4px 8px; font-size: 10px; }
+            .session-name { font-size: 10px; }
+            .session-time { font-size: 9px; }
         }
     </style>
 </head>
@@ -586,6 +694,14 @@
     <div class="fx-ticker" id="fx-ticker">
         <div class="fx-ticker-content" id="fx-ticker-content">
             <!-- Data akan dimuat di sini -->
+        </div>
+    </div>
+
+    <!-- Forex Session Tracker -->
+    <div class="forex-session-tracker" id="forex-session-tracker">
+        <div class="session-tracker-inner" id="session-tracker-inner">
+            <span class="session-tracker-title"><i class="fa-solid fa-globe"></i> Sesi Pasar</span>
+            <!-- Sesi akan dimuat di sini -->
         </div>
     </div>
 
@@ -598,6 +714,8 @@
                 <p class="header-source">Data berita dari Forex Factory & Kalender Ekonomi</p>
             </div>
             <div class="header-right">
+                <!-- Jam PM/AM -->
+                <span class="clock" id="clock"><i class="fa-regular fa-clock"></i> --:--:--</span>
                 <span class="article-count-badge" id="article-count">— articles</span>
                 <button class="btn btn-primary" id="ai-analysis-btn" onclick="analyzeMonetaryPolicy()" title="Analisis AI (API default)">
                     <span id="ai-btn-text"><i class="fa-solid fa-brain"></i> Analisis AI</span>
@@ -811,6 +929,107 @@
                 </span>`;
             }
         }
+
+        // ===== Forex Session Tracker =====
+        const SESSION_API_URL = 'https://api.tokocoding.my.id/api/sesi';
+
+        function parseSessionLabel(label) {
+            // label seperti "FrankfurtGermany", "LondonGreat Britain", "New YorkUnited States", dll.
+            // Pisahkan kota dan negara berdasarkan huruf besar kedua
+            if (!label) return { city: label, country: '' };
+            const match = label.match(/^([A-Z][a-z]+)([A-Z].*)$/);
+            if (match) {
+                return { city: match[1], country: match[2].replace(/([A-Z])/g, ' $1').trim() };
+            }
+            return { city: label, country: '' };
+        }
+
+        async function fetchForexSessions() {
+            const trackerInner = document.getElementById('session-tracker-inner');
+            if (!trackerInner) return;
+
+            try {
+                const response = await fetch(SESSION_API_URL);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                const json = await response.json();
+                if (!json.ok || !Array.isArray(json.data)) throw new Error('Invalid session API response');
+
+                const sessions = [];
+                // Filter item yang merupakan sesi pasar (memiliki label dengan nama kota + negara, value2 jam buka, value3 jam tutup, value4 status)
+                for (const item of json.data) {
+                    const label = (item.label || '').trim();
+                    const value1 = (item.value1 || '').trim();
+                    const value2 = (item.value2 || '').trim();
+                    const value3 = (item.value3 || '').trim();
+                    const value4 = (item.value4 || '').trim();
+
+                    // Skip header/penjelasan
+                    if (label === 'Forex Market Center' || label.startsWith('Use the Forex Market Time Converter') || label.includes('Time Zone:')) continue;
+                    if (!value2 || !value3 || !value4) continue;
+
+                    // Pastikan label mengandung nama kota (misal Frankfurt, London, New York, Sydney, Tokyo)
+                    const knownCities = ['Frankfurt', 'London', 'New York', 'Sydney', 'Tokyo'];
+                    const cityMatch = knownCities.find(city => label.includes(city));
+                    if (!cityMatch) continue;
+
+                    const parsed = parseSessionLabel(label);
+                    const openTime = value2; // e.g. "06:00 AM15-August-2026"
+                    const closeTime = value3; // e.g. "02:00 PM15-August-2026"
+                    const status = value4; // "Open" or "Closed"
+
+                    // Bersihkan waktu: pisahkan jam dan tanggal (untuk tampilan singkat)
+                    const openTimeShort = openTime.replace(/(\d{2}:\d{2} (?:AM|PM)).*/, '$1');
+                    const closeTimeShort = closeTime.replace(/(\d{2}:\d{2} (?:AM|PM)).*/, '$1');
+
+                    sessions.push({
+                        city: parsed.city || cityMatch,
+                        country: parsed.country,
+                        openTime: openTimeShort,
+                        closeTime: closeTimeShort,
+                        status: status
+                    });
+                }
+
+                if (sessions.length === 0) {
+                    trackerInner.innerHTML = '<span class="session-tracker-title">Sesi pasar tidak tersedia.</span>';
+                    return;
+                }
+
+                // Bangun HTML untuk setiap sesi
+                const sessionHTML = sessions.map(session => {
+                    const statusClass = session.status.toLowerCase() === 'open' ? 'open' : 'closed';
+                    return `<span class="session-item">
+                                <span class="session-name">${escapeHTML(session.city)}${session.country ? ' (' + escapeHTML(session.country) + ')' : ''}</span>
+                                <span class="session-time">${escapeHTML(session.openTime)} - ${escapeHTML(session.closeTime)}</span>
+                                <span class="session-status ${statusClass}">${escapeHTML(session.status)}</span>
+                            </span>`;
+                }).join('');
+
+                // Tambahkan ke tracker, pertahankan judul di depan
+                trackerInner.innerHTML = '<span class="session-tracker-title"><i class="fa-solid fa-globe"></i> Sesi Pasar</span>' + sessionHTML;
+            } catch (err) {
+                console.error('Gagal memuat data sesi:', err);
+                trackerInner.innerHTML = '<span class="session-tracker-title"><i class="fa-solid fa-globe"></i> Sesi Pasar</span> <span style="color:var(--danger);font-size:11px;"><i class="fa-solid fa-triangle-exclamation"></i> Gagal memuat sesi.</span>';
+            }
+        }
+
+        // ===== Jam PM/AM =====
+        function updateClock() {
+            const clockEl = document.getElementById('clock');
+            if (!clockEl) return;
+            const now = new Date();
+            let hours = now.getHours();
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12;
+            const strHours = String(hours).padStart(2, '0');
+            clockEl.innerHTML = `<i class="fa-regular fa-clock"></i> ${strHours}:${minutes}:${seconds} ${ampm}`;
+        }
+
+        setInterval(updateClock, 1000);
+        updateClock();
 
         // ===== Main Script =====
         const API_URL = 'https://api.tokocoding.my.id/api/ff';
@@ -1759,10 +1978,12 @@
         applyTheme(getInitialTheme());
 
         function init() {
-            fetchExchangeRates();   // ← tambahkan ini
+            fetchExchangeRates();
+            fetchForexSessions();
             fetchCalendarData();
             fetchNews();
-            setInterval(fetchExchangeRates, 10 * 60 * 1000); // refresh tiap 10 menit
+            setInterval(fetchExchangeRates, 10 * 60 * 1000);
+            setInterval(fetchForexSessions, 5 * 60 * 1000); // refresh sesi tiap 5 menit
         }
 
         init();
