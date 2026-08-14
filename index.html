@@ -6,11 +6,11 @@
     <title>Global News — Live Feed & AI Monetary Analysis</title>
 
     <link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#006241">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
-    
+    <meta name="theme-color" content="#006241">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -33,2275 +33,1751 @@
     </script>
 
     <style>
-:root {
-    /* Starbucks four-tier green system */
-    --starbucks-green: #006241;
-    --green-accent: #00754A;
-    --house-green: #1E3932;
-    --green-uplift: #2b5148;
-    --green-light: #d4e9e2;
-
-    /* Gold reserved for status/ceremony moments */
-    --gold: #cba258;
-    --gold-light: #dfc49d;
-    --gold-lightest: #faf6ee;
-
-    /* Surfaces */
-    --surface-white: #ffffff;
-    --surface-cool: #f9f9f9;
-    --surface-warm: #f2f0eb;
-    --surface-ceramic: #edebe9;
-
-    /* Text */
-    --text-black: rgba(0, 0, 0, 0.87);
-    --text-black-soft: rgba(0, 0, 0, 0.58);
-    --text-white: #ffffff;
-    --text-white-soft: rgba(255, 255, 255, 0.70);
-    --rewards-green: #33433d;
-
-    /* Semantic */
-    --danger: #c82014;
-    --warning: #fbbc05;
-    --input-border: #d6dbde;
-    --hairline: #e7e7e7;
-
-    /* Radius */
-    --radius-sm: 4px;
-    --radius-md: 8px;
-    --radius-card: 12px;
-    --radius-pill: 50px;
-
-    /* Elevation (whisper-soft, layered) */
-    --shadow-card: 0px 0px .5px 0px rgba(0, 0, 0, 0.14), 0px 1px 1px 0px rgba(0, 0, 0, 0.24);
-    --shadow-nav: 0 1px 3px rgba(0, 0, 0, 0.1), 0 2px 2px rgba(0, 0, 0, 0.06), 0 0 2px rgba(0, 0, 0, 0.07);
-    --shadow-frap: 0 0 6px rgba(0, 0, 0, 0.24), 0 8px 12px rgba(0, 0, 0, 0.14);
-
-    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    --font-mono: 'Menlo', 'Monaco', 'Consolas', monospace;
-
-    --font-size-h3: 20px;
-    --font-size-body: 14px;
-    --font-size-small: 12px;
-    --font-weight-regular: 400;
-    --font-weight-medium: 500;
-    --font-weight-bold: 600;
-    --font-weight-extrabold: 700;
-    --transition: all 0.2s ease;
-    --button-active-scale: 0.95;
-}
-
-/* ===== Dark Theme (override via data-theme) ===== */
-html[data-theme="dark"] {
-    /* Surfaces — deep warm-green darks referencing House Green */
-    --surface-white: #1c2421;
-    --surface-cool: #171e1c;
-    --surface-warm: #101614;
-    --surface-ceramic: #222b28;
-
-    /* Text — white ladder on dark surfaces */
-    --text-black: rgba(255, 255, 255, 0.87);
-    --text-black-soft: rgba(255, 255, 255, 0.58);
-
-    /* Brand greens — brightened for dark-surface legibility */
-    --starbucks-green: #00a05f;
-    --green-accent: #1e9e6e;
-    --green-light: #16352c;
-    --green-uplift: #2f5a4e;
-
-    /* Gold — warmed for dark status moments */
-    --gold: #d4b06a;
-    --gold-light: #4a3f27;
-    --gold-lightest: #201c12;
-
-    /* Semantic */
-    --danger: #ff5c4d;
-    --input-border: #37423e;
-    --hairline: #2a3531;
-
-    /* Elevation — deeper shadows for dark canvas */
-    --shadow-card: 0px 0px .5px 0px rgba(0, 0, 0, 0.55), 0px 2px 6px 0px rgba(0, 0, 0, 0.45);
-    --shadow-nav: 0 1px 3px rgba(0, 0, 0, 0.5), 0 2px 2px rgba(0, 0, 0, 0.4), 0 0 2px rgba(0, 0, 0, 0.4);
-}
-
-/* Smooth theme transition on major surfaces */
-body,
-.header,
-.article-card,
-.ai-modal,
-.settings-modal,
-.calendar-event-panel,
-.comment-item,
-.btn,
-.translate-btn,
-.calendar-tab,
-.settings-field input,
-.settings-field textarea,
-.settings-field select {
-    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
-body {
-    background: var(--surface-warm);
-    font-family: var(--font-family);
-    color: var(--text-black);
-    line-height: 1.5;
-    min-height: 100vh;
-    -webkit-font-smoothing: antialiased;
-    letter-spacing: -0.01em;
-}
-
-/* ===== Global Nav ===== */
-.header {
-    background: var(--surface-white);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    box-shadow: var(--shadow-nav);
-    padding: 12px 24px;
-}
-
-.header-inner {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 12px;
-}
-
-.header-left {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-
-.logo {
-    font-weight: var(--font-weight-extrabold);
-    font-size: 1.4rem;
-    letter-spacing: -0.5px;
-    color: var(--starbucks-green);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.logo .dot {
-    width: 8px;
-    height: 8px;
-    background: var(--green-accent);
-    border-radius: 50%;
-    animation: pulse-dot 1.6s infinite;
-}
-
-@keyframes pulse-dot {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(0, 117, 74, 0.4); }
-    50% { box-shadow: 0 0 0 8px rgba(0, 117, 74, 0); }
-}
-
-.header-source {
-    font-size: 11px;
-    color: var(--text-black-soft);
-    margin-left: 4px;
-    letter-spacing: 0.2px;
-}
-
-.header-right {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
-}
-
-.article-count-badge {
-    background: var(--green-light);
-    color: var(--starbucks-green);
-    padding: 6px 12px;
-    border-radius: var(--radius-pill);
-    font-weight: var(--font-weight-medium);
-    font-size: var(--font-size-small);
-    white-space: nowrap;
-}
-
-/* ===== Buttons (50px full-pill, scale(0.95) active) ===== */
-.btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    border-radius: var(--radius-pill);
-    cursor: pointer;
-    font-weight: var(--font-weight-bold);
-    font-size: var(--font-size-small);
-    transition: var(--transition);
-    white-space: nowrap;
-    height: 40px;
-    padding: 0 20px;
-    font-family: var(--font-family);
-    letter-spacing: -0.01em;
-    border: 1px solid transparent;
-}
-
-.btn:active {
-    transform: scale(var(--button-active-scale));
-}
-
-.btn-primary {
-    background: var(--green-accent);
-    color: var(--text-white);
-    border: 1px solid var(--green-accent);
-}
-
-.btn-primary:hover {
-    background: var(--starbucks-green);
-    border-color: var(--starbucks-green);
-}
-
-.btn-primary:disabled {
-    background: var(--green-light);
-    color: var(--text-black-soft);
-    border-color: var(--green-light);
-    cursor: not-allowed;
-}
-
-.btn-ghost {
-    background: transparent;
-    color: var(--starbucks-green);
-    border: 1px solid var(--green-accent);
-}
-
-.btn-ghost:hover {
-    background: var(--green-light);
-    border-color: var(--starbucks-green);
-}
-
-.btn-secondary {
-    background: var(--surface-ceramic);
-    color: var(--text-black);
-    border: 1px solid var(--input-border);
-}
-
-.btn-secondary:hover {
-    background: var(--surface-warm);
-    border-color: var(--text-black-soft);
-}
-
-.btn-danger {
-    background: rgba(200, 32, 20, 0.08);
-    color: var(--danger);
-    border: 1px solid rgba(200, 32, 20, 0.3);
-}
-
-.btn-danger:hover {
-    background: rgba(200, 32, 20, 0.15);
-}
-
-.btn-icon {
-    width: 40px;
-    height: 40px;
-    padding: 0;
-    border-radius: 50%;
-    font-size: 16px;
-}
-
-.btn-icon.active {
-    background: var(--green-accent);
-    border-color: var(--green-accent);
-    color: #FFFFFF;
-}
-
-.btn-sm {
-    height: 32px;
-    padding: 0 14px;
-    font-size: 11px;
-}
-
-.spinner-small {
-    display: inline-block;
-    width: 14px;
-    height: 14px;
-    border: 2px solid rgba(255, 255, 255, 0.4);
-    border-top-color: #fff;
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-}
-
-.btn-ghost .spinner-small,
-.btn-secondary .spinner-small {
-    border: 2px solid rgba(0, 117, 74, 0.3);
-    border-top-color: var(--green-accent);
-}
-
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}
-
-/* ===== Calendar section (dark-green feature band) ===== */
-.calendar-section {
-    background: var(--house-green);
-    position: sticky;
-    top: 65px;
-    z-index: 99;
-    box-shadow: var(--shadow-nav);
-}
-
-.calendar-inner {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 24px;
-}
-
-.calendar-tabs-row {
-    display: flex;
-    align-items: center;
-    gap: 0;
-    overflow-x: auto;
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    padding: 12px 0;
-    position: relative;
-}
-
-.calendar-tabs-row::-webkit-scrollbar {
-    display: none;
-}
-
-.calendar-tab {
-    flex: 0 0 auto;
-    min-width: 80px;
-    padding: 10px 16px;
-    text-align: center;
-    cursor: pointer;
-    border-radius: var(--radius-card);
-    transition: all var(--transition);
-    border: 1px solid transparent;
-    background: transparent;
-    color: var(--text-white-soft);
-    font-family: var(--font-family);
-    font-size: var(--font-size-small);
-    font-weight: var(--font-weight-medium);
-    position: relative;
-    white-space: nowrap;
-    user-select: none;
-    letter-spacing: -0.01em;
-}
-
-.calendar-tab:hover {
-    background: var(--green-uplift);
-    color: var(--text-white);
-    border-color: rgba(255, 255, 255, 0.2);
-}
-
-.calendar-tab.active {
-    background: var(--green-accent);
-    border-color: var(--green-accent);
-    color: var(--text-white);
-    font-weight: var(--font-weight-bold);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
-}
-
-.calendar-tab .tab-day {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    opacity: 0.7;
-    display: block;
-}
-
-.calendar-tab .tab-date {
-    font-size: 22px;
-    font-weight: var(--font-weight-extrabold);
-    line-height: 1;
-    display: block;
-    margin: 2px 0;
-}
-
-.calendar-tab .tab-month {
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.4px;
-    opacity: 0.7;
-    display: block;
-}
-
-.calendar-tab .tab-event-dot {
-    display: inline-block;
-    width: 6px;
-    height: 6px;
-    background: var(--gold);
-    border-radius: 50%;
-    margin-top: 3px;
-    opacity: 0;
-    transition: opacity var(--transition);
-}
-
-.calendar-tab.has-events .tab-event-dot {
-    opacity: 1;
-}
-
-.calendar-tab.active .tab-event-dot {
-    background: var(--gold);
-    box-shadow: 0 0 8px rgba(203, 162, 88, 0.6);
-}
-
-.calendar-nav-btn {
-    flex: 0 0 auto;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    background: transparent;
-    color: var(--text-white);
-    cursor: pointer;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all var(--transition);
-    z-index: 2;
-}
-
-.calendar-nav-btn:hover {
-    background: var(--green-uplift);
-    border-color: var(--text-white);
-}
-
-.calendar-nav-btn:disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
-}
-
-.calendar-event-panel {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.4s ease, padding 0.4s ease, border 0.4s ease;
-    border-top: 0px solid rgba(255, 255, 255, 0.2);
-    background: var(--surface-white);
-    border-radius: var(--radius-card) var(--radius-card) 0 0;
-}
-
-.calendar-event-panel.open {
-    max-height: 520px;
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
-    overflow-y: auto;
-}
-
-.calendar-event-panel-inner {
-    padding: 0 20px;
-    transition: padding 0.4s ease;
-}
-
-.calendar-event-panel.open .calendar-event-panel-inner {
-    padding: 16px 20px;
-}
-
-.calendar-event-panel-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 12px;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
-.calendar-event-panel-title {
-    font-weight: var(--font-weight-extrabold);
-    font-size: 15px;
-    color: var(--starbucks-green);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.calendar-event-panel-count {
-    background: var(--green-light);
-    color: var(--starbucks-green);
-    padding: 3px 10px;
-    border-radius: var(--radius-pill);
-    font-size: 11px;
-    font-weight: var(--font-weight-bold);
-}
-
-.calendar-event-close {
-    background: none;
-    border: 1px solid var(--input-border);
-    color: var(--text-black-soft);
-    cursor: pointer;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all var(--transition);
-}
-
-.calendar-event-close:hover {
-    background: var(--surface-ceramic);
-    color: var(--text-black);
-}
-
-.calendar-event-time-group {
-    margin-bottom: 14px;
-}
-
-.calendar-event-time-label {
-    font-size: 11px;
-    font-weight: var(--font-weight-extrabold);
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-    color: var(--text-black-soft);
-    margin-bottom: 6px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.calendar-event-time-label::before {
-    content: '';
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--green-accent);
-    opacity: 0.6;
-}
-
-.calendar-event-time-label.special {
-    color: var(--gold);
-}
-
-.calendar-event-time-label.special::before {
-    background: var(--gold);
-    opacity: 0.8;
-}
-
-.calendar-event-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 8px 12px;
-    border-radius: var(--radius-md);
-    margin-bottom: 4px;
-    transition: all var(--transition);
-    border-left: 2px solid transparent;
-    font-size: var(--font-size-small);
-    color: var(--text-black);
-}
-
-.calendar-event-item:hover {
-    background: var(--surface-warm);
-    border-left-color: var(--green-accent);
-}
-
-.calendar-event-item.important {
-    border-left-color: var(--danger);
-    background: rgba(200, 32, 20, 0.04);
-}
-
-.calendar-event-item.important:hover {
-    background: rgba(200, 32, 20, 0.08);
-}
-
-.calendar-event-currency {
-    flex: 0 0 auto;
-    padding: 3px 9px;
-    border-radius: var(--radius-pill);
-    font-weight: var(--font-weight-extrabold);
-    font-size: 11px;
-    letter-spacing: 0.3px;
-    white-space: nowrap;
-    min-width: 42px;
-    text-align: center;
-}
-
-.calendar-event-name {
-    flex: 1;
-    color: var(--text-black);
-    font-weight: var(--font-weight-medium);
-    line-height: 1.3;
-}
-
-.calendar-event-impact {
-    flex: 0 0 auto;
-    font-size: 10px;
-    opacity: 0.7;
-}
-
-.calendar-event-star {
-    color: var(--danger);
-    margin-left: 2px;
-    font-size: 10px;
-}
-
-.calendar-no-events {
-    text-align: center;
-    padding: 20px;
-    color: var(--text-black-soft);
-    font-size: var(--font-size-small);
-}
-
-.calendar-loading {
-    text-align: center;
-    padding: 16px;
-    color: var(--text-white-soft);
-}
-
-/* ===== Container & cards ===== */
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 32px 24px 60px;
-}
-
-.loading {
-    text-align: center;
-    padding: 60px 20px;
-    color: var(--text-black-soft);
-}
-
-.loading .spinner {
-    display: inline-block;
-    width: 36px;
-    height: 36px;
-    border: 3px solid var(--surface-ceramic);
-    border-top-color: var(--green-accent);
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-    margin-bottom: 16px;
-}
-
-.error-box {
-    background: rgba(200, 32, 20, 0.06);
-    color: var(--danger);
-    padding: 16px 20px;
-    border-radius: var(--radius-card);
-    text-align: center;
-    border: 1px solid var(--danger);
-    font-weight: var(--font-weight-medium);
-}
-
-.article-card {
-    background: var(--surface-white);
-    border-radius: var(--radius-card);
-    box-shadow: var(--shadow-card);
-    margin-bottom: 20px;
-    overflow: hidden;
-    transition: all var(--transition);
-    animation: fadeInUp 0.4s ease forwards;
-    opacity: 0;
-}
-
-.article-card:hover {
-    box-shadow: 0px 0px .5px 0px rgba(0, 0, 0, 0.14), 0px 3px 6px 0px rgba(0, 0, 0, 0.16);
-}
-
-.article-card.translated {
-    border-left: 4px solid var(--green-accent);
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(18px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.article-body {
-    padding: 24px;
-}
-
-.article-headline {
-    font-size: var(--font-size-h3);
-    font-weight: var(--font-weight-bold);
-    line-height: 1.4;
-    color: var(--text-black);
-    margin-bottom: 12px;
-    letter-spacing: -0.16px;
-}
-
-.article-meta {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 12px;
-    font-size: var(--font-size-small);
-    color: var(--text-black-soft);
-    margin-bottom: 12px;
-}
-
-.article-meta .source {
-    background: var(--green-light);
-    color: var(--starbucks-green);
-    padding: 4px 10px;
-    border-radius: var(--radius-pill);
-    font-weight: var(--font-weight-bold);
-}
-
-.article-meta .time {
-    font-weight: var(--font-weight-medium);
-}
-
-.article-meta .comment-count {
-    background: var(--gold-lightest);
-    color: var(--gold);
-    padding: 4px 10px;
-    border-radius: var(--radius-pill);
-    font-weight: var(--font-weight-bold);
-    border: 1px solid var(--gold-light);
-}
-
-.article-snippet {
-    font-size: var(--font-size-body);
-    color: var(--text-black-soft);
-    margin-bottom: 16px;
-    line-height: 1.6;
-}
-
-.translate-btn {
-    background: transparent;
-    color: var(--green-accent);
-    border: 1px solid var(--green-accent);
-    border-radius: var(--radius-pill);
-    height: 36px;
-    padding: 0 16px;
-    font-weight: var(--font-weight-bold);
-    font-size: var(--font-size-small);
-    cursor: pointer;
-    transition: all var(--transition);
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-family: var(--font-family);
-    letter-spacing: -0.01em;
-}
-
-.translate-btn:hover {
-    background: var(--green-light);
-    border-color: var(--starbucks-green);
-}
-
-.translate-btn.active {
-    background: var(--green-accent);
-    border-color: var(--green-accent);
-    color: #FFFFFF;
-}
-
-.translate-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-.translate-btn:active {
-    transform: scale(var(--button-active-scale));
-}
-
-.comments-section {
-    margin-top: 20px;
-    border-top: 1px solid var(--hairline);
-    padding-top: 16px;
-}
-
-.comments-label {
-    font-weight: var(--font-weight-extrabold);
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    color: var(--text-black-soft);
-    margin-bottom: 12px;
-}
-
-.comment-item {
-    background: var(--surface-warm);
-    border-radius: var(--radius-md);
-    padding: 12px 16px;
-    margin-bottom: 8px;
-    font-size: var(--font-size-small);
-    color: var(--text-black);
-    border-left: 3px solid var(--input-border);
-    transition: var(--transition);
-}
-
-.comment-item:hover {
-    border-left-color: var(--green-accent);
-    background: var(--surface-ceramic);
-}
-
-.comment-item.translated-comment {
-    border-left-color: var(--green-accent);
-}
-
-.comment-user {
-    font-weight: var(--font-weight-extrabold);
-    color: var(--text-black);
-    margin-bottom: 4px;
-    font-size: var(--font-size-small);
-}
-
-.translation-badge {
-    display: inline-block;
-    background: var(--green-accent);
-    color: #FFFFFF;
-    font-size: 10px;
-    padding: 2px 8px;
-    border-radius: var(--radius-pill);
-    font-weight: var(--font-weight-extrabold);
-    margin-right: 6px;
-    vertical-align: middle;
-}
-
-.no-comments {
-    color: var(--text-black-soft);
-}
-
-/* ===== Modals ===== */
-.ai-modal-overlay,
-.settings-modal-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(4px);
-    z-index: 200;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-}
-
-.ai-modal-overlay.active,
-.settings-modal-overlay.active {
-    display: flex;
-}
-
-.ai-modal,
-.settings-modal {
-    background: var(--surface-white);
-    border-radius: var(--radius-card);
-    max-width: 700px;
-    width: 100%;
-    max-height: 85vh;
-    overflow-y: auto;
-    box-shadow: var(--shadow-nav);
-    animation: modalIn 0.3s ease;
-}
-
-.settings-modal {
-    max-width: 560px;
-    max-height: 90vh;
-}
-
-@keyframes modalIn {
-    from {
-        opacity: 0;
-        transform: scale(0.95) translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-    }
-}
-
-.ai-modal-header,
-.settings-modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 24px;
-    background: var(--house-green);
-    border-radius: var(--radius-card) var(--radius-card) 0 0;
-    position: sticky;
-    top: 0;
-    z-index: 2;
-}
-
-.ai-modal-title,
-.settings-modal-title {
-    font-weight: var(--font-weight-extrabold);
-    font-size: 1.2rem;
-    color: var(--text-white);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    letter-spacing: -0.16px;
-}
-
-.settings-modal-title {
-    font-size: 1.1rem;
-}
-
-.ai-modal-close {
-    background: none;
-    border: none;
-    font-size: 1.6rem;
-    cursor: pointer;
-    color: var(--text-white-soft);
-    line-height: 1;
-    padding: 0 8px;
-    transition: color var(--transition);
-}
-
-.ai-modal-close:hover {
-    color: var(--text-white);
-}
-
-.ai-modal-content {
-    padding: 24px;
-    font-size: var(--font-size-body);
-    line-height: 1.7;
-    color: var(--text-black);
-}
-
-.ai-modal-content h1,
-.ai-modal-content h2,
-.ai-modal-content h3 {
-    color: var(--starbucks-green);
-    margin: 20px 0 12px;
-    font-weight: var(--font-weight-bold);
-    letter-spacing: -0.16px;
-}
-
-.ai-modal-content h3 {
-    font-size: 18px;
-    color: var(--green-accent);
-}
-
-.ai-modal-content ul,
-.ai-modal-content ol {
-    padding-left: 24px;
-    margin: 8px 0;
-}
-
-.ai-modal-content li {
-    margin-bottom: 6px;
-}
-
-.ai-modal-content strong {
-    color: var(--starbucks-green);
-}
-
-.ai-modal-content em {
-    color: var(--danger);
-    font-style: normal;
-}
-
-.ai-modal-content code {
-    background: var(--surface-warm);
-    padding: 2px 8px;
-    border-radius: var(--radius-sm);
-    font-family: var(--font-mono);
-    font-size: 0.9em;
-    color: var(--green-accent);
-}
-
-.ai-modal-content blockquote {
-    border-left: 4px solid var(--gold);
-    padding-left: 16px;
-    margin: 16px 0;
-    color: var(--text-black-soft);
-    background: var(--gold-lightest);
-    padding: 12px;
-    border-radius: 0 var(--radius-md) var(--radius-md) 0;
-}
-
-.ai-modal-loading {
-    text-align: center;
-    padding: 32px;
-    color: var(--text-black-soft);
-}
-
-.loading-hero {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-}
-
-.loading-emoji {
-    font-size: 42px;
-    color: var(--green-accent);
-    animation: loadingPop 1.1s ease-in-out infinite;
-}
-
-@keyframes loadingPop {
-    0%, 100% { transform: translateY(0) scale(1); opacity: 0.95; }
-    50% { transform: translateY(-4px) scale(1.05); opacity: 1; }
-}
-
-.loading-text {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 2px;
-    font-weight: var(--font-weight-bold);
-    color: var(--text-black);
-    letter-spacing: 0.2px;
-}
-
-.loading-dots span {
-    display: inline-block;
-    animation: dotBounce 1.2s infinite;
-}
-
-.loading-dots span:nth-child(2) { animation-delay: 0.15s; }
-.loading-dots span:nth-child(3) { animation-delay: 0.30s; }
-
-@keyframes dotBounce {
-    0%, 80%, 100% { transform: translateY(0); opacity: 0.35; }
-    40% { transform: translateY(-4px); opacity: 1; }
-}
-
-.settings-modal-body {
-    padding: 24px;
-}
-
-.settings-field {
-    margin-bottom: 16px;
-}
-
-.settings-field label {
-    display: block;
-    font-size: var(--font-size-small);
-    font-weight: var(--font-weight-bold);
-    color: var(--text-black);
-    margin-bottom: 6px;
-}
-
-.settings-field label .optional {
-    color: var(--text-black-soft);
-    font-weight: var(--font-weight-regular);
-}
-
-.settings-field input[type="text"],
-.settings-field input[type="password"],
-.settings-field input[type="number"],
-.settings-field textarea,
-.settings-field select {
-    width: 100%;
-    padding: 10px 14px;
-    background: var(--surface-cool);
-    border: 1px solid var(--input-border);
-    border-radius: var(--radius-sm);
-    color: var(--text-black);
-    font-family: var(--font-family);
-    font-size: var(--font-size-body);
-    transition: border var(--transition);
-}
-
-.settings-field input:focus,
-.settings-field textarea:focus,
-.settings-field select:focus {
-    outline: none;
-    border-color: var(--green-accent);
-}
-
-.settings-field textarea {
-    resize: vertical;
-    min-height: 80px;
-}
-
-.settings-field .hint {
-    font-size: 11px;
-    color: var(--text-black-soft);
-    margin-top: 4px;
-}
-
-.settings-modal-footer {
-    display: flex;
-    gap: 8px;
-    justify-content: flex-end;
-    padding: 16px 24px;
-    border-top: 1px solid var(--hairline);
-    background: var(--surface-cool);
-    border-radius: 0 0 var(--radius-card) var(--radius-card);
-    flex-wrap: wrap;
-}
-
-.settings-status {
-    padding: 10px 14px;
-    border-radius: var(--radius-md);
-    font-size: var(--font-size-small);
-    margin-bottom: 16px;
-    display: none;
-}
-
-.settings-status.success {
-    display: block;
-    background: var(--green-light);
-    color: var(--starbucks-green);
-    border: 1px solid var(--green-accent);
-}
-
-.settings-status.error {
-    display: block;
-    background: rgba(200, 32, 20, 0.08);
-    color: var(--danger);
-    border: 1px solid rgba(200, 32, 20, 0.3);
-}
-
-/* ===== Responsive ===== */
-@media (max-width: 1024px) {
-    .container { padding: 16px; }
-    .article-body { padding: 20px; }
-    .calendar-inner { padding: 0 12px; }
-    .calendar-tab { min-width: 68px; padding: 8px 10px; }
-    .calendar-tab .tab-date { font-size: 18px; }
-}
-
-@media (max-width: 768px) {
-    .header { padding: 12px 16px; }
-    .header-inner { flex-direction: column; align-items: flex-start; }
-    .header-right { width: 100%; justify-content: flex-start; }
-    .btn { height: 36px; padding: 0 16px; font-size: 11px; }
-    .btn-icon { width: 36px; height: 36px; }
-    .article-headline { font-size: 18px; }
-    .container { padding: 12px; }
-    .article-body { padding: 16px; }
-    .ai-modal { border-radius: var(--radius-md); }
-    .calendar-section { top: 100px; }
-    .calendar-tab { min-width: 60px; padding: 6px 8px; }
-    .calendar-tab .tab-date { font-size: 16px; }
-    .calendar-tab .tab-day { font-size: 9px; }
-    .calendar-tab .tab-month { font-size: 9px; }
-    .calendar-event-panel.open { max-height: 400px; }
-}
-
-</style>
+        /* ===== FX Ticker / Notifikasi Bergulir ===== */
+        .fx-ticker {
+            background: linear-gradient(135deg, var(--surface-white) 0%, var(--green-light) 100%);
+            border-bottom: 1px solid var(--gold);
+            overflow: hidden;
+            white-space: nowrap;
+            padding: 10px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            position: relative;
+            z-index: 101;
+        }
+
+        .fx-ticker::before {
+            content: '💱 LIVE FX';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--house-green);
+            color: var(--gold);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 0 12px 12px 0;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .fx-ticker-content {
+            display: inline-block;
+            white-space: nowrap;
+            animation: fx-scroll 100s linear infinite;
+            padding-left: 100px; /* beri ruang untuk label LIVE FX */
+        }
+
+        .fx-ticker:hover .fx-ticker-content {
+            animation-play-state: paused;
+        }
+
+        @keyframes fx-scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .fx-ticker-item {
+            display: inline-flex;
+            align-items: center;
+            background: var(--surface-white);
+            border: 1px solid var(--input-border);
+            border-radius: 20px;
+            padding: 6px 14px;
+            margin-right: 16px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+            transition: all 0.2s ease;
+            color: var(--text-black);
+        }
+
+        .fx-ticker-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+            border-color: var(--green-accent);
+            background: var(--green-light);
+        }
+
+        .fx-pair {
+            color: var(--starbucks-green);
+            font-weight: 700;
+            margin-right: 8px;
+        }
+
+        .fx-rate {
+            color: var(--text-black-soft);
+            font-weight: 500;
+            background: var(--surface-cool);
+            padding: 2px 8px;
+            border-radius: 12px;
+        }
+
+        /* Warna khusus untuk beberapa mata uang agar lebih hidup */
+        .fx-ticker-item[data-code="USD"] .fx-pair { color: #006241; }
+        .fx-ticker-item[data-code="EUR"] .fx-pair { color: #00754A; }
+        .fx-ticker-item[data-code="JPY"] .fx-pair { color: #C82014; }
+        .fx-ticker-item[data-code="GBP"] .fx-pair { color: #2B5148; }
+        .fx-ticker-item[data-code="AUD"] .fx-pair { color: #A8863F; }
+        .fx-ticker-item[data-code="CAD"] .fx-pair { color: #A34A3F; }
+        .fx-ticker-item[data-code="CHF"] .fx-pair { color: #3A6B5B; }
+        .fx-ticker-item[data-code="NZD"] .fx-pair { color: #1E3932; }
+        .fx-ticker-item[data-code="CNY"] .fx-pair { color: #B3915C; }
+        .fx-ticker-item[data-code="IDR"] .fx-pair { color: #C82014; } /* tambahan IDR merah */
+
+        /* Responsif */
+        @media (max-width: 768px) {
+            .fx-ticker::before { display: none; }
+            .fx-ticker-content { padding-left: 0; }
+            .fx-ticker-item { margin-right: 10px; padding: 4px 10px; font-size: 11px; }
+        }
+
+        /* ===== Root Variables & Global Styles ===== */
+        :root {
+            --starbucks-green: #006241;
+            --green-accent: #00754A;
+            --house-green: #1E3932;
+            --green-uplift: #2b5148;
+            --green-light: #d4e9e2;
+            --gold: #cba258;
+            --gold-light: #dfc49d;
+            --gold-lightest: #faf6ee;
+            --surface-white: #ffffff;
+            --surface-cool: #f9f9f9;
+            --surface-warm: #f2f0eb;
+            --surface-ceramic: #edebe9;
+            --text-black: rgba(0, 0, 0, 0.87);
+            --text-black-soft: rgba(0, 0, 0, 0.58);
+            --text-white: #ffffff;
+            --text-white-soft: rgba(255, 255, 255, 0.70);
+            --rewards-green: #33433d;
+            --danger: #c82014;
+            --warning: #fbbc05;
+            --input-border: #d6dbde;
+            --hairline: #e7e7e7;
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-card: 12px;
+            --radius-pill: 50px;
+            --shadow-card: 0px 0px .5px 0px rgba(0, 0, 0, 0.14), 0px 1px 1px 0px rgba(0, 0, 0, 0.24);
+            --shadow-nav: 0 1px 3px rgba(0, 0, 0, 0.1), 0 2px 2px rgba(0, 0, 0, 0.06), 0 0 2px rgba(0, 0, 0, 0.07);
+            --shadow-frap: 0 0 6px rgba(0, 0, 0, 0.24), 0 8px 12px rgba(0, 0, 0, 0.14);
+            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            --font-mono: 'Menlo', 'Monaco', 'Consolas', monospace;
+            --font-size-h3: 20px;
+            --font-size-body: 14px;
+            --font-size-small: 12px;
+            --font-weight-regular: 400;
+            --font-weight-medium: 500;
+            --font-weight-bold: 600;
+            --font-weight-extrabold: 700;
+            --transition: all 0.2s ease;
+            --button-active-scale: 0.95;
+        }
+
+        html[data-theme="dark"] {
+            --surface-white: #1c2421;
+            --surface-cool: #171e1c;
+            --surface-warm: #101614;
+            --surface-ceramic: #222b28;
+            --text-black: rgba(255, 255, 255, 0.87);
+            --text-black-soft: rgba(255, 255, 255, 0.58);
+            --starbucks-green: #00a05f;
+            --green-accent: #1e9e6e;
+            --green-light: #16352c;
+            --green-uplift: #2f5a4e;
+            --gold: #d4b06a;
+            --gold-light: #4a3f27;
+            --gold-lightest: #201c12;
+            --danger: #ff5c4d;
+            --input-border: #37423e;
+            --hairline: #2a3531;
+            --shadow-card: 0px 0px .5px 0px rgba(0, 0, 0, 0.55), 0px 2px 6px 0px rgba(0, 0, 0, 0.45);
+            --shadow-nav: 0 1px 3px rgba(0, 0, 0, 0.5), 0 2px 2px rgba(0, 0, 0, 0.4), 0 0 2px rgba(0, 0, 0, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--surface-warm);
+            font-family: var(--font-family);
+            color: var(--text-black);
+            line-height: 1.5;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            letter-spacing: -0.01em;
+        }
+
+        /* ===== Global Nav ===== */
+        .header {
+            background: var(--surface-white);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-nav);
+            padding: 12px 24px;
+        }
+
+        .header-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .header-left {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .logo {
+            font-weight: var(--font-weight-extrabold);
+            font-size: 1.4rem;
+            letter-spacing: -0.5px;
+            color: var(--starbucks-green);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--green-accent);
+            border-radius: 50%;
+            animation: pulse-dot 1.6s infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(0, 117, 74, 0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(0, 117, 74, 0); }
+        }
+
+        .header-source {
+            font-size: 11px;
+            color: var(--text-black-soft);
+            margin-left: 4px;
+            letter-spacing: 0.2px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .article-count-badge {
+            background: var(--green-light);
+            color: var(--starbucks-green);
+            padding: 6px 12px;
+            border-radius: var(--radius-pill);
+            font-weight: var(--font-weight-medium);
+            font-size: var(--font-size-small);
+            white-space: nowrap;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            border-radius: var(--radius-pill);
+            cursor: pointer;
+            font-weight: var(--font-weight-bold);
+            font-size: var(--font-size-small);
+            transition: var(--transition);
+            white-space: nowrap;
+            height: 40px;
+            padding: 0 20px;
+            font-family: var(--font-family);
+            letter-spacing: -0.01em;
+            border: 1px solid transparent;
+        }
+
+        .btn:active {
+            transform: scale(var(--button-active-scale));
+        }
+
+        .btn-primary { background: var(--green-accent); color: var(--text-white); border: 1px solid var(--green-accent); }
+        .btn-primary:hover { background: var(--starbucks-green); border-color: var(--starbucks-green); }
+        .btn-primary:disabled { background: var(--green-light); color: var(--text-black-soft); border-color: var(--green-light); cursor: not-allowed; }
+        .btn-ghost { background: transparent; color: var(--starbucks-green); border: 1px solid var(--green-accent); }
+        .btn-ghost:hover { background: var(--green-light); border-color: var(--starbucks-green); }
+        .btn-secondary { background: var(--surface-ceramic); color: var(--text-black); border: 1px solid var(--input-border); }
+        .btn-secondary:hover { background: var(--surface-warm); border-color: var(--text-black-soft); }
+        .btn-danger { background: rgba(200, 32, 20, 0.08); color: var(--danger); border: 1px solid rgba(200, 32, 20, 0.3); }
+        .btn-danger:hover { background: rgba(200, 32, 20, 0.15); }
+        .btn-icon { width: 40px; height: 40px; padding: 0; border-radius: 50%; font-size: 16px; }
+        .btn-icon.active { background: var(--green-accent); border-color: var(--green-accent); color: #FFFFFF; }
+        .btn-sm { height: 32px; padding: 0 14px; font-size: 11px; }
+
+        .spinner-small {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+
+        .btn-ghost .spinner-small,
+        .btn-secondary .spinner-small {
+            border: 2px solid rgba(0, 117, 74, 0.3);
+            border-top-color: var(--green-accent);
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Calendar section */
+        .calendar-section {
+            background: var(--house-green);
+            position: sticky;
+            top: 65px;
+            z-index: 99;
+            box-shadow: var(--shadow-nav);
+        }
+
+        .calendar-inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+        .calendar-tabs-row {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            padding: 12px 0;
+            position: relative;
+        }
+
+        .calendar-tabs-row::-webkit-scrollbar { display: none; }
+
+        .calendar-tab {
+            flex: 0 0 auto;
+            min-width: 80px;
+            padding: 10px 16px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: var(--radius-card);
+            transition: all var(--transition);
+            border: 1px solid transparent;
+            background: transparent;
+            color: var(--text-white-soft);
+            font-family: var(--font-family);
+            font-size: var(--font-size-small);
+            font-weight: var(--font-weight-medium);
+            position: relative;
+            white-space: nowrap;
+            user-select: none;
+            letter-spacing: -0.01em;
+        }
+
+        .calendar-tab:hover { background: var(--green-uplift); color: var(--text-white); border-color: rgba(255, 255, 255, 0.2); }
+        .calendar-tab.active { background: var(--green-accent); border-color: var(--green-accent); color: var(--text-white); font-weight: var(--font-weight-bold); box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25); }
+        .calendar-tab .tab-day { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.7; display: block; }
+        .calendar-tab .tab-date { font-size: 22px; font-weight: var(--font-weight-extrabold); line-height: 1; display: block; margin: 2px 0; }
+        .calendar-tab .tab-month { font-size: 10px; text-transform: uppercase; letter-spacing: 0.4px; opacity: 0.7; display: block; }
+        .calendar-tab .tab-event-dot { display: inline-block; width: 6px; height: 6px; background: var(--gold); border-radius: 50%; margin-top: 3px; opacity: 0; transition: opacity var(--transition); }
+        .calendar-tab.has-events .tab-event-dot { opacity: 1; }
+        .calendar-tab.active .tab-event-dot { background: var(--gold); box-shadow: 0 0 8px rgba(203, 162, 88, 0.6); }
+
+        .calendar-nav-btn {
+            flex: 0 0 auto;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: transparent;
+            color: var(--text-white);
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition);
+            z-index: 2;
+        }
+
+        .calendar-nav-btn:hover { background: var(--green-uplift); border-color: var(--text-white); }
+        .calendar-nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+        .calendar-event-panel {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease, border 0.4s ease;
+            border-top: 0px solid rgba(255, 255, 255, 0.2);
+            background: var(--surface-white);
+            border-radius: var(--radius-card) var(--radius-card) 0 0;
+        }
+
+        .calendar-event-panel.open {
+            max-height: 520px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            overflow-y: auto;
+        }
+
+        .calendar-event-panel-inner { padding: 0 20px; transition: padding 0.4s ease; }
+        .calendar-event-panel.open .calendar-event-panel-inner { padding: 16px 20px; }
+
+        .calendar-event-panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
+        .calendar-event-panel-title { font-weight: var(--font-weight-extrabold); font-size: 15px; color: var(--starbucks-green); display: flex; align-items: center; gap: 8px; }
+        .calendar-event-panel-count { background: var(--green-light); color: var(--starbucks-green); padding: 3px 10px; border-radius: var(--radius-pill); font-size: 11px; font-weight: var(--font-weight-bold); }
+        .calendar-event-close { background: none; border: 1px solid var(--input-border); color: var(--text-black-soft); cursor: pointer; width: 30px; height: 30px; border-radius: 50%; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: all var(--transition); }
+        .calendar-event-close:hover { background: var(--surface-ceramic); color: var(--text-black); }
+
+        .calendar-event-time-group { margin-bottom: 14px; }
+        .calendar-event-time-label { font-size: 11px; font-weight: var(--font-weight-extrabold); text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-black-soft); margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+        .calendar-event-time-label::before { content: ''; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--green-accent); opacity: 0.6; }
+        .calendar-event-time-label.special { color: var(--gold); }
+        .calendar-event-time-label.special::before { background: var(--gold); opacity: 0.8; }
+        .calendar-event-item { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: var(--radius-md); margin-bottom: 4px; transition: all var(--transition); border-left: 2px solid transparent; font-size: var(--font-size-small); color: var(--text-black); }
+        .calendar-event-item:hover { background: var(--surface-warm); border-left-color: var(--green-accent); }
+        .calendar-event-item.important { border-left-color: var(--danger); background: rgba(200, 32, 20, 0.04); }
+        .calendar-event-item.important:hover { background: rgba(200, 32, 20, 0.08); }
+        .calendar-event-currency { flex: 0 0 auto; padding: 3px 9px; border-radius: var(--radius-pill); font-weight: var(--font-weight-extrabold); font-size: 11px; letter-spacing: 0.3px; white-space: nowrap; min-width: 42px; text-align: center; }
+        .calendar-event-name { flex: 1; color: var(--text-black); font-weight: var(--font-weight-medium); line-height: 1.3; }
+        .calendar-event-impact { flex: 0 0 auto; font-size: 10px; opacity: 0.7; }
+        .calendar-event-star { color: var(--danger); margin-left: 2px; font-size: 10px; }
+        .calendar-no-events { text-align: center; padding: 20px; color: var(--text-black-soft); font-size: var(--font-size-small); }
+        .calendar-loading { text-align: center; padding: 16px; color: var(--text-white-soft); }
+
+        /* Container & cards */
+        .container { max-width: 1200px; margin: 0 auto; padding: 32px 24px 60px; }
+        .loading { text-align: center; padding: 60px 20px; color: var(--text-black-soft); }
+        .loading .spinner { display: inline-block; width: 36px; height: 36px; border: 3px solid var(--surface-ceramic); border-top-color: var(--green-accent); border-radius: 50%; animation: spin 0.7s linear infinite; margin-bottom: 16px; }
+        .error-box { background: rgba(200, 32, 20, 0.06); color: var(--danger); padding: 16px 20px; border-radius: var(--radius-card); text-align: center; border: 1px solid var(--danger); font-weight: var(--font-weight-medium); }
+        .article-card { background: var(--surface-white); border-radius: var(--radius-card); box-shadow: var(--shadow-card); margin-bottom: 20px; overflow: hidden; transition: all var(--transition); animation: fadeInUp 0.4s ease forwards; opacity: 0; }
+        .article-card:hover { box-shadow: 0px 0px .5px 0px rgba(0, 0, 0, 0.14), 0px 3px 6px 0px rgba(0, 0, 0, 0.16); }
+        .article-card.translated { border-left: 4px solid var(--green-accent); }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+        .article-body { padding: 24px; }
+        .article-headline { font-size: var(--font-size-h3); font-weight: var(--font-weight-bold); line-height: 1.4; color: var(--text-black); margin-bottom: 12px; letter-spacing: -0.16px; }
+        .article-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; font-size: var(--font-size-small); color: var(--text-black-soft); margin-bottom: 12px; }
+        .article-meta .source { background: var(--green-light); color: var(--starbucks-green); padding: 4px 10px; border-radius: var(--radius-pill); font-weight: var(--font-weight-bold); }
+        .article-meta .time { font-weight: var(--font-weight-medium); }
+        .article-meta .comment-count { background: var(--gold-lightest); color: var(--gold); padding: 4px 10px; border-radius: var(--radius-pill); font-weight: var(--font-weight-bold); border: 1px solid var(--gold-light); }
+        .article-snippet { font-size: var(--font-size-body); color: var(--text-black-soft); margin-bottom: 16px; line-height: 1.6; }
+        .translate-btn { background: transparent; color: var(--green-accent); border: 1px solid var(--green-accent); border-radius: var(--radius-pill); height: 36px; padding: 0 16px; font-weight: var(--font-weight-bold); font-size: var(--font-size-small); cursor: pointer; transition: all var(--transition); display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-family); letter-spacing: -0.01em; }
+        .translate-btn:hover { background: var(--green-light); border-color: var(--starbucks-green); }
+        .translate-btn.active { background: var(--green-accent); border-color: var(--green-accent); color: #FFFFFF; }
+        .translate-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .translate-btn:active { transform: scale(var(--button-active-scale)); }
+        .comments-section { margin-top: 20px; border-top: 1px solid var(--hairline); padding-top: 16px; }
+        .comments-label { font-weight: var(--font-weight-extrabold); font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-black-soft); margin-bottom: 12px; }
+        .comment-item { background: var(--surface-warm); border-radius: var(--radius-md); padding: 12px 16px; margin-bottom: 8px; font-size: var(--font-size-small); color: var(--text-black); border-left: 3px solid var(--input-border); transition: var(--transition); }
+        .comment-item:hover { border-left-color: var(--green-accent); background: var(--surface-ceramic); }
+        .comment-item.translated-comment { border-left-color: var(--green-accent); }
+        .comment-user { font-weight: var(--font-weight-extrabold); color: var(--text-black); margin-bottom: 4px; font-size: var(--font-size-small); }
+        .translation-badge { display: inline-block; background: var(--green-accent); color: #FFFFFF; font-size: 10px; padding: 2px 8px; border-radius: var(--radius-pill); font-weight: var(--font-weight-extrabold); margin-right: 6px; vertical-align: middle; }
+        .no-comments { color: var(--text-black-soft); }
+
+        /* Modals */
+        .ai-modal-overlay, .settings-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 200;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .ai-modal-overlay.active, .settings-modal-overlay.active { display: flex; }
+        .ai-modal, .settings-modal { background: var(--surface-white); border-radius: var(--radius-card); max-width: 700px; width: 100%; max-height: 85vh; overflow-y: auto; box-shadow: var(--shadow-nav); animation: modalIn 0.3s ease; }
+        .settings-modal { max-width: 560px; max-height: 90vh; }
+        @keyframes modalIn { from { opacity: 0; transform: scale(0.95) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        .ai-modal-header, .settings-modal-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 24px; background: var(--house-green); border-radius: var(--radius-card) var(--radius-card) 0 0; position: sticky; top: 0; z-index: 2; }
+        .ai-modal-title, .settings-modal-title { font-weight: var(--font-weight-extrabold); font-size: 1.2rem; color: var(--text-white); display: flex; align-items: center; gap: 8px; letter-spacing: -0.16px; }
+        .settings-modal-title { font-size: 1.1rem; }
+        .ai-modal-close { background: none; border: none; font-size: 1.6rem; cursor: pointer; color: var(--text-white-soft); line-height: 1; padding: 0 8px; transition: color var(--transition); }
+        .ai-modal-close:hover { color: var(--text-white); }
+        .ai-modal-content { padding: 24px; font-size: var(--font-size-body); line-height: 1.7; color: var(--text-black); }
+        .ai-modal-content h1, .ai-modal-content h2, .ai-modal-content h3 { color: var(--starbucks-green); margin: 20px 0 12px; font-weight: var(--font-weight-bold); letter-spacing: -0.16px; }
+        .ai-modal-content h3 { font-size: 18px; color: var(--green-accent); }
+        .ai-modal-content ul, .ai-modal-content ol { padding-left: 24px; margin: 8px 0; }
+        .ai-modal-content li { margin-bottom: 6px; }
+        .ai-modal-content strong { color: var(--starbucks-green); }
+        .ai-modal-content em { color: var(--danger); font-style: normal; }
+        .ai-modal-content code { background: var(--surface-warm); padding: 2px 8px; border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.9em; color: var(--green-accent); }
+        .ai-modal-content blockquote { border-left: 4px solid var(--gold); padding-left: 16px; margin: 16px 0; color: var(--text-black-soft); background: var(--gold-lightest); padding: 12px; border-radius: 0 var(--radius-md) var(--radius-md) 0; }
+        .ai-modal-loading { text-align: center; padding: 32px; color: var(--text-black-soft); }
+        .loading-hero { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+        .loading-emoji { font-size: 42px; color: var(--green-accent); animation: loadingPop 1.1s ease-in-out infinite; }
+        @keyframes loadingPop { 0%, 100% { transform: translateY(0) scale(1); opacity: 0.95; } 50% { transform: translateY(-4px) scale(1.05); opacity: 1; } }
+        .loading-text { display: inline-flex; align-items: baseline; gap: 2px; font-weight: var(--font-weight-bold); color: var(--text-black); letter-spacing: 0.2px; }
+        .loading-dots span { display: inline-block; animation: dotBounce 1.2s infinite; }
+        .loading-dots span:nth-child(2) { animation-delay: 0.15s; }
+        .loading-dots span:nth-child(3) { animation-delay: 0.30s; }
+        @keyframes dotBounce { 0%, 80%, 100% { transform: translateY(0); opacity: 0.35; } 40% { transform: translateY(-4px); opacity: 1; } }
+
+        .settings-modal-body { padding: 24px; }
+        .settings-field { margin-bottom: 16px; }
+        .settings-field label { display: block; font-size: var(--font-size-small); font-weight: var(--font-weight-bold); color: var(--text-black); margin-bottom: 6px; }
+        .settings-field label .optional { color: var(--text-black-soft); font-weight: var(--font-weight-regular); }
+        .settings-field input[type="text"], .settings-field input[type="password"], .settings-field input[type="number"], .settings-field textarea, .settings-field select {
+            width: 100%;
+            padding: 10px 14px;
+            background: var(--surface-cool);
+            border: 1px solid var(--input-border);
+            border-radius: var(--radius-sm);
+            color: var(--text-black);
+            font-family: var(--font-family);
+            font-size: var(--font-size-body);
+            transition: border var(--transition);
+        }
+        .settings-field input:focus, .settings-field textarea:focus, .settings-field select:focus { outline: none; border-color: var(--green-accent); }
+        .settings-field textarea { resize: vertical; min-height: 80px; }
+        .settings-field .hint { font-size: 11px; color: var(--text-black-soft); margin-top: 4px; }
+        .settings-modal-footer { display: flex; gap: 8px; justify-content: flex-end; padding: 16px 24px; border-top: 1px solid var(--hairline); background: var(--surface-cool); border-radius: 0 0 var(--radius-card) var(--radius-card); flex-wrap: wrap; }
+        .settings-status { padding: 10px 14px; border-radius: var(--radius-md); font-size: var(--font-size-small); margin-bottom: 16px; display: none; }
+        .settings-status.success { display: block; background: var(--green-light); color: var(--starbucks-green); border: 1px solid var(--green-accent); }
+        .settings-status.error { display: block; background: rgba(200, 32, 20, 0.08); color: var(--danger); border: 1px solid rgba(200, 32, 20, 0.3); }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .container { padding: 16px; }
+            .article-body { padding: 20px; }
+            .calendar-inner { padding: 0 12px; }
+            .calendar-tab { min-width: 68px; padding: 8px 10px; }
+            .calendar-tab .tab-date { font-size: 18px; }
+        }
+        @media (max-width: 768px) {
+            .header { padding: 12px 16px; }
+            .header-inner { flex-direction: column; align-items: flex-start; }
+            .header-right { width: 100%; justify-content: flex-start; }
+            .btn { height: 36px; padding: 0 16px; font-size: 11px; }
+            .btn-icon { width: 36px; height: 36px; }
+            .article-headline { font-size: 18px; }
+            .container { padding: 12px; }
+            .article-body { padding: 16px; }
+            .ai-modal { border-radius: var(--radius-md); }
+            .calendar-section { top: 100px; }
+            .calendar-tab { min-width: 60px; padding: 6px 8px; }
+            .calendar-tab .tab-date { font-size: 16px; }
+            .calendar-tab .tab-day { font-size: 9px; }
+            .calendar-tab .tab-month { font-size: 9px; }
+            .calendar-event-panel.open { max-height: 400px; }
+        }
+    </style>
 </head>
 <body>
-<header class="header">
-    <div class="header-inner">
-        <div class="header-left">
-            <div class="logo">
-                <span class="dot"></span> Global Economics News
-            </div>
-            <p class="header-source">Data berita dari Forex Factory & Kalender Ekonomi</p>
-        </div>
-        <div class="header-right">
-            <span class="article-count-badge" id="article-count">— articles</span>
-            <button class="btn btn-primary" id="ai-analysis-btn" onclick="analyzeMonetaryPolicy()" title="Analisis AI (API default)">
-                <span id="ai-btn-text"><i class="fa-solid fa-brain"></i> Analisis AI</span>
-            </button>
-            <button class="btn btn-ghost" id="ai-agent-btn" onclick="analyzeWithAgent()" title="Analisis dengan AI Agent (custom API)">
-                <i class="fa-solid fa-robot"></i> AI Agent
-            </button>
-            <button class="btn btn-icon btn-ghost" id="theme-toggle-btn" onclick="toggleTheme()" title="Ganti mode gelap/terang">
-                <i class="fa-solid fa-moon"></i>
-            </button>
-            <button class="btn btn-icon btn-ghost" onclick="openAISettings()" title="Pengaturan AI Agent">
-                <i class="fa-solid fa-gear"></i>
-            </button>
-            <button class="btn btn-icon btn-ghost" onclick="fetchNews()" title="Refresh feed">
-                <i class="fa-solid fa-rotate-right"></i>
-            </button>
-            <button class="btn btn-icon btn-ghost" id="translate-all-btn" onclick="toggleTranslateAll()" title="Terjemahkan semua">
-                <i class="fa-solid fa-language"></i>
-            </button>
-
-            <button class="btn btn-ghost" id="install-btn" style="display:none;" title="Install app">
-                <i class="fa-solid fa-download"></i> Install
-            </button>
+    <!-- FX Ticker -->
+    <div class="fx-ticker" id="fx-ticker">
+        <div class="fx-ticker-content" id="fx-ticker-content">
+            <!-- Data akan dimuat di sini -->
         </div>
     </div>
-</header>
 
-<section class="calendar-section" id="calendar-section">
-    <div class="calendar-inner">
-        <div class="calendar-tabs-row" id="calendar-tabs-row">
-            <button class="calendar-nav-btn" id="cal-nav-left" onclick="scrollCalendarTabs(-1)" title="Scroll kiri">◂</button>
-            <div id="calendar-tabs-container" style="display:flex;gap:4px;overflow:hidden;flex:1;scroll-behavior:smooth;"></div>
-            <button class="calendar-nav-btn" id="cal-nav-right" onclick="scrollCalendarTabs(1)" title="Scroll kanan">▸</button>
-        </div>
-    </div>
-    <div class="calendar-event-panel" id="calendar-event-panel">
-        <div class="calendar-event-panel-inner" id="calendar-event-panel-inner"></div>
-    </div>
-</section>
-
-<div class="ai-modal-overlay" id="ai-modal-overlay">
-    <div class="ai-modal" id="ai-modal">
-        <div class="ai-modal-header">
-            <div class="ai-modal-title"><i class="fa-solid fa-brain"></i> Analisis Kebijakan Moneter AI</div>
-            <button class="ai-modal-close" onclick="closeAIModal()"><i class="fa-solid fa-xmark"></i></button>
-        </div>
-        <div class="ai-modal-content" id="ai-modal-content"></div>
-    </div>
-</div>
-
-<div class="settings-modal-overlay" id="settings-modal-overlay">
-    <div class="settings-modal">
-        <div class="settings-modal-header">
-            <div class="settings-modal-title"><i class="fa-solid fa-gear"></i> Pengaturan AI Agent</div>
-            <button class="ai-modal-close" onclick="closeAISettings()"><i class="fa-solid fa-xmark"></i></button>
-        </div>
-        <div class="settings-modal-body">
-            <div class="settings-status" id="settings-status"></div>
-            <div class="settings-field">
-                <label for="set-base-url">Base URL</label>
-                <input type="text" id="set-base-url" placeholder="https://api.example.com/v1/chat/completions">
-                <div class="hint">Endpoint OpenAI-compatible (POST)</div>
-            </div>
-            <div class="settings-field">
-                <label for="set-api-key">API Key</label>
-                <input type="password" id="set-api-key" placeholder="sk-... / thk_live_...">
-            </div>
-            <div class="settings-field">
-                <label for="set-model">Model <span id="model-loading-hint" style="color:var(--text-black-soft);font-weight:400;"></span></label>
-                <div style="display:flex;gap:8px;">
-                    <select id="set-model" style="flex:1;">
-                        <option value="">— pilih model —</option>
-                    </select>
-                    <button class="btn btn-secondary btn-sm" id="load-models-btn" onclick="loadModels()" title="Muat daftar model dari API"><i class="fa-solid fa-rotate"></i> Muat</button>
+    <header class="header">
+        <div class="header-inner">
+            <div class="header-left">
+                <div class="logo">
+                    <span class="dot"></span> Global Economics News
                 </div>
-                <div class="hint">Masukkan Base URL + API Key valid, lalu otomatis muat model & pilih</div>
+                <p class="header-source">Data berita dari Forex Factory & Kalender Ekonomi</p>
             </div>
-            <div class="settings-field">
-                <label for="set-temperature">Temperature</label>
-                <input type="number" id="set-temperature" min="0" max="2" step="0.1" placeholder="0.7">
-            </div>
-            <div class="settings-field">
-                <label for="set-timeout">Timeout (detik)</label>
-                <input type="number" id="set-timeout" min="5" max="120" placeholder="30">
-            </div>
-            <div class="settings-field">
-                <label for="set-system-prompt">System Prompt</label>
-                <textarea id="set-system-prompt" rows="4" placeholder="Kamu adalah analis kebijakan moneter..."></textarea>
+            <div class="header-right">
+                <span class="article-count-badge" id="article-count">— articles</span>
+                <button class="btn btn-primary" id="ai-analysis-btn" onclick="analyzeMonetaryPolicy()" title="Analisis AI (API default)">
+                    <span id="ai-btn-text"><i class="fa-solid fa-brain"></i> Analisis AI</span>
+                </button>
+                <button class="btn btn-ghost" id="ai-agent-btn" onclick="analyzeWithAgent()" title="Analisis dengan AI Agent (custom API)">
+                    <i class="fa-solid fa-robot"></i> AI Agent
+                </button>
+                <button class="btn btn-icon btn-ghost" id="theme-toggle-btn" onclick="toggleTheme()" title="Ganti mode gelap/terang">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+                <button class="btn btn-icon btn-ghost" onclick="openAISettings()" title="Pengaturan AI Agent">
+                    <i class="fa-solid fa-gear"></i>
+                </button>
+                <button class="btn btn-icon btn-ghost" onclick="fetchNews()" title="Refresh feed">
+                    <i class="fa-solid fa-rotate-right"></i>
+                </button>
+                <button class="btn btn-icon btn-ghost" id="translate-all-btn" onclick="toggleTranslateAll()" title="Terjemahkan semua">
+                    <i class="fa-solid fa-language"></i>
+                </button>
+                <button class="btn btn-ghost" id="install-btn" style="display:none;" title="Install app">
+                    <i class="fa-solid fa-download"></i> Install
+                </button>
             </div>
         </div>
-        <div class="settings-modal-footer">
-            <button class="btn btn-danger btn-sm" onclick="resetAISettings()"><i class="fa-solid fa-trash"></i> Reset</button>
-            <button class="btn btn-secondary btn-sm" id="test-agent-btn" onclick="testAgentConnection()"><i class="fa-solid fa-plug-circle-bolt"></i> Tes Koneksi</button>
-            <button class="btn btn-secondary btn-sm" onclick="closeAISettings()"><i class="fa-solid fa-xmark"></i> Tutup</button>
-            <button class="btn btn-primary btn-sm" onclick="saveAISettings()"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
+    </header>
+
+    <section class="calendar-section" id="calendar-section">
+        <div class="calendar-inner">
+            <div class="calendar-tabs-row" id="calendar-tabs-row">
+                <button class="calendar-nav-btn" id="cal-nav-left" onclick="scrollCalendarTabs(-1)" title="Scroll kiri">◂</button>
+                <div id="calendar-tabs-container" style="display:flex;gap:4px;overflow:hidden;flex:1;scroll-behavior:smooth;"></div>
+                <button class="calendar-nav-btn" id="cal-nav-right" onclick="scrollCalendarTabs(1)" title="Scroll kanan">▸</button>
+            </div>
+        </div>
+        <div class="calendar-event-panel" id="calendar-event-panel">
+            <div class="calendar-event-panel-inner" id="calendar-event-panel-inner"></div>
+        </div>
+    </section>
+
+    <div class="ai-modal-overlay" id="ai-modal-overlay">
+        <div class="ai-modal" id="ai-modal">
+            <div class="ai-modal-header">
+                <div class="ai-modal-title"><i class="fa-solid fa-brain"></i> Analisis Kebijakan Moneter AI</div>
+                <button class="ai-modal-close" onclick="closeAIModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="ai-modal-content" id="ai-modal-content"></div>
         </div>
     </div>
-</div>
 
-<main class="container" id="news-container">
-    <div class="loading">
-        <div class="spinner"></div>
-        <p><i class="fa-solid fa-newspaper"></i> Mengambil berita terbaru…</p>
-    </div>
-</main>
-
-<script src="js/settings.js"></script>
-<script src="js/ai.js"></script>
-<script src="js/ai-agent.js"></script>
-
-<script>
-    const API_URL = 'https://api.tokocoding.my.id/api/ff';
-    const CALENDAR_API_URL = 'https://api.tokocoding.my.id/api/kalender';
-    const container = document.getElementById('news-container');
-    const countEl = document.getElementById('article-count');
-    const translateAllBtn = document.getElementById('translate-all-btn');
-    const aiBtn = document.getElementById('ai-analysis-btn');
-    const aiBtnText = document.getElementById('ai-btn-text');
-    const aiModalOverlay = document.getElementById('ai-modal-overlay');
-    const aiModalContent = document.getElementById('ai-modal-content');
-    const installBtn = document.getElementById('install-btn');
-
-    let deferredPrompt = null;
-    let allArticlesData = [];
-    let globalTranslated = false;
-    let translationInProgress = false;
-    let aiAnalysisInProgress = false;
-
-    let calendarData = {};
-    let calendarDatesOrder = [];
-    let selectedCalendarDate = null;
-    let calendarEventPanelOpen = false;
-
-    const currencyColorMap = {
-        'USD': {
-            light: { bg: 'rgba(0,117,74,0.14)', text: '#00754A', border: 'rgba(0,117,74,0.35)' },
-            dark: { bg: 'rgba(30,158,110,0.18)', text: '#4cd19a', border: 'rgba(30,158,110,0.45)' }
-        },
-        'EUR': {
-            light: { bg: 'rgba(0,98,65,0.14)', text: '#006241', border: 'rgba(0,98,65,0.35)' },
-            dark: { bg: 'rgba(0,160,95,0.18)', text: '#35d98f', border: 'rgba(0,160,95,0.45)' }
-        },
-        'JPY': {
-            light: { bg: 'rgba(200,32,20,0.12)', text: '#c82014', border: 'rgba(200,32,20,0.3)' },
-            dark: { bg: 'rgba(255,92,77,0.18)', text: '#ff8a80', border: 'rgba(255,92,77,0.45)' }
-        },
-        'GBP': {
-            light: { bg: 'rgba(43,81,72,0.14)', text: '#2b5148', border: 'rgba(43,81,72,0.35)' },
-            dark: { bg: 'rgba(47,90,78,0.2)', text: '#7db8a5', border: 'rgba(47,90,78,0.5)' }
-        },
-        'AUD': {
-            light: { bg: 'rgba(203,162,88,0.16)', text: '#a8863f', border: 'rgba(203,162,88,0.45)' },
-            dark: { bg: 'rgba(212,176,106,0.18)', text: '#e2c080', border: 'rgba(212,176,106,0.45)' }
-        },
-        'CAD': {
-            light: { bg: 'rgba(200,32,20,0.10)', text: '#a34a3f', border: 'rgba(200,32,20,0.25)' },
-            dark: { bg: 'rgba(255,92,77,0.14)', text: '#f0968a', border: 'rgba(255,92,77,0.35)' }
-        },
-        'CHF': {
-            light: { bg: 'rgba(0,117,74,0.10)', text: '#3a6b5b', border: 'rgba(0,117,74,0.25)' },
-            dark: { bg: 'rgba(30,158,110,0.14)', text: '#6fc7a4', border: 'rgba(30,158,110,0.35)' }
-        },
-        'NZD': {
-            light: { bg: 'rgba(43,81,72,0.12)', text: '#1E3932', border: 'rgba(43,81,72,0.3)' },
-            dark: { bg: 'rgba(47,90,78,0.16)', text: '#8fc4b0', border: 'rgba(47,90,78,0.4)' }
-        },
-        'CNY': {
-            light: { bg: 'rgba(223,196,157,0.18)', text: '#b3915c', border: 'rgba(203,162,88,0.4)' },
-            dark: { bg: 'rgba(212,176,106,0.16)', text: '#dcc08a', border: 'rgba(212,176,106,0.4)' }
-        },
-    };
-
-    const importantEventKeywords = [
-        'Federal Funds Rate', 'FOMC Statement', 'FOMC Press Conference', 'BOJ Policy Rate',
-        'Monetary Policy Statement', 'BOJ Outlook Report', 'Official Bank Rate', 'MPC Official',
-        'BOE Monetary Policy Report', 'Non-Farm', 'NFP', 'CPI', 'GDP', 'Unemployment Rate',
-        'Payrolls', 'ECB Press Conference', 'BOC Summary', 'RBA Gov', 'BOJ Press Conference',
-        'Advance GDP', 'Core PCE', 'Employment Cost Index', 'CB Consumer Confidence'
-    ];
-
-    function isImportantEvent(eventName) {
-        return importantEventKeywords.some(keyword =>
-            eventName.toLowerCase().includes(keyword.toLowerCase())
-        );
-    }
-
-    function isDarkTheme() {
-        return document.documentElement.getAttribute('data-theme') === 'dark';
-    }
-
-    function getCurrencyStyle(currency) {
-        const upper = (currency || '').toUpperCase().trim();
-        if (currencyColorMap[upper]) {
-            const variant = isDarkTheme() ? currencyColorMap[upper].dark : currencyColorMap[upper].light;
-            return variant;
-        }
-        return isDarkTheme()
-            ? { bg: 'rgba(255,255,255,0.08)', text: 'rgba(255,255,255,0.58)', border: 'rgba(255,255,255,0.18)' }
-            : { bg: 'rgba(0,0,0,0.06)', text: 'rgba(0,0,0,0.58)', border: 'rgba(0,0,0,0.15)' };
-    }
-
-    function parseCalendarData(rawData) {
-        const calendar = {};
-        let currentDate = null;
-        let currentTime = null;
-        const dateRegex =
-            /^(Sun|Mon|Tue|Wed|Thu|Fri|Sat)\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{1,2}$/;
-        const timeRegex = /^\d{1,2}:\d{2}(am|pm)$/;
-
-        for (const item of rawData) {
-            const label = (item.label || '').trim();
-            const v1 = (item.value1 || '').trim();
-            const v2 = (item.value2 || '').trim();
-            const v3 = (item.value3 || '').trim();
-            const v4 = (item.value4 || '').trim();
-
-            if (dateRegex.test(label) && !v1 && !v2 && !v3 && !v4) {
-                currentDate = label;
-                currentTime = null;
-                if (!calendar[currentDate]) calendar[currentDate] = [];
-                continue;
-            }
-
-            if (dateRegex.test(label) && v1 && timeRegex.test(v1)) {
-                currentDate = label;
-                currentTime = v1;
-                if (!calendar[currentDate]) calendar[currentDate] = [];
-                const eventName = v3 || v4 || '';
-                calendar[currentDate].push({
-                    time: v1,
-                    currency: v2 || '',
-                    event: eventName,
-                    important: isImportantEvent(eventName),
-                });
-                continue;
-            }
-
-            if (label === '' && currentDate) {
-                const eventName = v3 || v4 || '';
-                calendar[currentDate].push({
-                    time: currentTime || '',
-                    currency: v1 || '',
-                    event: eventName,
-                    important: isImportantEvent(eventName),
-                });
-                continue;
-            }
-
-            if ((timeRegex.test(label) || label === 'All Day' || label === 'Tentative') && currentDate) {
-                currentTime = label;
-                const eventName = v3 || v4 || '';
-                calendar[currentDate].push({
-                    time: label,
-                    currency: v1 || '',
-                    event: eventName,
-                    important: isImportantEvent(eventName),
-                });
-                continue;
-            }
-        }
-        return calendar;
-    }
-
-    function groupEventsByTime(events) {
-        const grouped = [];
-        let currentGroup = null;
-        for (const ev of events) {
-            if (!currentGroup || currentGroup.time !== ev.time) {
-                currentGroup = { time: ev.time, events: [ev] };
-                grouped.push(currentGroup);
-            } else {
-                currentGroup.events.push(ev);
-            }
-        }
-        return grouped;
-    }
-
-    function buildCalendarTabs() {
-        const tabsContainer = document.getElementById('calendar-tabs-container');
-        if (!tabsContainer) return;
-        tabsContainer.innerHTML = '';
-
-        calendarDatesOrder.forEach(dateStr => {
-            const events = calendarData[dateStr] || [];
-            const hasEvents = events.length > 0;
-            const parts = dateStr.split(' ');
-            const dayName = parts[0] || '';
-            const monthName = parts[1] || '';
-            const dateNum = parts[2] || '';
-
-            const tab = document.createElement('button');
-            tab.className = 'calendar-tab' + (hasEvents ? ' has-events' : '');
-            if (dateStr === selectedCalendarDate && calendarEventPanelOpen) {
-                tab.classList.add('active');
-            }
-            tab.innerHTML = `
-                <span class="tab-day">${dayName}</span>
-                <span class="tab-date">${dateNum}</span>
-                <span class="tab-month">${monthName}</span>
-                <span class="tab-event-dot"></span>
-            `;
-            tab.title = `${dateStr} — ${hasEvents ? events.length + ' event' + (events.length > 1 ? 's' : '') : 'No events'}`;
-            tab.addEventListener('click', () => toggleCalendarDate(dateStr));
-            tabsContainer.appendChild(tab);
-        });
-    }
-
-    function toggleCalendarDate(dateStr) {
-        if (selectedCalendarDate === dateStr && calendarEventPanelOpen) {
-            closeCalendarPanel();
-            return;
-        }
-        selectedCalendarDate = dateStr;
-        calendarEventPanelOpen = true;
-        renderEventPanel(dateStr);
-        buildCalendarTabs();
-        document.getElementById('calendar-event-panel').classList.add('open');
-    }
-
-    function closeCalendarPanel() {
-        calendarEventPanelOpen = false;
-        document.getElementById('calendar-event-panel').classList.remove('open');
-        buildCalendarTabs();
-    }
-
-    function renderEventPanel(dateStr) {
-        const panelInner = document.getElementById('calendar-event-panel-inner');
-        if (!panelInner) return;
-        const events = calendarData[dateStr] || [];
-        const grouped = groupEventsByTime(events);
-
-        if (events.length === 0) {
-            panelInner.innerHTML = `
-                <div class="calendar-event-panel-header">
-                    <div class="calendar-event-panel-title"><i class="fa-solid fa-calendar-day"></i> ${dateStr}</div>
-                    <button class="calendar-event-close" onclick="closeCalendarPanel()"><i class="fa-solid fa-xmark"></i></button>
+    <div class="settings-modal-overlay" id="settings-modal-overlay">
+        <div class="settings-modal">
+            <div class="settings-modal-header">
+                <div class="settings-modal-title"><i class="fa-solid fa-gear"></i> Pengaturan AI Agent</div>
+                <button class="ai-modal-close" onclick="closeAISettings()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="settings-modal-body">
+                <div class="settings-status" id="settings-status"></div>
+                <div class="settings-field">
+                    <label for="set-base-url">Base URL</label>
+                    <input type="text" id="set-base-url" placeholder="https://api.example.com/v1/chat/completions">
+                    <div class="hint">Endpoint OpenAI-compatible (POST)</div>
                 </div>
-                <div class="calendar-no-events">Tidak ada event ekonomi untuk tanggal ini.</div>`;
-            return;
-        }
-
-        let html = `
-            <div class="calendar-event-panel-header">
-                <div class="calendar-event-panel-title">
-                    <i class="fa-solid fa-calendar-day"></i> ${dateStr}
-                    <span class="calendar-event-panel-count">${events.length} event${events.length > 1 ? 's' : ''}</span>
+                <div class="settings-field">
+                    <label for="set-api-key">API Key</label>
+                    <input type="password" id="set-api-key" placeholder="sk-... / thk_live_...">
                 </div>
-                <button class="calendar-event-close" onclick="closeCalendarPanel()"><i class="fa-solid fa-xmark"></i></button>
-            </div>`;
-
-        grouped.forEach(group => {
-            const timeClass = (group.time === 'All Day' || group.time === 'Tentative') ? ' special' : '';
-            html += `
-                <div class="calendar-event-time-group">
-                    <div class="calendar-event-time-label${timeClass}"><i class="fa-regular fa-clock"></i> ${group.time || 'TBA'}</div>`;
-            group.events.forEach(ev => {
-                const cs = getCurrencyStyle(ev.currency);
-                const importantClass = ev.important ? ' important' : '';
-                const starHtml = ev.important ? '<span class="calendar-event-star"><i class="fa-solid fa-star"></i></span>' : '';
-                html += `
-                    <div class="calendar-event-item${importantClass}">
-                        <span class="calendar-event-currency" style="background:${cs.bg};color:${cs.text};border:1px solid ${cs.border};">${escapeHTML(ev.currency)}</span>
-                        <span class="calendar-event-name">${escapeHTML(ev.event)}${starHtml}</span>
-                    </div>`;
-            });
-            html += `</div>`;
-        });
-
-        panelInner.innerHTML = html;
-    }
-
-    function scrollCalendarTabs(direction) {
-        const tabsContainer = document.getElementById('calendar-tabs-container');
-        if (!tabsContainer) return;
-        const scrollAmount = 200;
-        tabsContainer.scrollBy({
-            left: direction * scrollAmount,
-            behavior: 'smooth'
-        });
-    }
-
-    async function fetchCalendarData() {
-        const tabsContainer = document.getElementById('calendar-tabs-container');
-        if (tabsContainer) {
-            tabsContainer.innerHTML = '<div class="calendar-loading" style="width:100%;text-align:center;padding:12px;">Memuat kalender...</div>';
-        }
-        try {
-            const response = await fetch(CALENDAR_API_URL);
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            const json = await response.json();
-            if (!json.ok || !Array.isArray(json.data)) throw new Error('Invalid calendar API response');
-
-            calendarData = parseCalendarData(json.data);
-            calendarDatesOrder = Object.keys(calendarData).sort((a, b) => {
-                const dateA = new Date(a + ' 2026');
-                const dateB = new Date(b + ' 2026');
-                return dateA - dateB;
-            });
-
-            const today = new Date();
-            const todayStr = today.toLocaleDateString('en-US', {
-                weekday: 'short',
-                month: 'short',
-                day: 'numeric'
-            }).replace(/,/g, '');
-
-            let matchedDate = null;
-            const todayParts = todayStr.split(' ');
-            if (todayParts.length >= 3) {
-                const todayFormatted = `${todayParts[0]} ${todayParts[1]} ${todayParts[2]}`;
-                if (calendarDatesOrder.includes(todayFormatted)) {
-                    matchedDate = todayFormatted;
-                }
-            }
-
-            if (!matchedDate && calendarDatesOrder.length > 0) {
-                const todayTime = today.getTime();
-                let closestDate = calendarDatesOrder[0];
-                let closestDiff = Infinity;
-                for (const d of calendarDatesOrder) {
-                    const dTime = new Date(d + ' 2026').getTime();
-                    const diff = Math.abs(dTime - todayTime);
-                    if (diff < closestDiff) {
-                        closestDiff = diff;
-                        closestDate = d;
-                    }
-                }
-                matchedDate = closestDate;
-            }
-
-            selectedCalendarDate = matchedDate;
-            calendarEventPanelOpen = true;
-            buildCalendarTabs();
-            if (selectedCalendarDate) {
-                renderEventPanel(selectedCalendarDate);
-                document.getElementById('calendar-event-panel').classList.add('open');
-            }
-        } catch (err) {
-            console.error('Calendar fetch error:', err);
-            if (tabsContainer) {
-                tabsContainer.innerHTML = '<span style="color:var(--danger);font-size:11px;padding:12px;"><i class="fa-solid fa-triangle-exclamation"></i> Gagal memuat kalender. <button onclick="fetchCalendarData()" style="color:var(--green-accent);background:none;border:none;cursor:pointer;text-decoration:underline;">Coba lagi</button></span>';
-            }
-        }
-    }
-
-    async function translateText(text, targetLang = 'id', sourceLang = 'en') {
-        if (!text || text.trim().length === 0) return text;
-        if (text.length > 1500) {
-            const chunks = [];
-            let remaining = text;
-            while (remaining.length > 0) {
-                if (remaining.length <= 1500) { chunks.push(remaining); break; }
-                let breakPoint = remaining.lastIndexOf('.', 1400);
-                if (breakPoint === -1 || breakPoint < 500) breakPoint = remaining.lastIndexOf(' ', 1400);
-                if (breakPoint === -1 || breakPoint < 500) breakPoint = 1400;
-                chunks.push(remaining.substring(0, breakPoint + 1));
-                remaining = remaining.substring(breakPoint + 1);
-            }
-            const translatedChunks = await Promise.all(chunks.map(chunk => translateSingleChunk(chunk, targetLang, sourceLang)));
-            return translatedChunks.join(' ');
-        }
-        return await translateSingleChunk(text, targetLang, sourceLang);
-    }
-
-    async function translateSingleChunk(text, targetLang, sourceLang) {
-        const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLang}&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`;
-        try {
-            const response = await fetch(url);
-            if (!response.ok) throw new Error('Translation API failed');
-            const data = await response.json();
-            if (data && data[0] && Array.isArray(data[0])) {
-                return data[0].map(segment => segment[0]).join('');
-            }
-            return text;
-        } catch (err) {
-            console.warn('Translation error:', err);
-            return text;
-        }
-    }
-
-    function parseNewsItem(item) {
-        const title = item.newsblock__title || 'Untitled Article';
-        const body = item.newsblock__body || '';
-        const sourceMatch = body.match(/From\s+([^\|\n]+)/i);
-        const source = sourceMatch ? sourceMatch[1].trim() : '';
-        const timeMatch = body.match(/\|\s*(\d+\s*(?:hr|min|hour|minute|day)s?\s*(?:\d+\s*(?:min|hr|hour|minute)s?)?\s*ago)/i);
-        const time = timeMatch ? timeMatch[1].trim() : '';
-        const commentMatch = body.match(/(\d+)\s*comments?/i);
-        const commentCount = commentMatch ? parseInt(commentMatch[1], 10) : 0;
-        let snippet = body
-            .replace(/\|\s*\d+\s*(?:hr|min|hour|minute|day)s?\s*(?:\d+\s*(?:min|hr|hour|minute)s?)?\s*ago\s*\|?/gi, '')
-            .replace(/From\s+[^\s\|\n]+/i, '')
-            .replace(/\d+\s*comments?/gi, '')
-            .replace(/\|/g, '')
-            .replace(/\s+/g, ' ')
-            .trim();
-        if (snippet.length > 200) snippet = snippet.substring(0, 200) + '...';
-        return { headline: title, source, time, commentCount, snippet };
-    }
-
-    function parseComments(bodyString) {
-        if (!bodyString || typeof bodyString !== 'string' || bodyString.trim() === '') return [];
-        return [];
-    }
-
-    function escapeHTML(str) {
-        const div = document.createElement('div');
-        div.textContent = str;
-        return div.innerHTML;
-    }
-
-    function buildArticleCardHTML(item, index, isTranslated = false, translatedData = null) {
-        const flexData = translatedData || parseNewsItem(item);
-        const comments = parseComments(item.newsblock__body);
-        const cardId = `article-${index}`;
-
-        let metaHTML = '';
-        if (flexData.source) metaHTML += `<span class="source">${escapeHTML(flexData.source)}</span>`;
-        if (flexData.time) metaHTML += `<span class="time"><i class="fa-regular fa-clock"></i> ${escapeHTML(flexData.time)}</span>`;
-        if (flexData.commentCount > 0) metaHTML += `<span class="comment-count"><i class="fa-solid fa-comments"></i> ${flexData.commentCount} comment${flexData.commentCount !== 1 ? 's' : ''}</span>`;
-
-        let commentsHTML = '';
-        if (comments.length > 0) {
-            commentsHTML = `
-                <div class="comments-section" id="comments-${index}">
-                    <div class="comments-label"><i class="fa-solid fa-comments"></i> Top Comments</div>
-                    ${comments.map((c, ci) => `
-                        <div class="comment-item" id="comment-${index}-${ci}">
-                            <div class="comment-user">@${escapeHTML(c.user)}</div>
-                            <div class="comment-text" data-original="${escapeHTML(c.text)}">${escapeHTML(c.text)}</div>
-                        </div>
-                    `).join('')}
-                </div>`;
-        } else if (flexData.commentCount > 0) {
-            commentsHTML = `
-                <div class="comments-section" id="comments-${index}">
-                    <div class="comments-label"><i class="fa-solid fa-comments"></i> Comments</div>
-                    <p class="no-comments" style="color: var(--text-black-soft);">No comment preview available.</p>
-                </div>`;
-        }
-
-        const translatedClass = isTranslated ? ' translated' : '';
-        const badgeHTML = isTranslated ? '<span class="translation-badge">ID</span> ' : '';
-
-        return `
-            <article class="article-card${translatedClass}" id="${cardId}" data-index="${index}">
-                <div class="article-body">
-                    <h2 class="article-headline" data-original="${escapeHTML(parseNewsItem(item).headline)}">
-                        ${badgeHTML}${escapeHTML(flexData.headline)}
-                    </h2>
-                    ${metaHTML ? `<div class="article-meta">${metaHTML}</div>` : ''}
-                    ${flexData.snippet ? `<p class="article-snippet" data-original="${escapeHTML(parseNewsItem(item).snippet)}">${escapeHTML(flexData.snippet)}</p>` : ''}
-                    <button class="translate-btn" id="translate-btn-${index}" onclick="toggleArticleTranslation(${index})" title="Terjemahkan artikel ini ke Bahasa Indonesia">
-                        <i class="fa-solid fa-language"></i> Terjemahkan
-                    </button>
-                    ${commentsHTML}
-                </div>
-            </article>
-        `;
-    }
-
-    async function toggleArticleTranslation(index) {
-        if (translationInProgress) return;
-        const btn = document.getElementById(`translate-btn-${index}`);
-        const card = document.getElementById(`article-${index}`);
-        if (!card) return;
-        const isCurrentlyTranslated = card.classList.contains('translated');
-
-        if (isCurrentlyTranslated) {
-            revertArticleTranslation(index);
-            updateGlobalButtonState();
-            return;
-        }
-
-        translationInProgress = true;
-        btn.disabled = true;
-        btn.innerHTML = '<span class="spinner-small"></span> Menerjemahkan…';
-
-        try {
-            const item = allArticlesData[index];
-            const flexData = parseNewsItem(item);
-
-            const translatedHeadline = await translateText(flexData.headline);
-            let translatedSnippet = '';
-            if (flexData.snippet) translatedSnippet = await translateText(flexData.snippet);
-
-            const headlineEl = card.querySelector('.article-headline');
-            headlineEl.textContent = translatedHeadline;
-            headlineEl.classList.add('translated-text');
-            if (!headlineEl.querySelector('.translation-badge')) {
-                const badge = document.createElement('span');
-                badge.className = 'translation-badge';
-                badge.textContent = 'ID';
-                headlineEl.prepend(badge);
-            }
-
-            const snippetEl = card.querySelector('.article-snippet');
-            if (snippetEl && translatedSnippet) {
-                snippetEl.textContent = translatedSnippet;
-                snippetEl.classList.add('translated-text');
-            }
-
-            const commentTexts = card.querySelectorAll('.comment-text');
-            for (const ct of commentTexts) {
-                const original = ct.getAttribute('data-original');
-                if (original) {
-                    const translatedComment = await translateText(original);
-                    ct.textContent = translatedComment;
-                    ct.classList.add('translated-text');
-                }
-            }
-            const commentItems = card.querySelectorAll('.comment-item');
-            commentItems.forEach(ci => ci.classList.add('translated-comment'));
-
-            card.classList.add('translated');
-            btn.classList.add('active');
-            btn.innerHTML = '<i class="fa-solid fa-rotate-left"></i> Kembali ke Asli';
-        } catch (err) {
-            console.error('Translation failed', err);
-            btn.innerHTML = '<i class="fa-solid fa-language"></i> Terjemahkan (gagal)';
-        } finally {
-            btn.disabled = false;
-            translationInProgress = false;
-            updateGlobalButtonState();
-        }
-    }
-
-    function revertArticleTranslation(index) {
-        const card = document.getElementById(`article-${index}`);
-        const btn = document.getElementById(`translate-btn-${index}`);
-        if (!card || !btn) return;
-        const item = allArticlesData[index];
-        const flexData = parseNewsItem(item);
-
-        const headlineEl = card.querySelector('.article-headline');
-        const badge = headlineEl ? headlineEl.querySelector('.translation-badge') : null;
-        if (badge) badge.remove();
-        if (headlineEl) {
-            headlineEl.textContent = flexData.headline;
-            headlineEl.classList.remove('translated-text');
-        }
-
-        const snippetEl = card.querySelector('.article-snippet');
-        if (snippetEl) {
-            snippetEl.textContent = flexData.snippet;
-            snippetEl.classList.remove('translated-text');
-        }
-
-        const commentTexts = card.querySelectorAll('.comment-text');
-        commentTexts.forEach(ct => {
-            const original = ct.getAttribute('data-original');
-            if (original) {
-                ct.textContent = original;
-                ct.classList.remove('translated-text');
-            }
-        });
-        const commentItems = card.querySelectorAll('.comment-item');
-        commentItems.forEach(ci => ci.classList.remove('translated-comment'));
-
-        card.classList.remove('translated');
-        btn.classList.remove('active');
-        btn.innerHTML = '<i class="fa-solid fa-language"></i> Terjemahkan';
-    }
-
-    async function toggleTranslateAll() {
-        if (translationInProgress) return;
-        if (globalTranslated) {
-            for (let i = 0; i < allArticlesData.length; i++) {
-                const card = document.getElementById(`article-${i}`);
-                if (card && card.classList.contains('translated')) revertArticleTranslation(i);
-            }
-            globalTranslated = false;
-            translateAllBtn.classList.remove('active');
-        } else {
-            globalTranslated = true;
-            translateAllBtn.classList.add('active');
-            translateAllBtn.disabled = true;
-            for (let i = 0; i < allArticlesData.length; i++) {
-                const card = document.getElementById(`article-${i}`);
-                if (card && !card.classList.contains('translated')) {
-                    try { await toggleArticleTranslation(i); } catch (e) { console.warn('Failed', i); }
-                    await new Promise(resolve => setTimeout(resolve, 300));
-                }
-            }
-            translateAllBtn.disabled = false;
-            translationInProgress = false;
-        }
-        updateGlobalButtonState();
-    }
-
-    function updateGlobalButtonState() {
-        const cards = document.querySelectorAll('.article-card');
-        const allTranslated = cards.length > 0 && Array.from(cards).every(c => c.classList.contains('translated'));
-        if (allTranslated) {
-            globalTranslated = true;
-            translateAllBtn.classList.add('active');
-        } else {
-            globalTranslated = false;
-            translateAllBtn.classList.remove('active');
-        }
-    }
-
-    function closeAIModal(confirmClose = true) {
-        if (confirmClose && aiModalOverlay.classList.contains('active')) {
-            if (!confirm('Tutup pop-up analisis AI ini?')) return;
-        }
-        aiModalOverlay.classList.remove('active');
-        aiModalContent.innerHTML = '';
-        resetModalTitle();
-    }
-
-    function buildAnalysisPrompt() {
-        const headlines = allArticlesData.map(item => parseNewsItem(item).headline);
-        const numberedHeadlines = headlines.map((h, i) => `${i + 1}. ${h}`).join('\n');
-        return `Berikut adalah headline berita ekonomi global terbaru:\n${numberedHeadlines}\n\nBerdasarkan headline di atas, berikan analisis singkat tentang arah kebijakan moneter ke depan, sentimen pasar (bullish/bearish/netral), serta sebutkan pair/aset yang mungkin terpengaruh (contoh: XAUUSD, EURUSD, OILUSD). Jawab HANYA dalam format JSON: {"kesimpulan": "markdown string"}. Gunakan emoji 📈 (bullish) dan 📉 (bearish) jika relevan.`;
-    }
-
-    function openModalWithSpinner(title, message) {
-        const titleEl = document.querySelector('.ai-modal-title');
-        if (titleEl) titleEl.innerHTML = title;
-        aiModalOverlay.classList.add('active');
-        aiModalContent.innerHTML = `
-            <div class="ai-modal-loading">
-                <div class="loading-hero">
-                    <div class="loading-emoji"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
-                    <div class="loading-text">
-                        AI sedang menganalisis
-                        <span class="loading-dots"><span>.</span><span>.</span><span>.</span></span>
+                <div class="settings-field">
+                    <label for="set-model">Model <span id="model-loading-hint" style="color:var(--text-black-soft);font-weight:400;"></span></label>
+                    <div style="display:flex;gap:8px;">
+                        <select id="set-model" style="flex:1;">
+                            <option value="">— pilih model —</option>
+                        </select>
+                        <button class="btn btn-secondary btn-sm" id="load-models-btn" onclick="loadModels()" title="Muat daftar model dari API"><i class="fa-solid fa-rotate"></i> Muat</button>
                     </div>
+                    <div class="hint">Masukkan Base URL + API Key valid, lalu otomatis muat model & pilih</div>
                 </div>
-                <p style="margin-top:12px;">${escapeHTML(message)}</p>
-            </div>`;
-    }
+                <div class="settings-field">
+                    <label for="set-temperature">Temperature</label>
+                    <input type="number" id="set-temperature" min="0" max="2" step="0.1" placeholder="0.7">
+                </div>
+                <div class="settings-field">
+                    <label for="set-timeout">Timeout (detik)</label>
+                    <input type="number" id="set-timeout" min="5" max="120" placeholder="30">
+                </div>
+                <div class="settings-field">
+                    <label for="set-system-prompt">System Prompt</label>
+                    <textarea id="set-system-prompt" rows="4" placeholder="Kamu adalah analis kebijakan moneter..."></textarea>
+                </div>
+            </div>
+            <div class="settings-modal-footer">
+                <button class="btn btn-danger btn-sm" onclick="resetAISettings()"><i class="fa-solid fa-trash"></i> Reset</button>
+                <button class="btn btn-secondary btn-sm" id="test-agent-btn" onclick="testAgentConnection()"><i class="fa-solid fa-plug-circle-bolt"></i> Tes Koneksi</button>
+                <button class="btn btn-secondary btn-sm" onclick="closeAISettings()"><i class="fa-solid fa-xmark"></i> Tutup</button>
+                <button class="btn btn-primary btn-sm" onclick="saveAISettings()"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
+            </div>
+        </div>
+    </div>
 
-    function resetModalTitle() {
-        const titleEl = document.querySelector('.ai-modal-title');
-        if (titleEl) titleEl.innerHTML = '<i class="fa-solid fa-brain"></i> Analisis Kebijakan Moneter AI';
-    }
+    <main class="container" id="news-container">
+        <div class="loading">
+            <div class="spinner"></div>
+            <p><i class="fa-solid fa-newspaper"></i> Mengambil berita terbaru…</p>
+        </div>
+    </main>
 
-    async function analyzeMonetaryPolicy() {
-        if (aiAnalysisInProgress) return;
-        if (!allArticlesData || allArticlesData.length === 0) {
-            alert('Belum ada berita untuk dianalisis. Silakan refresh feed terlebih dahulu.');
-            return;
-        }
+    <script src="js/settings.js"></script>
+    <script src="js/ai.js"></script>
+    <script src="js/ai-agent.js"></script>
 
-        aiAnalysisInProgress = true;
-        aiBtn.disabled = true;
-        aiBtnText.innerHTML = '<span class="spinner-small"></span> Menganalisis...';
-        openModalWithSpinner(
-            '<i class="fa-solid fa-brain"></i> Analisis Kebijakan Moneter AI',
-            'AI sedang menganalisis kebijakan moneter berdasarkan headline...'
-        );
-
-        try {
-            const userPrompt = buildAnalysisPrompt();
-            const systemPrompt =
-                'Kamu adalah analis kebijakan moneter profesional. Berikan kesimpulan dalam bahasa Indonesia yang informatif dan terstruktur dengan markdown, termasuk poin-poin utama, indikator bullish/bearish, dan daftar pair yang terpengaruh. Pastikan output adalah JSON valid tanpa teks lain.';
-
-            const rawAnswer = await AIDefault.ask(userPrompt, systemPrompt);
-            const markdown = AIDefault.extractMarkdown(rawAnswer);
-            aiModalContent.innerHTML = marked.parse(markdown);
-        } catch (err) {
-            console.error('AI analysis error:', err);
-            aiModalContent.innerHTML = `<p style="color:var(--danger);">Gagal mendapatkan analisis AI: ${escapeHTML(err.message)}</p>`;
-        } finally {
-            aiAnalysisInProgress = false;
-            aiBtn.disabled = false;
-            aiBtnText.innerHTML = '<i class="fa-solid fa-brain"></i> Analisis AI';
-        }
-    }
-
-    const aiAgentBtn = document.getElementById('ai-agent-btn');
-
-    async function analyzeWithAgent() {
-        if (aiAnalysisInProgress) return;
-        if (!allArticlesData || allArticlesData.length === 0) {
-            alert('Belum ada berita untuk dianalisis. Silakan refresh feed terlebih dahulu.');
-            return;
-        }
-        if (!AISettings.isAgentConfigured()) {
-            openAISettings();
-            showSettingsStatus('Isi Base URL dan Model terlebih dahulu, lalu simpan.', 'error');
-            return;
-        }
-
-        aiAnalysisInProgress = true;
-        aiAgentBtn.disabled = true;
-        aiAgentBtn.innerHTML = '<span class="spinner-small"></span> Menganalisis...';
-        const cfg = AISettings.getAgent();
-        openModalWithSpinner(`<i class="fa-solid fa-robot"></i> AI Agent — ${cfg.model}`, 'AI Agent sedang menganalisis berdasarkan headline...');
-
-        try {
-            const userPrompt = buildAnalysisPrompt();
-            const rawAnswer = await AIAgent.ask(userPrompt);
-            const markdown = AIDefault.extractMarkdown(rawAnswer);
-            aiModalContent.innerHTML = marked.parse(markdown);
-        } catch (err) {
-            console.error('AI Agent error:', err);
-            aiModalContent.innerHTML = `<p style="color:var(--danger);">AI Agent gagal: ${escapeHTML(err.message)}</p>`;
-        } finally {
-            aiAnalysisInProgress = false;
-            aiAgentBtn.disabled = false;
-            aiAgentBtn.innerHTML = '<i class="fa-solid fa-robot"></i> AI Agent';
-            resetModalTitle();
-        }
-    }
-
-    const settingsOverlay = document.getElementById('settings-modal-overlay');
-    const settingsStatus = document.getElementById('settings-status');
-    const modelSelect = document.getElementById('set-model');
-    const loadModelsBtn = document.getElementById('load-models-btn');
-    let modelsLoadTimer = null;
-
-    function populateModelSelect(models, selected) {
-        const current = selected || modelSelect.value || '';
-        const list = Array.isArray(models) ? models.slice() : [];
-        if (current && !list.includes(current)) list.unshift(current);
-        modelSelect.innerHTML = '';
-        if (list.length === 0) {
-            const opt = document.createElement('option');
-            opt.value = '';
-            opt.textContent = '— pilih model —';
-            modelSelect.appendChild(opt);
-        } else {
-            list.forEach(m => {
-                const opt = document.createElement('option');
-                opt.value = m;
-                opt.textContent = m;
-                modelSelect.appendChild(opt);
-            });
-            modelSelect.value = current || list[0];
-        }
-    }
-
-    function openAISettings() {
-        const cfg = AISettings.getAgent();
-        document.getElementById('set-base-url').value = cfg.baseUrl || '';
-        document.getElementById('set-api-key').value = cfg.apiKey || '';
-        populateModelSelect([], cfg.model || '');
-        document.getElementById('set-temperature').value = cfg.temperature != null ? cfg.temperature : '';
-        document.getElementById('set-timeout').value = cfg.timeout != null ? cfg.timeout : '';
-        document.getElementById('set-system-prompt').value = cfg.systemPrompt || '';
-        hideSettingsStatus();
-        settingsOverlay.classList.add('active');
-        if (cfg.baseUrl && cfg.apiKey) {
-            scheduleAutoLoadModels();
-        }
-    }
-
-    function closeAISettings(confirmClose = true) {
-        if (confirmClose && settingsOverlay.classList.contains('active')) {
-            if (!confirm('Tutup pengaturan AI Agent?')) return;
-        }
-        settingsOverlay.classList.remove('active');
-        hideSettingsStatus();
-    }
-
-    function showSettingsStatus(msg, type) {
-        settingsStatus.innerHTML = msg;
-        settingsStatus.className = 'settings-status ' + type;
-    }
-
-    function hideSettingsStatus() {
-        settingsStatus.className = 'settings-status';
-        settingsStatus.textContent = '';
-    }
-
-    function collectSettingsForm() {
-        return {
-            baseUrl: document.getElementById('set-base-url').value.trim(),
-            apiKey: document.getElementById('set-api-key').value.trim(),
-            model: modelSelect.value.trim(),
-            temperature: parseFloat(document.getElementById('set-temperature').value) || 0.7,
-            timeout: parseInt(document.getElementById('set-timeout').value, 10) || 30,
-            systemPrompt: document.getElementById('set-system-prompt').value.trim(),
+    <script>
+        // ===== Currency Code Mapping =====
+        const currencyCodeMap = {
+            'Euro': 'EUR',
+            'British Pound': 'GBP',
+            'Indian Rupee': 'INR',
+            'Australian Dollar': 'AUD',
+            'Canadian Dollar': 'CAD',
+            'Singapore Dollar': 'SGD',
+            'Swiss Franc': 'CHF',
+            'Malaysian Ringgit': 'MYR',
+            'Japanese Yen': 'JPY',
+            'Chinese Yuan Renminbi': 'CNY',
+            'Argentine Peso': 'ARS',
+            'Bahraini Dinar': 'BHD',
+            'Botswana Pula': 'BWP',
+            'Brazilian Real': 'BRL',
+            'Bruneian Dollar': 'BND',
+            'Chilean Peso': 'CLP',
+            'Colombian Peso': 'COP',
+            'Czech Koruna': 'CZK',
+            'Danish Krone': 'DKK',
+            'Hong Kong Dollar': 'HKD',
+            'Hungarian Forint': 'HUF',
+            'Icelandic Krona': 'ISK',
+            'Indonesian Rupiah': 'IDR',
+            'Iranian Rial': 'IRR',
+            'Israeli Shekel': 'ILS',
+            'Kazakhstani Tenge': 'KZT',
+            'South Korean Won': 'KRW',
+            'Kuwaiti Dinar': 'KWD',
+            'Libyan Dinar': 'LYD',
+            'Mauritian Rupee': 'MUR',
+            'Mexican Peso': 'MXN',
+            'Nepalese Rupee': 'NPR',
+            'New Zealand Dollar': 'NZD',
+            'Norwegian Krone': 'NOK',
+            'Omani Rial': 'OMR',
+            'Pakistani Rupee': 'PKR',
+            'Philippine Peso': 'PHP',
+            'Polish Zloty': 'PLN',
+            'Qatari Riyal': 'QAR',
+            'Romanian New Leu': 'RON',
+            'Russian Ruble': 'RUB',
+            'Saudi Arabian Riyal': 'SAR',
+            'South African Rand': 'ZAR',
+            'Sri Lankan Rupee': 'LKR',
+            'Swedish Krona': 'SEK',
+            'Taiwan New Dollar': 'TWD',
+            'Thai Baht': 'THB',
+            'Trinidadian Dollar': 'TTD',
+            'Turkish Lira': 'TRY',
+            'Emirati Dirham': 'AED'
         };
-    }
 
-    function saveAISettings() {
-        const cfg = collectSettingsForm();
-        if (!cfg.baseUrl) {
-            showSettingsStatus('<i class="fa-solid fa-triangle-exclamation"></i> Base URL wajib diisi.', 'error');
-            return;
+        // ===== XRates Ticker =====
+        const XRATES_API_URL = 'https://api.tokocoding.my.id/api/xrates';
+        let xratesData = [];
+
+        async function fetchExchangeRates() {
+            const tickerContent = document.getElementById('fx-ticker-content');
+            if (!tickerContent) return;
+
+            try {
+                const response = await fetch(XRATES_API_URL);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                const data = await response.json();
+
+                // Hilangkan duplikat (API mengirim beberapa mata uang ganda)
+                const uniqueMap = new Map();
+                data.forEach(item => {
+                    const key = item.currency.toLowerCase();
+                    if (!uniqueMap.has(key)) {
+                        uniqueMap.set(key, item);
+                    }
+                });
+                const uniqueData = Array.from(uniqueMap.values());
+                xratesData = uniqueData;
+
+                if (uniqueData.length === 0) {
+                    tickerContent.innerHTML = '<span class="fx-ticker-item">Data nilai tukar tidak tersedia.</span>';
+                    return;
+                }
+
+                // Bangun HTML ticker dengan format USD/XXX = rate
+                const tickerHTML = uniqueData.map(item => {
+                    const currencyName = item.currency;
+                    const code = currencyCodeMap[currencyName] || currencyName;
+                    const rate = parseFloat(item.rateToUSD).toFixed(6);
+                    return `<span class="fx-ticker-item" data-code="${escapeHTML(code)}">
+                                <span class="fx-pair">USD/${escapeHTML(code)}</span>
+                                <span class="fx-rate">${rate}</span>
+                            </span>`;
+                }).join('');
+
+                // Duplikat konten agar animasi scroll mulus (2x lipat)
+                tickerContent.innerHTML = tickerHTML + tickerHTML;
+            } catch (err) {
+                console.error('Gagal memuat data XRates:', err);
+                tickerContent.innerHTML = `<span class="fx-ticker-item" style="color:var(--danger);">
+                    <i class="fa-solid fa-triangle-exclamation"></i> Gagal memuat nilai tukar.
+                </span>`;
+            }
         }
-        if (!cfg.model) {
-            showSettingsStatus('<i class="fa-solid fa-triangle-exclamation"></i> Pilih model terlebih dahulu (klik Muat jika kosong).', 'error');
-            return;
+
+        // ===== Main Script =====
+        const API_URL = 'https://api.tokocoding.my.id/api/ff';
+        const CALENDAR_API_URL = 'https://api.tokocoding.my.id/api/kalender';
+        const container = document.getElementById('news-container');
+        const countEl = document.getElementById('article-count');
+        const translateAllBtn = document.getElementById('translate-all-btn');
+        const aiBtn = document.getElementById('ai-analysis-btn');
+        const aiBtnText = document.getElementById('ai-btn-text');
+        const aiModalOverlay = document.getElementById('ai-modal-overlay');
+        const aiModalContent = document.getElementById('ai-modal-content');
+        const installBtn = document.getElementById('install-btn');
+
+        let deferredPrompt = null;
+        let allArticlesData = [];
+        let globalTranslated = false;
+        let translationInProgress = false;
+        let aiAnalysisInProgress = false;
+
+        let calendarData = {};
+        let calendarDatesOrder = [];
+        let selectedCalendarDate = null;
+        let calendarEventPanelOpen = false;
+
+        const currencyColorMap = {
+            'USD': { light: { bg: 'rgba(0,117,74,0.14)', text: '#00754A', border: 'rgba(0,117,74,0.35)' }, dark: { bg: 'rgba(30,158,110,0.18)', text: '#4cd19a', border: 'rgba(30,158,110,0.45)' } },
+            'EUR': { light: { bg: 'rgba(0,98,65,0.14)', text: '#006241', border: 'rgba(0,98,65,0.35)' }, dark: { bg: 'rgba(0,160,95,0.18)', text: '#35d98f', border: 'rgba(0,160,95,0.45)' } },
+            'JPY': { light: { bg: 'rgba(200,32,20,0.12)', text: '#c82014', border: 'rgba(200,32,20,0.3)' }, dark: { bg: 'rgba(255,92,77,0.18)', text: '#ff8a80', border: 'rgba(255,92,77,0.45)' } },
+            'GBP': { light: { bg: 'rgba(43,81,72,0.14)', text: '#2b5148', border: 'rgba(43,81,72,0.35)' }, dark: { bg: 'rgba(47,90,78,0.2)', text: '#7db8a5', border: 'rgba(47,90,78,0.5)' } },
+            'AUD': { light: { bg: 'rgba(203,162,88,0.16)', text: '#a8863f', border: 'rgba(203,162,88,0.45)' }, dark: { bg: 'rgba(212,176,106,0.18)', text: '#e2c080', border: 'rgba(212,176,106,0.45)' } },
+            'CAD': { light: { bg: 'rgba(200,32,20,0.10)', text: '#a34a3f', border: 'rgba(200,32,20,0.25)' }, dark: { bg: 'rgba(255,92,77,0.14)', text: '#f0968a', border: 'rgba(255,92,77,0.35)' } },
+            'CHF': { light: { bg: 'rgba(0,117,74,0.10)', text: '#3a6b5b', border: 'rgba(0,117,74,0.25)' }, dark: { bg: 'rgba(30,158,110,0.14)', text: '#6fc7a4', border: 'rgba(30,158,110,0.35)' } },
+            'NZD': { light: { bg: 'rgba(43,81,72,0.12)', text: '#1E3932', border: 'rgba(43,81,72,0.3)' }, dark: { bg: 'rgba(47,90,78,0.16)', text: '#8fc4b0', border: 'rgba(47,90,78,0.4)' } },
+            'CNY': { light: { bg: 'rgba(223,196,157,0.18)', text: '#b3915c', border: 'rgba(203,162,88,0.4)' }, dark: { bg: 'rgba(212,176,106,0.16)', text: '#dcc08a', border: 'rgba(212,176,106,0.4)' } },
+        };
+
+        const importantEventKeywords = [
+            'Federal Funds Rate', 'FOMC Statement', 'FOMC Press Conference', 'BOJ Policy Rate',
+            'Monetary Policy Statement', 'BOJ Outlook Report', 'Official Bank Rate', 'MPC Official',
+            'BOE Monetary Policy Report', 'Non-Farm', 'NFP', 'CPI', 'GDP', 'Unemployment Rate',
+            'Payrolls', 'ECB Press Conference', 'BOC Summary', 'RBA Gov', 'BOJ Press Conference',
+            'Advance GDP', 'Core PCE', 'Employment Cost Index', 'CB Consumer Confidence'
+        ];
+
+        function isImportantEvent(eventName) {
+            return importantEventKeywords.some(keyword =>
+                eventName.toLowerCase().includes(keyword.toLowerCase())
+            );
         }
-        AISettings.saveAgent(cfg);
-        showSettingsStatus('<i class="fa-solid fa-circle-check"></i> Pengaturan berhasil disimpan.', 'success');
-        closeAISettings(false);
-    }
 
-    function scheduleAutoLoadModels() {
-        clearTimeout(modelsLoadTimer);
-        const baseUrl = document.getElementById('set-base-url').value.trim();
-        const apiKey = document.getElementById('set-api-key').value.trim();
-        if (baseUrl && apiKey) {
-            modelsLoadTimer = setTimeout(loadModels, 600);
-        }
-    }
-
-    async function loadModels() {
-        const baseUrl = document.getElementById('set-base-url').value.trim();
-        const apiKey = document.getElementById('set-api-key').value.trim();
-        if (!baseUrl || !apiKey) {
-            showSettingsStatus('Isi Base URL dan API Key dulu, lalu klik Muat.', 'error');
-            return;
+        function isDarkTheme() {
+            return document.documentElement.getAttribute('data-theme') === 'dark';
         }
 
-        AISettings.saveAgent({
-            ...AISettings.getAgent(),
-            baseUrl,
-            apiKey
-        });
-
-        loadModelsBtn.disabled = true;
-        loadModelsBtn.innerHTML = '<span class="spinner-small"></span>';
-        const hint = document.getElementById('model-loading-hint');
-        if (hint) hint.textContent = 'memuat...';
-        showSettingsStatus('<i class="fa-solid fa-spinner fa-spin"></i> Memuat daftar model...', 'success');
-        try {
-            const models = await AIAgent.listModels();
-            populateModelSelect(models, '');
-            showSettingsStatus(`<i class="fa-solid fa-circle-check"></i> ${models.length} model ditemukan. Pilih model lalu Simpan.`, 'success');
-        } catch (err) {
-            console.error('Load models error:', err);
-            showSettingsStatus(`<i class="fa-solid fa-circle-xmark"></i> Gagal memuat model: ${escapeHTML(err.message)}`, 'error');
-        } finally {
-            loadModelsBtn.disabled = false;
-            loadModelsBtn.innerHTML = '<i class="fa-solid fa-rotate"></i> Muat';
-            if (hint) hint.textContent = '';
+        function getCurrencyStyle(currency) {
+            const upper = (currency || '').toUpperCase().trim();
+            if (currencyColorMap[upper]) {
+                const variant = isDarkTheme() ? currencyColorMap[upper].dark : currencyColorMap[upper].light;
+                return variant;
+            }
+            return isDarkTheme()
+                ? { bg: 'rgba(255,255,255,0.08)', text: 'rgba(255,255,255,0.58)', border: 'rgba(255,255,255,0.18)' }
+                : { bg: 'rgba(0,0,0,0.06)', text: 'rgba(0,0,0,0.58)', border: 'rgba(0,0,0,0.15)' };
         }
-    }
 
-    async function testAgentConnection() {
-        const testBtn = document.getElementById('test-agent-btn');
-        AISettings.saveAgent(collectSettingsForm());
+        function parseCalendarData(rawData) {
+            const calendar = {};
+            let currentDate = null;
+            let currentTime = null;
+            const dateRegex = /^(Sun|Mon|Tue|Wed|Thu|Fri|Sat)\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{1,2}$/;
+            const timeRegex = /^\d{1,2}:\d{2}(am|pm)$/;
 
-        testBtn.disabled = true;
-        testBtn.innerHTML = '<span class="spinner-small"></span> Menguji...';
-        showSettingsStatus('<i class="fa-solid fa-spinner fa-spin"></i> Menghubungi AI Agent...', 'success');
-        try {
-            const reply = await AIAgent.testConnection();
-            showSettingsStatus(`<i class="fa-solid fa-circle-check"></i> Koneksi berhasil! Respons: "${escapeHTML(reply.substring(0, 80))}"`, 'success');
-        } catch (err) {
-            showSettingsStatus(`<i class="fa-solid fa-circle-xmark"></i> Gagal: ${escapeHTML(err.message)}`, 'error');
-        } finally {
-            testBtn.disabled = false;
-            testBtn.innerHTML = '<i class="fa-solid fa-plug-circle-bolt"></i> Tes Koneksi';
+            for (const item of rawData) {
+                const label = (item.label || '').trim();
+                const v1 = (item.value1 || '').trim();
+                const v2 = (item.value2 || '').trim();
+                const v3 = (item.value3 || '').trim();
+                const v4 = (item.value4 || '').trim();
+
+                if (dateRegex.test(label) && !v1 && !v2 && !v3 && !v4) {
+                    currentDate = label;
+                    currentTime = null;
+                    if (!calendar[currentDate]) calendar[currentDate] = [];
+                    continue;
+                }
+
+                if (dateRegex.test(label) && v1 && timeRegex.test(v1)) {
+                    currentDate = label;
+                    currentTime = v1;
+                    if (!calendar[currentDate]) calendar[currentDate] = [];
+                    const eventName = v3 || v4 || '';
+                    calendar[currentDate].push({
+                        time: v1,
+                        currency: v2 || '',
+                        event: eventName,
+                        important: isImportantEvent(eventName),
+                    });
+                    continue;
+                }
+
+                if (label === '' && currentDate) {
+                    const eventName = v3 || v4 || '';
+                    calendar[currentDate].push({
+                        time: currentTime || '',
+                        currency: v1 || '',
+                        event: eventName,
+                        important: isImportantEvent(eventName),
+                    });
+                    continue;
+                }
+
+                if ((timeRegex.test(label) || label === 'All Day' || label === 'Tentative') && currentDate) {
+                    currentTime = label;
+                    const eventName = v3 || v4 || '';
+                    calendar[currentDate].push({
+                        time: label,
+                        currency: v1 || '',
+                        event: eventName,
+                        important: isImportantEvent(eventName),
+                    });
+                    continue;
+                }
+            }
+            return calendar;
         }
-    }
 
-    function resetAISettings() {
-        if (!confirm('Reset semua pengaturan AI Agent ke default?')) return;
-        AISettings.reset();
-        openAISettings();
-        showSettingsStatus('<i class="fa-solid fa-circle-check"></i> Pengaturan direset ke default.', 'success');
-    }
+        function groupEventsByTime(events) {
+            const grouped = [];
+            let currentGroup = null;
+            for (const ev of events) {
+                if (!currentGroup || currentGroup.time !== ev.time) {
+                    currentGroup = { time: ev.time, events: [ev] };
+                    grouped.push(currentGroup);
+                } else {
+                    currentGroup.events.push(ev);
+                }
+            }
+            return grouped;
+        }
 
-    async function fetchNews() {
-        container.innerHTML = `
-            <div class="loading">
-                <div class="spinner"></div>
-                <p><i class="fa-solid fa-newspaper"></i> Mengambil berita terbaru…</p>
-            </div>`;
-        countEl.textContent = '— articles';
-        globalTranslated = false;
-        translateAllBtn.classList.remove('active');
-        allArticlesData = [];
+        function buildCalendarTabs() {
+            const tabsContainer = document.getElementById('calendar-tabs-container');
+            if (!tabsContainer) return;
+            tabsContainer.innerHTML = '';
 
-        try {
-            const response = await fetch(API_URL);
-            if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-            const json = await response.json();
-            if (!json.ok || !Array.isArray(json.data)) throw new Error('Invalid API response structure.');
+            calendarDatesOrder.forEach(dateStr => {
+                const events = calendarData[dateStr] || [];
+                const hasEvents = events.length > 0;
+                const parts = dateStr.split(' ');
+                const dayName = parts[0] || '';
+                const monthName = parts[1] || '';
+                const dateNum = parts[2] || '';
 
-            const articles = json.data;
-            allArticlesData = articles;
-            container.innerHTML = '';
+                const tab = document.createElement('button');
+                tab.className = 'calendar-tab' + (hasEvents ? ' has-events' : '');
+                if (dateStr === selectedCalendarDate && calendarEventPanelOpen) {
+                    tab.classList.add('active');
+                }
+                tab.innerHTML = `
+                    <span class="tab-day">${dayName}</span>
+                    <span class="tab-date">${dateNum}</span>
+                    <span class="tab-month">${monthName}</span>
+                    <span class="tab-event-dot"></span>
+                `;
+                tab.title = `${dateStr} — ${hasEvents ? events.length + ' event' + (events.length > 1 ? 's' : '') : 'No events'}`;
+                tab.addEventListener('click', () => toggleCalendarDate(dateStr));
+                tabsContainer.appendChild(tab);
+            });
+        }
 
-            if (articles.length === 0) {
-                container.innerHTML = '<p style="text-align:center;color:var(--text-black-soft);padding:40px;">Tidak ada artikel ditemukan.</p>';
-                countEl.textContent = '0 artikel';
+        function toggleCalendarDate(dateStr) {
+            if (selectedCalendarDate === dateStr && calendarEventPanelOpen) {
+                closeCalendarPanel();
+                return;
+            }
+            selectedCalendarDate = dateStr;
+            calendarEventPanelOpen = true;
+            renderEventPanel(dateStr);
+            buildCalendarTabs();
+            document.getElementById('calendar-event-panel').classList.add('open');
+        }
+
+        function closeCalendarPanel() {
+            calendarEventPanelOpen = false;
+            document.getElementById('calendar-event-panel').classList.remove('open');
+            buildCalendarTabs();
+        }
+
+        function renderEventPanel(dateStr) {
+            const panelInner = document.getElementById('calendar-event-panel-inner');
+            if (!panelInner) return;
+            const events = calendarData[dateStr] || [];
+            const grouped = groupEventsByTime(events);
+
+            if (events.length === 0) {
+                panelInner.innerHTML = `
+                    <div class="calendar-event-panel-header">
+                        <div class="calendar-event-panel-title"><i class="fa-solid fa-calendar-day"></i> ${dateStr}</div>
+                        <button class="calendar-event-close" onclick="closeCalendarPanel()"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                    <div class="calendar-no-events">Tidak ada event ekonomi untuk tanggal ini.</div>`;
                 return;
             }
 
-            articles.forEach((item, i) => {
-                const cardHTML = buildArticleCardHTML(item, i, false);
-                container.insertAdjacentHTML('beforeend', cardHTML);
+            let html = `
+                <div class="calendar-event-panel-header">
+                    <div class="calendar-event-panel-title">
+                        <i class="fa-solid fa-calendar-day"></i> ${dateStr}
+                        <span class="calendar-event-panel-count">${events.length} event${events.length > 1 ? 's' : ''}</span>
+                    </div>
+                    <button class="calendar-event-close" onclick="closeCalendarPanel()"><i class="fa-solid fa-xmark"></i></button>
+                </div>`;
+
+            grouped.forEach(group => {
+                const timeClass = (group.time === 'All Day' || group.time === 'Tentative') ? ' special' : '';
+                html += `
+                    <div class="calendar-event-time-group">
+                        <div class="calendar-event-time-label${timeClass}"><i class="fa-regular fa-clock"></i> ${group.time || 'TBA'}</div>`;
+                group.events.forEach(ev => {
+                    const cs = getCurrencyStyle(ev.currency);
+                    const importantClass = ev.important ? ' important' : '';
+                    const starHtml = ev.important ? '<span class="calendar-event-star"><i class="fa-solid fa-star"></i></span>' : '';
+                    html += `
+                        <div class="calendar-event-item${importantClass}">
+                            <span class="calendar-event-currency" style="background:${cs.bg};color:${cs.text};border:1px solid ${cs.border};">${escapeHTML(ev.currency)}</span>
+                            <span class="calendar-event-name">${escapeHTML(ev.event)}${starHtml}</span>
+                        </div>`;
+                });
+                html += `</div>`;
             });
 
-            const cards = container.querySelectorAll('.article-card');
-            cards.forEach((card, i) => { card.style.animationDelay = `${i * 0.05}s`; });
+            panelInner.innerHTML = html;
+        }
 
-            countEl.textContent = `${articles.length} artikel`;
-        } catch (err) {
-            console.error('Fetch error:', err);
-            container.innerHTML = `
-                <div class="error-box">
-                    <i class="fa-solid fa-triangle-exclamation"></i> Gagal memuat berita: ${escapeHTML(err.message)}<br>
-                    <small>Silakan periksa koneksi Anda dan coba lagi.</small>
-                    <br><br>
-                    <button class="btn btn-primary" onclick="fetchNews()"><i class="fa-solid fa-rotate-right"></i> Coba Lagi</button>
+        function scrollCalendarTabs(direction) {
+            const tabsContainer = document.getElementById('calendar-tabs-container');
+            if (!tabsContainer) return;
+            const scrollAmount = 200;
+            tabsContainer.scrollBy({
+                left: direction * scrollAmount,
+                behavior: 'smooth'
+            });
+        }
+
+        async function fetchCalendarData() {
+            const tabsContainer = document.getElementById('calendar-tabs-container');
+            if (tabsContainer) {
+                tabsContainer.innerHTML = '<div class="calendar-loading" style="width:100%;text-align:center;padding:12px;">Memuat kalender...</div>';
+            }
+            try {
+                const response = await fetch(CALENDAR_API_URL);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                const json = await response.json();
+                if (!json.ok || !Array.isArray(json.data)) throw new Error('Invalid calendar API response');
+
+                calendarData = parseCalendarData(json.data);
+                calendarDatesOrder = Object.keys(calendarData).sort((a, b) => {
+                    const dateA = new Date(a + ' 2026');
+                    const dateB = new Date(b + ' 2026');
+                    return dateA - dateB;
+                });
+
+                const today = new Date();
+                const todayStr = today.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }).replace(/,/g, '');
+
+                let matchedDate = null;
+                const todayParts = todayStr.split(' ');
+                if (todayParts.length >= 3) {
+                    const todayFormatted = `${todayParts[0]} ${todayParts[1]} ${todayParts[2]}`;
+                    if (calendarDatesOrder.includes(todayFormatted)) {
+                        matchedDate = todayFormatted;
+                    }
+                }
+
+                if (!matchedDate && calendarDatesOrder.length > 0) {
+                    const todayTime = today.getTime();
+                    let closestDate = calendarDatesOrder[0];
+                    let closestDiff = Infinity;
+                    for (const d of calendarDatesOrder) {
+                        const dTime = new Date(d + ' 2026').getTime();
+                        const diff = Math.abs(dTime - todayTime);
+                        if (diff < closestDiff) {
+                            closestDiff = diff;
+                            closestDate = d;
+                        }
+                    }
+                    matchedDate = closestDate;
+                }
+
+                selectedCalendarDate = matchedDate;
+                calendarEventPanelOpen = true;
+                buildCalendarTabs();
+                if (selectedCalendarDate) {
+                    renderEventPanel(selectedCalendarDate);
+                    document.getElementById('calendar-event-panel').classList.add('open');
+                }
+            } catch (err) {
+                console.error('Calendar fetch error:', err);
+                if (tabsContainer) {
+                    tabsContainer.innerHTML = '<span style="color:var(--danger);font-size:11px;padding:12px;"><i class="fa-solid fa-triangle-exclamation"></i> Gagal memuat kalender. <button onclick="fetchCalendarData()" style="color:var(--green-accent);background:none;border:none;cursor:pointer;text-decoration:underline;">Coba lagi</button></span>';
+                }
+            }
+        }
+
+        async function translateText(text, targetLang = 'id', sourceLang = 'en') {
+            if (!text || text.trim().length === 0) return text;
+            if (text.length > 1500) {
+                const chunks = [];
+                let remaining = text;
+                while (remaining.length > 0) {
+                    if (remaining.length <= 1500) { chunks.push(remaining); break; }
+                    let breakPoint = remaining.lastIndexOf('.', 1400);
+                    if (breakPoint === -1 || breakPoint < 500) breakPoint = remaining.lastIndexOf(' ', 1400);
+                    if (breakPoint === -1 || breakPoint < 500) breakPoint = 1400;
+                    chunks.push(remaining.substring(0, breakPoint + 1));
+                    remaining = remaining.substring(breakPoint + 1);
+                }
+                const translatedChunks = await Promise.all(chunks.map(chunk => translateSingleChunk(chunk, targetLang, sourceLang)));
+                return translatedChunks.join(' ');
+            }
+            return await translateSingleChunk(text, targetLang, sourceLang);
+        }
+
+        async function translateSingleChunk(text, targetLang, sourceLang) {
+            const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLang}&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`;
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Translation API failed');
+                const data = await response.json();
+                if (data && data[0] && Array.isArray(data[0])) {
+                    return data[0].map(segment => segment[0]).join('');
+                }
+                return text;
+            } catch (err) {
+                console.warn('Translation error:', err);
+                return text;
+            }
+        }
+
+        function parseNewsItem(item) {
+            const title = item.newsblock__title || 'Untitled Article';
+            const body = item.newsblock__body || '';
+            const sourceMatch = body.match(/From\s+([^\|\n]+)/i);
+            const source = sourceMatch ? sourceMatch[1].trim() : '';
+            const timeMatch = body.match(/\|\s*(\d+\s*(?:hr|min|hour|minute|day)s?\s*(?:\d+\s*(?:min|hr|hour|minute)s?)?\s*ago)/i);
+            const time = timeMatch ? timeMatch[1].trim() : '';
+            const commentMatch = body.match(/(\d+)\s*comments?/i);
+            const commentCount = commentMatch ? parseInt(commentMatch[1], 10) : 0;
+            let snippet = body
+                .replace(/\|\s*\d+\s*(?:hr|min|hour|minute|day)s?\s*(?:\d+\s*(?:min|hr|hour|minute)s?)?\s*ago\s*\|?/gi, '')
+                .replace(/From\s+[^\s\|\n]+/i, '')
+                .replace(/\d+\s*comments?/gi, '')
+                .replace(/\|/g, '')
+                .replace(/\s+/g, ' ')
+                .trim();
+            if (snippet.length > 200) snippet = snippet.substring(0, 200) + '...';
+            return { headline: title, source, time, commentCount, snippet };
+        }
+
+        function parseComments(bodyString) {
+            if (!bodyString || typeof bodyString !== 'string' || bodyString.trim() === '') return [];
+            return [];
+        }
+
+        function escapeHTML(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        function buildArticleCardHTML(item, index, isTranslated = false, translatedData = null) {
+            const flexData = translatedData || parseNewsItem(item);
+            const comments = parseComments(item.newsblock__body);
+            const cardId = `article-${index}`;
+
+            let metaHTML = '';
+            if (flexData.source) metaHTML += `<span class="source">${escapeHTML(flexData.source)}</span>`;
+            if (flexData.time) metaHTML += `<span class="time"><i class="fa-regular fa-clock"></i> ${escapeHTML(flexData.time)}</span>`;
+            if (flexData.commentCount > 0) metaHTML += `<span class="comment-count"><i class="fa-solid fa-comments"></i> ${flexData.commentCount} comment${flexData.commentCount !== 1 ? 's' : ''}</span>`;
+
+            let commentsHTML = '';
+            if (comments.length > 0) {
+                commentsHTML = `
+                    <div class="comments-section" id="comments-${index}">
+                        <div class="comments-label"><i class="fa-solid fa-comments"></i> Top Comments</div>
+                        ${comments.map((c, ci) => `
+                            <div class="comment-item" id="comment-${index}-${ci}">
+                                <div class="comment-user">@${escapeHTML(c.user)}</div>
+                                <div class="comment-text" data-original="${escapeHTML(c.text)}">${escapeHTML(c.text)}</div>
+                            </div>
+                        `).join('')}
+                    </div>`;
+            } else if (flexData.commentCount > 0) {
+                commentsHTML = `
+                    <div class="comments-section" id="comments-${index}">
+                        <div class="comments-label"><i class="fa-solid fa-comments"></i> Comments</div>
+                        <p class="no-comments" style="color: var(--text-black-soft);">No comment preview available.</p>
+                    </div>`;
+            }
+
+            const translatedClass = isTranslated ? ' translated' : '';
+            const badgeHTML = isTranslated ? '<span class="translation-badge">ID</span> ' : '';
+
+            return `
+                <article class="article-card${translatedClass}" id="${cardId}" data-index="${index}">
+                    <div class="article-body">
+                        <h2 class="article-headline" data-original="${escapeHTML(parseNewsItem(item).headline)}">
+                            ${badgeHTML}${escapeHTML(flexData.headline)}
+                        </h2>
+                        ${metaHTML ? `<div class="article-meta">${metaHTML}</div>` : ''}
+                        ${flexData.snippet ? `<p class="article-snippet" data-original="${escapeHTML(parseNewsItem(item).snippet)}">${escapeHTML(flexData.snippet)}</p>` : ''}
+                        <button class="translate-btn" id="translate-btn-${index}" onclick="toggleArticleTranslation(${index})" title="Terjemahkan artikel ini ke Bahasa Indonesia">
+                            <i class="fa-solid fa-language"></i> Terjemahkan
+                        </button>
+                        ${commentsHTML}
+                    </div>
+                </article>
+            `;
+        }
+
+        async function toggleArticleTranslation(index) {
+            if (translationInProgress) return;
+            const btn = document.getElementById(`translate-btn-${index}`);
+            const card = document.getElementById(`article-${index}`);
+            if (!card) return;
+            const isCurrentlyTranslated = card.classList.contains('translated');
+
+            if (isCurrentlyTranslated) {
+                revertArticleTranslation(index);
+                updateGlobalButtonState();
+                return;
+            }
+
+            translationInProgress = true;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-small"></span> Menerjemahkan…';
+
+            try {
+                const item = allArticlesData[index];
+                const flexData = parseNewsItem(item);
+
+                const translatedHeadline = await translateText(flexData.headline);
+                let translatedSnippet = '';
+                if (flexData.snippet) translatedSnippet = await translateText(flexData.snippet);
+
+                const headlineEl = card.querySelector('.article-headline');
+                headlineEl.textContent = translatedHeadline;
+                headlineEl.classList.add('translated-text');
+                if (!headlineEl.querySelector('.translation-badge')) {
+                    const badge = document.createElement('span');
+                    badge.className = 'translation-badge';
+                    badge.textContent = 'ID';
+                    headlineEl.prepend(badge);
+                }
+
+                const snippetEl = card.querySelector('.article-snippet');
+                if (snippetEl && translatedSnippet) {
+                    snippetEl.textContent = translatedSnippet;
+                    snippetEl.classList.add('translated-text');
+                }
+
+                const commentTexts = card.querySelectorAll('.comment-text');
+                for (const ct of commentTexts) {
+                    const original = ct.getAttribute('data-original');
+                    if (original) {
+                        const translatedComment = await translateText(original);
+                        ct.textContent = translatedComment;
+                        ct.classList.add('translated-text');
+                    }
+                }
+                const commentItems = card.querySelectorAll('.comment-item');
+                commentItems.forEach(ci => ci.classList.add('translated-comment'));
+
+                card.classList.add('translated');
+                btn.classList.add('active');
+                btn.innerHTML = '<i class="fa-solid fa-rotate-left"></i> Kembali ke Asli';
+            } catch (err) {
+                console.error('Translation failed', err);
+                btn.innerHTML = '<i class="fa-solid fa-language"></i> Terjemahkan (gagal)';
+            } finally {
+                btn.disabled = false;
+                translationInProgress = false;
+                updateGlobalButtonState();
+            }
+        }
+
+        function revertArticleTranslation(index) {
+            const card = document.getElementById(`article-${index}`);
+            const btn = document.getElementById(`translate-btn-${index}`);
+            if (!card || !btn) return;
+            const item = allArticlesData[index];
+            const flexData = parseNewsItem(item);
+
+            const headlineEl = card.querySelector('.article-headline');
+            const badge = headlineEl ? headlineEl.querySelector('.translation-badge') : null;
+            if (badge) badge.remove();
+            if (headlineEl) {
+                headlineEl.textContent = flexData.headline;
+                headlineEl.classList.remove('translated-text');
+            }
+
+            const snippetEl = card.querySelector('.article-snippet');
+            if (snippetEl) {
+                snippetEl.textContent = flexData.snippet;
+                snippetEl.classList.remove('translated-text');
+            }
+
+            const commentTexts = card.querySelectorAll('.comment-text');
+            commentTexts.forEach(ct => {
+                const original = ct.getAttribute('data-original');
+                if (original) {
+                    ct.textContent = original;
+                    ct.classList.remove('translated-text');
+                }
+            });
+            const commentItems = card.querySelectorAll('.comment-item');
+            commentItems.forEach(ci => ci.classList.remove('translated-comment'));
+
+            card.classList.remove('translated');
+            btn.classList.remove('active');
+            btn.innerHTML = '<i class="fa-solid fa-language"></i> Terjemahkan';
+        }
+
+        async function toggleTranslateAll() {
+            if (translationInProgress) return;
+            if (globalTranslated) {
+                for (let i = 0; i < allArticlesData.length; i++) {
+                    const card = document.getElementById(`article-${i}`);
+                    if (card && card.classList.contains('translated')) revertArticleTranslation(i);
+                }
+                globalTranslated = false;
+                translateAllBtn.classList.remove('active');
+            } else {
+                globalTranslated = true;
+                translateAllBtn.classList.add('active');
+                translateAllBtn.disabled = true;
+                for (let i = 0; i < allArticlesData.length; i++) {
+                    const card = document.getElementById(`article-${i}`);
+                    if (card && !card.classList.contains('translated')) {
+                        try { await toggleArticleTranslation(i); } catch (e) { console.warn('Failed', i); }
+                        await new Promise(resolve => setTimeout(resolve, 300));
+                    }
+                }
+                translateAllBtn.disabled = false;
+                translationInProgress = false;
+            }
+            updateGlobalButtonState();
+        }
+
+        function updateGlobalButtonState() {
+            const cards = document.querySelectorAll('.article-card');
+            const allTranslated = cards.length > 0 && Array.from(cards).every(c => c.classList.contains('translated'));
+            if (allTranslated) {
+                globalTranslated = true;
+                translateAllBtn.classList.add('active');
+            } else {
+                globalTranslated = false;
+                translateAllBtn.classList.remove('active');
+            }
+        }
+
+        function closeAIModal(confirmClose = true) {
+            if (confirmClose && aiModalOverlay.classList.contains('active')) {
+                if (!confirm('Tutup pop-up analisis AI ini?')) return;
+            }
+            aiModalOverlay.classList.remove('active');
+            aiModalContent.innerHTML = '';
+            resetModalTitle();
+        }
+
+        function buildAnalysisPrompt() {
+            const headlines = allArticlesData.map(item => parseNewsItem(item).headline);
+            const numberedHeadlines = headlines.map((h, i) => `${i + 1}. ${h}`).join('\n');
+            return `Berikut adalah headline berita ekonomi global terbaru:\n${numberedHeadlines}\n\nBerdasarkan headline di atas, berikan analisis singkat tentang arah kebijakan moneter ke depan, sentimen pasar (bullish/bearish/netral), serta sebutkan pair/aset yang mungkin terpengaruh (contoh: XAUUSD, EURUSD, OILUSD). Jawab HANYA dalam format JSON: {"kesimpulan": "markdown string"}. Gunakan emoji 📈 (bullish) dan 📉 (bearish) jika relevan.`;
+        }
+
+        function openModalWithSpinner(title, message) {
+            const titleEl = document.querySelector('.ai-modal-title');
+            if (titleEl) titleEl.innerHTML = title;
+            aiModalOverlay.classList.add('active');
+            aiModalContent.innerHTML = `
+                <div class="ai-modal-loading">
+                    <div class="loading-hero">
+                        <div class="loading-emoji"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                        <div class="loading-text">
+                            AI sedang menganalisis
+                            <span class="loading-dots"><span>.</span><span>.</span><span>.</span></span>
+                        </div>
+                    </div>
+                    <p style="margin-top:12px;">${escapeHTML(message)}</p>
                 </div>`;
-            countEl.textContent = 'Error';
         }
-    }
 
-    aiModalOverlay.addEventListener('click', (e) => {
-        if (e.target === aiModalOverlay) closeAIModal();
-    });
+        function resetModalTitle() {
+            const titleEl = document.querySelector('.ai-modal-title');
+            if (titleEl) titleEl.innerHTML = '<i class="fa-solid fa-brain"></i> Analisis Kebijakan Moneter AI';
+        }
 
-    settingsOverlay.addEventListener('click', (e) => {
-        if (e.target === settingsOverlay) closeAISettings();
-    });
+        async function analyzeMonetaryPolicy() {
+            if (aiAnalysisInProgress) return;
+            if (!allArticlesData || allArticlesData.length === 0) {
+                alert('Belum ada berita untuk dianalisis. Silakan refresh feed terlebih dahulu.');
+                return;
+            }
 
-    document.getElementById('set-base-url').addEventListener('input', scheduleAutoLoadModels);
-    document.getElementById('set-api-key').addEventListener('input', scheduleAutoLoadModels);
+            aiAnalysisInProgress = true;
+            aiBtn.disabled = true;
+            aiBtnText.innerHTML = '<span class="spinner-small"></span> Menganalisis...';
+            openModalWithSpinner(
+                '<i class="fa-solid fa-brain"></i> Analisis Kebijakan Moneter AI',
+                'AI sedang menganalisis kebijakan moneter berdasarkan headline...'
+            );
 
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        if (installBtn) installBtn.style.display = 'inline-flex';
-    });
+            try {
+                const userPrompt = buildAnalysisPrompt();
+                const systemPrompt =
+                    'Kamu adalah analis kebijakan moneter profesional. Berikan kesimpulan dalam bahasa Indonesia yang informatif dan terstruktur dengan markdown, termasuk poin-poin utama, indikator bullish/bearish, dan daftar pair yang terpengaruh. Pastikan output adalah JSON valid tanpa teks lain.';
 
-    if (installBtn) {
-        installBtn.addEventListener('click', async () => {
-            if (!deferredPrompt) return;
-            deferredPrompt.prompt();
-            await deferredPrompt.userChoice;
+                const rawAnswer = await AIDefault.ask(userPrompt, systemPrompt);
+                const markdown = AIDefault.extractMarkdown(rawAnswer);
+                aiModalContent.innerHTML = marked.parse(markdown);
+            } catch (err) {
+                console.error('AI analysis error:', err);
+                aiModalContent.innerHTML = `<p style="color:var(--danger);">Gagal mendapatkan analisis AI: ${escapeHTML(err.message)}</p>`;
+            } finally {
+                aiAnalysisInProgress = false;
+                aiBtn.disabled = false;
+                aiBtnText.innerHTML = '<i class="fa-solid fa-brain"></i> Analisis AI';
+            }
+        }
+
+        const aiAgentBtn = document.getElementById('ai-agent-btn');
+
+        async function analyzeWithAgent() {
+            if (aiAnalysisInProgress) return;
+            if (!allArticlesData || allArticlesData.length === 0) {
+                alert('Belum ada berita untuk dianalisis. Silakan refresh feed terlebih dahulu.');
+                return;
+            }
+            if (!AISettings.isAgentConfigured()) {
+                openAISettings();
+                showSettingsStatus('Isi Base URL dan Model terlebih dahulu, lalu simpan.', 'error');
+                return;
+            }
+
+            aiAnalysisInProgress = true;
+            aiAgentBtn.disabled = true;
+            aiAgentBtn.innerHTML = '<span class="spinner-small"></span> Menganalisis...';
+            const cfg = AISettings.getAgent();
+            openModalWithSpinner(`<i class="fa-solid fa-robot"></i> AI Agent — ${cfg.model}`, 'AI Agent sedang menganalisis berdasarkan headline...');
+
+            try {
+                const userPrompt = buildAnalysisPrompt();
+                const rawAnswer = await AIAgent.ask(userPrompt);
+                const markdown = AIDefault.extractMarkdown(rawAnswer);
+                aiModalContent.innerHTML = marked.parse(markdown);
+            } catch (err) {
+                console.error('AI Agent error:', err);
+                aiModalContent.innerHTML = `<p style="color:var(--danger);">AI Agent gagal: ${escapeHTML(err.message)}</p>`;
+            } finally {
+                aiAnalysisInProgress = false;
+                aiAgentBtn.disabled = false;
+                aiAgentBtn.innerHTML = '<i class="fa-solid fa-robot"></i> AI Agent';
+                resetModalTitle();
+            }
+        }
+
+        const settingsOverlay = document.getElementById('settings-modal-overlay');
+        const settingsStatus = document.getElementById('settings-status');
+        const modelSelect = document.getElementById('set-model');
+        const loadModelsBtn = document.getElementById('load-models-btn');
+        let modelsLoadTimer = null;
+
+        function populateModelSelect(models, selected) {
+            const current = selected || modelSelect.value || '';
+            const list = Array.isArray(models) ? models.slice() : [];
+            if (current && !list.includes(current)) list.unshift(current);
+            modelSelect.innerHTML = '';
+            if (list.length === 0) {
+                const opt = document.createElement('option');
+                opt.value = '';
+                opt.textContent = '— pilih model —';
+                modelSelect.appendChild(opt);
+            } else {
+                list.forEach(m => {
+                    const opt = document.createElement('option');
+                    opt.value = m;
+                    opt.textContent = m;
+                    modelSelect.appendChild(opt);
+                });
+                modelSelect.value = current || list[0];
+            }
+        }
+
+        function openAISettings() {
+            const cfg = AISettings.getAgent();
+            document.getElementById('set-base-url').value = cfg.baseUrl || '';
+            document.getElementById('set-api-key').value = cfg.apiKey || '';
+            populateModelSelect([], cfg.model || '');
+            document.getElementById('set-temperature').value = cfg.temperature != null ? cfg.temperature : '';
+            document.getElementById('set-timeout').value = cfg.timeout != null ? cfg.timeout : '';
+            document.getElementById('set-system-prompt').value = cfg.systemPrompt || '';
+            hideSettingsStatus();
+            settingsOverlay.classList.add('active');
+            if (cfg.baseUrl && cfg.apiKey) {
+                scheduleAutoLoadModels();
+            }
+        }
+
+        function closeAISettings(confirmClose = true) {
+            if (confirmClose && settingsOverlay.classList.contains('active')) {
+                if (!confirm('Tutup pengaturan AI Agent?')) return;
+            }
+            settingsOverlay.classList.remove('active');
+            hideSettingsStatus();
+        }
+
+        function showSettingsStatus(msg, type) {
+            settingsStatus.innerHTML = msg;
+            settingsStatus.className = 'settings-status ' + type;
+        }
+
+        function hideSettingsStatus() {
+            settingsStatus.className = 'settings-status';
+            settingsStatus.textContent = '';
+        }
+
+        function collectSettingsForm() {
+            return {
+                baseUrl: document.getElementById('set-base-url').value.trim(),
+                apiKey: document.getElementById('set-api-key').value.trim(),
+                model: modelSelect.value.trim(),
+                temperature: parseFloat(document.getElementById('set-temperature').value) || 0.7,
+                timeout: parseInt(document.getElementById('set-timeout').value, 10) || 30,
+                systemPrompt: document.getElementById('set-system-prompt').value.trim(),
+            };
+        }
+
+        function saveAISettings() {
+            const cfg = collectSettingsForm();
+            if (!cfg.baseUrl) {
+                showSettingsStatus('<i class="fa-solid fa-triangle-exclamation"></i> Base URL wajib diisi.', 'error');
+                return;
+            }
+            if (!cfg.model) {
+                showSettingsStatus('<i class="fa-solid fa-triangle-exclamation"></i> Pilih model terlebih dahulu (klik Muat jika kosong).', 'error');
+                return;
+            }
+            AISettings.saveAgent(cfg);
+            showSettingsStatus('<i class="fa-solid fa-circle-check"></i> Pengaturan berhasil disimpan.', 'success');
+            closeAISettings(false);
+        }
+
+        function scheduleAutoLoadModels() {
+            clearTimeout(modelsLoadTimer);
+            const baseUrl = document.getElementById('set-base-url').value.trim();
+            const apiKey = document.getElementById('set-api-key').value.trim();
+            if (baseUrl && apiKey) {
+                modelsLoadTimer = setTimeout(loadModels, 600);
+            }
+        }
+
+        async function loadModels() {
+            const baseUrl = document.getElementById('set-base-url').value.trim();
+            const apiKey = document.getElementById('set-api-key').value.trim();
+            if (!baseUrl || !apiKey) {
+                showSettingsStatus('Isi Base URL dan API Key dulu, lalu klik Muat.', 'error');
+                return;
+            }
+
+            AISettings.saveAgent({
+                ...AISettings.getAgent(),
+                baseUrl,
+                apiKey
+            });
+
+            loadModelsBtn.disabled = true;
+            loadModelsBtn.innerHTML = '<span class="spinner-small"></span>';
+            const hint = document.getElementById('model-loading-hint');
+            if (hint) hint.textContent = 'memuat...';
+            showSettingsStatus('<i class="fa-solid fa-spinner fa-spin"></i> Memuat daftar model...', 'success');
+            try {
+                const models = await AIAgent.listModels();
+                populateModelSelect(models, '');
+                showSettingsStatus(`<i class="fa-solid fa-circle-check"></i> ${models.length} model ditemukan. Pilih model lalu Simpan.`, 'success');
+            } catch (err) {
+                console.error('Load models error:', err);
+                showSettingsStatus(`<i class="fa-solid fa-circle-xmark"></i> Gagal memuat model: ${escapeHTML(err.message)}`, 'error');
+            } finally {
+                loadModelsBtn.disabled = false;
+                loadModelsBtn.innerHTML = '<i class="fa-solid fa-rotate"></i> Muat';
+                if (hint) hint.textContent = '';
+            }
+        }
+
+        async function testAgentConnection() {
+            const testBtn = document.getElementById('test-agent-btn');
+            AISettings.saveAgent(collectSettingsForm());
+
+            testBtn.disabled = true;
+            testBtn.innerHTML = '<span class="spinner-small"></span> Menguji...';
+            showSettingsStatus('<i class="fa-solid fa-spinner fa-spin"></i> Menghubungi AI Agent...', 'success');
+            try {
+                const reply = await AIAgent.testConnection();
+                showSettingsStatus(`<i class="fa-solid fa-circle-check"></i> Koneksi berhasil! Respons: "${escapeHTML(reply.substring(0, 80))}"`, 'success');
+            } catch (err) {
+                showSettingsStatus(`<i class="fa-solid fa-circle-xmark"></i> Gagal: ${escapeHTML(err.message)}`, 'error');
+            } finally {
+                testBtn.disabled = false;
+                testBtn.innerHTML = '<i class="fa-solid fa-plug-circle-bolt"></i> Tes Koneksi';
+            }
+        }
+
+        function resetAISettings() {
+            if (!confirm('Reset semua pengaturan AI Agent ke default?')) return;
+            AISettings.reset();
+            openAISettings();
+            showSettingsStatus('<i class="fa-solid fa-circle-check"></i> Pengaturan direset ke default.', 'success');
+        }
+
+        async function fetchNews() {
+            container.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p><i class="fa-solid fa-newspaper"></i> Mengambil berita terbaru…</p>
+                </div>`;
+            countEl.textContent = '— articles';
+            globalTranslated = false;
+            translateAllBtn.classList.remove('active');
+            allArticlesData = [];
+
+            try {
+                const response = await fetch(API_URL);
+                if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                const json = await response.json();
+                if (!json.ok || !Array.isArray(json.data)) throw new Error('Invalid API response structure.');
+
+                const articles = json.data;
+                allArticlesData = articles;
+                container.innerHTML = '';
+
+                if (articles.length === 0) {
+                    container.innerHTML = '<p style="text-align:center;color:var(--text-black-soft);padding:40px;">Tidak ada artikel ditemukan.</p>';
+                    countEl.textContent = '0 artikel';
+                    return;
+                }
+
+                articles.forEach((item, i) => {
+                    const cardHTML = buildArticleCardHTML(item, i, false);
+                    container.insertAdjacentHTML('beforeend', cardHTML);
+                });
+
+                const cards = container.querySelectorAll('.article-card');
+                cards.forEach((card, i) => { card.style.animationDelay = `${i * 0.05}s`; });
+
+                countEl.textContent = `${articles.length} artikel`;
+            } catch (err) {
+                console.error('Fetch error:', err);
+                container.innerHTML = `
+                    <div class="error-box">
+                        <i class="fa-solid fa-triangle-exclamation"></i> Gagal memuat berita: ${escapeHTML(err.message)}<br>
+                        <small>Silakan periksa koneksi Anda dan coba lagi.</small>
+                        <br><br>
+                        <button class="btn btn-primary" onclick="fetchNews()"><i class="fa-solid fa-rotate-right"></i> Coba Lagi</button>
+                    </div>`;
+                countEl.textContent = 'Error';
+            }
+        }
+
+        aiModalOverlay.addEventListener('click', (e) => {
+            if (e.target === aiModalOverlay) closeAIModal();
+        });
+
+        settingsOverlay.addEventListener('click', (e) => {
+            if (e.target === settingsOverlay) closeAISettings();
+        });
+
+        document.getElementById('set-base-url').addEventListener('input', scheduleAutoLoadModels);
+        document.getElementById('set-api-key').addEventListener('input', scheduleAutoLoadModels);
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            if (installBtn) installBtn.style.display = 'inline-flex';
+        });
+
+        if (installBtn) {
+            installBtn.addEventListener('click', async () => {
+                if (!deferredPrompt) return;
+                deferredPrompt.prompt();
+                await deferredPrompt.userChoice;
+                deferredPrompt = null;
+                installBtn.style.display = 'none';
+            });
+        }
+
+        window.addEventListener('appinstalled', () => {
             deferredPrompt = null;
-            installBtn.style.display = 'none';
+            if (installBtn) installBtn.style.display = 'none';
         });
-    }
 
-    window.addEventListener('appinstalled', () => {
-        deferredPrompt = null;
-        if (installBtn) installBtn.style.display = 'none';
-    });
-
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('./service-worker.js')
-                .catch(err => console.warn('SW gagal:', err));
-        });
-    }
-
-    // ===== Theme toggle (gelap/terang) =====
-    const THEME_KEY = 'gnews-theme';
-    const themeToggleBtn = document.getElementById('theme-toggle-btn');
-    const themeColorMeta = document.querySelector('meta[name="theme-color"]');
-
-    function applyTheme(theme) {
-        document.documentElement.setAttribute('data-theme', theme);
-        if (themeToggleBtn) {
-            themeToggleBtn.innerHTML = theme === 'dark'
-                ? '<i class="fa-solid fa-sun"></i>'
-                : '<i class="fa-solid fa-moon"></i>';
-            themeToggleBtn.title = theme === 'dark' ? 'Ganti ke mode terang' : 'Ganti ke mode gelap';
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service-worker.js')
+                    .catch(err => console.warn('SW gagal:', err));
+            });
         }
-        if (themeColorMeta) {
-            themeColorMeta.setAttribute('content', theme === 'dark' ? '#101614' : '#006241');
+
+        // ===== Theme toggle =====
+        const THEME_KEY = 'gnews-theme';
+        const themeToggleBtn = document.getElementById('theme-toggle-btn');
+        const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            if (themeToggleBtn) {
+                themeToggleBtn.innerHTML = theme === 'dark'
+                    ? '<i class="fa-solid fa-sun"></i>'
+                    : '<i class="fa-solid fa-moon"></i>';
+                themeToggleBtn.title = theme === 'dark' ? 'Ganti ke mode terang' : 'Ganti ke mode gelap';
+            }
+            if (themeColorMeta) {
+                themeColorMeta.setAttribute('content', theme === 'dark' ? '#101614' : '#006241');
+            }
+            try {
+                localStorage.setItem(THEME_KEY, theme);
+            } catch (e) { /* private mode */ }
+            if (selectedCalendarDate && calendarEventPanelOpen) {
+                renderEventPanel(selectedCalendarDate);
+            }
         }
-        try {
-            localStorage.setItem(THEME_KEY, theme);
-        } catch (e) { /* private mode */ }
-        // Re-render panel kalender agar warna badge currency menyesuaikan theme
-        if (selectedCalendarDate && calendarEventPanelOpen) {
-            renderEventPanel(selectedCalendarDate);
+
+        function getInitialTheme() {
+            try {
+                const saved = localStorage.getItem(THEME_KEY);
+                if (saved === 'dark' || saved === 'light') return saved;
+            } catch (e) { /* private mode */ }
+            return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
         }
-    }
 
-    function getInitialTheme() {
-        try {
-            const saved = localStorage.getItem(THEME_KEY);
-            if (saved === 'dark' || saved === 'light') return saved;
-        } catch (e) { /* private mode */ }
-        return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    }
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme') || 'light';
+            applyTheme(current === 'dark' ? 'light' : 'dark');
+        }
 
-    function toggleTheme() {
-        const current = document.documentElement.getAttribute('data-theme') || 'light';
-        applyTheme(current === 'dark' ? 'light' : 'dark');
-    }
+        applyTheme(getInitialTheme());
 
-    applyTheme(getInitialTheme());
+        function init() {
+            fetchExchangeRates();   // ← tambahkan ini
+            fetchCalendarData();
+            fetchNews();
+            setInterval(fetchExchangeRates, 10 * 60 * 1000); // refresh tiap 10 menit
+        }
 
-    function init() {
-        fetchCalendarData();
-        fetchNews();
-    }
+        init();
 
-    init();
-
-    setInterval(fetchNews, 5 * 60 * 1000);
-    setInterval(fetchCalendarData, 30 * 60 * 1000);
-</script>
-  <script>
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/service-worker.js')
-            .then(reg => console.log('Service Worker aktif:', reg.scope))
-            .catch(err => console.error('Service Worker gagal:', err));
-    });
-}
-</script>
+        setInterval(fetchNews, 5 * 60 * 1000);
+        setInterval(fetchCalendarData, 30 * 60 * 1000);
+    </script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(reg => console.log('Service Worker aktif:', reg.scope))
+                    .catch(err => console.error('Service Worker gagal:', err));
+            });
+        }
+    </script>
 </body>
 </html>
