@@ -16,6 +16,21 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        // Terapkan theme lebih awal untuk mencegah flash (FOUC)
+        (function () {
+            try {
+                var saved = localStorage.getItem('gnews-theme');
+                if (saved === 'dark' || saved === 'light') {
+                    document.documentElement.setAttribute('data-theme', saved);
+                    return;
+                }
+            } catch (e) {}
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
 
     <style>
 :root {
@@ -73,6 +88,56 @@
     --font-weight-extrabold: 700;
     --transition: all 0.2s ease;
     --button-active-scale: 0.95;
+}
+
+/* ===== Dark Theme (override via data-theme) ===== */
+html[data-theme="dark"] {
+    /* Surfaces — deep warm-green darks referencing House Green */
+    --surface-white: #1c2421;
+    --surface-cool: #171e1c;
+    --surface-warm: #101614;
+    --surface-ceramic: #222b28;
+
+    /* Text — white ladder on dark surfaces */
+    --text-black: rgba(255, 255, 255, 0.87);
+    --text-black-soft: rgba(255, 255, 255, 0.58);
+
+    /* Brand greens — brightened for dark-surface legibility */
+    --starbucks-green: #00a05f;
+    --green-accent: #1e9e6e;
+    --green-light: #16352c;
+    --green-uplift: #2f5a4e;
+
+    /* Gold — warmed for dark status moments */
+    --gold: #d4b06a;
+    --gold-light: #4a3f27;
+    --gold-lightest: #201c12;
+
+    /* Semantic */
+    --danger: #ff5c4d;
+    --input-border: #37423e;
+    --hairline: #2a3531;
+
+    /* Elevation — deeper shadows for dark canvas */
+    --shadow-card: 0px 0px .5px 0px rgba(0, 0, 0, 0.55), 0px 2px 6px 0px rgba(0, 0, 0, 0.45);
+    --shadow-nav: 0 1px 3px rgba(0, 0, 0, 0.5), 0 2px 2px rgba(0, 0, 0, 0.4), 0 0 2px rgba(0, 0, 0, 0.4);
+}
+
+/* Smooth theme transition on major surfaces */
+body,
+.header,
+.article-card,
+.ai-modal,
+.settings-modal,
+.calendar-event-panel,
+.comment-item,
+.btn,
+.translate-btn,
+.calendar-tab,
+.settings-field input,
+.settings-field textarea,
+.settings-field select {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 * {
@@ -1137,6 +1202,9 @@ body {
             <button class="btn btn-ghost" id="ai-agent-btn" onclick="analyzeWithAgent()" title="Analisis dengan AI Agent (custom API)">
                 <i class="fa-solid fa-robot"></i> AI Agent
             </button>
+            <button class="btn btn-icon btn-ghost" id="theme-toggle-btn" onclick="toggleTheme()" title="Ganti mode gelap/terang">
+                <i class="fa-solid fa-moon"></i>
+            </button>
             <button class="btn btn-icon btn-ghost" onclick="openAISettings()" title="Pengaturan AI Agent">
                 <i class="fa-solid fa-gear"></i>
             </button>
@@ -1195,7 +1263,7 @@ body {
                 <input type="password" id="set-api-key" placeholder="sk-... / thk_live_...">
             </div>
             <div class="settings-field">
-                <label for="set-model">Model <span id="model-loading-hint" style="color:var(--text-tertiary);font-weight:400;"></span></label>
+                <label for="set-model">Model <span id="model-loading-hint" style="color:var(--text-black-soft);font-weight:400;"></span></label>
                 <div style="display:flex;gap:8px;">
                     <select id="set-model" style="flex:1;">
                         <option value="">— pilih model —</option>
@@ -1261,15 +1329,42 @@ body {
     let calendarEventPanelOpen = false;
 
     const currencyColorMap = {
-        'USD': { bg: 'rgba(0,117,74,0.14)', text: '#00754A', border: 'rgba(0,117,74,0.35)' },
-        'EUR': { bg: 'rgba(0,98,65,0.14)', text: '#006241', border: 'rgba(0,98,65,0.35)' },
-        'JPY': { bg: 'rgba(200,32,20,0.12)', text: '#c82014', border: 'rgba(200,32,20,0.3)' },
-        'GBP': { bg: 'rgba(43,81,72,0.14)', text: '#2b5148', border: 'rgba(43,81,72,0.35)' },
-        'AUD': { bg: 'rgba(203,162,88,0.16)', text: '#a8863f', border: 'rgba(203,162,88,0.45)' },
-        'CAD': { bg: 'rgba(200,32,20,0.10)', text: '#a34a3f', border: 'rgba(200,32,20,0.25)' },
-        'CHF': { bg: 'rgba(0,117,74,0.10)', text: '#3a6b5b', border: 'rgba(0,117,74,0.25)' },
-        'NZD': { bg: 'rgba(43,81,72,0.12)', text: '#1E3932', border: 'rgba(43,81,72,0.3)' },
-        'CNY': { bg: 'rgba(223,196,157,0.18)', text: '#b3915c', border: 'rgba(203,162,88,0.4)' },
+        'USD': {
+            light: { bg: 'rgba(0,117,74,0.14)', text: '#00754A', border: 'rgba(0,117,74,0.35)' },
+            dark: { bg: 'rgba(30,158,110,0.18)', text: '#4cd19a', border: 'rgba(30,158,110,0.45)' }
+        },
+        'EUR': {
+            light: { bg: 'rgba(0,98,65,0.14)', text: '#006241', border: 'rgba(0,98,65,0.35)' },
+            dark: { bg: 'rgba(0,160,95,0.18)', text: '#35d98f', border: 'rgba(0,160,95,0.45)' }
+        },
+        'JPY': {
+            light: { bg: 'rgba(200,32,20,0.12)', text: '#c82014', border: 'rgba(200,32,20,0.3)' },
+            dark: { bg: 'rgba(255,92,77,0.18)', text: '#ff8a80', border: 'rgba(255,92,77,0.45)' }
+        },
+        'GBP': {
+            light: { bg: 'rgba(43,81,72,0.14)', text: '#2b5148', border: 'rgba(43,81,72,0.35)' },
+            dark: { bg: 'rgba(47,90,78,0.2)', text: '#7db8a5', border: 'rgba(47,90,78,0.5)' }
+        },
+        'AUD': {
+            light: { bg: 'rgba(203,162,88,0.16)', text: '#a8863f', border: 'rgba(203,162,88,0.45)' },
+            dark: { bg: 'rgba(212,176,106,0.18)', text: '#e2c080', border: 'rgba(212,176,106,0.45)' }
+        },
+        'CAD': {
+            light: { bg: 'rgba(200,32,20,0.10)', text: '#a34a3f', border: 'rgba(200,32,20,0.25)' },
+            dark: { bg: 'rgba(255,92,77,0.14)', text: '#f0968a', border: 'rgba(255,92,77,0.35)' }
+        },
+        'CHF': {
+            light: { bg: 'rgba(0,117,74,0.10)', text: '#3a6b5b', border: 'rgba(0,117,74,0.25)' },
+            dark: { bg: 'rgba(30,158,110,0.14)', text: '#6fc7a4', border: 'rgba(30,158,110,0.35)' }
+        },
+        'NZD': {
+            light: { bg: 'rgba(43,81,72,0.12)', text: '#1E3932', border: 'rgba(43,81,72,0.3)' },
+            dark: { bg: 'rgba(47,90,78,0.16)', text: '#8fc4b0', border: 'rgba(47,90,78,0.4)' }
+        },
+        'CNY': {
+            light: { bg: 'rgba(223,196,157,0.18)', text: '#b3915c', border: 'rgba(203,162,88,0.4)' },
+            dark: { bg: 'rgba(212,176,106,0.16)', text: '#dcc08a', border: 'rgba(212,176,106,0.4)' }
+        },
     };
 
     const importantEventKeywords = [
@@ -1286,10 +1381,19 @@ body {
         );
     }
 
+    function isDarkTheme() {
+        return document.documentElement.getAttribute('data-theme') === 'dark';
+    }
+
     function getCurrencyStyle(currency) {
         const upper = (currency || '').toUpperCase().trim();
-        if (currencyColorMap[upper]) return currencyColorMap[upper];
-        return { bg: 'rgba(0,0,0,0.06)', text: 'rgba(0,0,0,0.58)', border: 'rgba(0,0,0,0.15)' };
+        if (currencyColorMap[upper]) {
+            const variant = isDarkTheme() ? currencyColorMap[upper].dark : currencyColorMap[upper].light;
+            return variant;
+        }
+        return isDarkTheme()
+            ? { bg: 'rgba(255,255,255,0.08)', text: 'rgba(255,255,255,0.58)', border: 'rgba(255,255,255,0.18)' }
+            : { bg: 'rgba(0,0,0,0.06)', text: 'rgba(0,0,0,0.58)', border: 'rgba(0,0,0,0.15)' };
     }
 
     function parseCalendarData(rawData) {
@@ -1531,7 +1635,7 @@ body {
         } catch (err) {
             console.error('Calendar fetch error:', err);
             if (tabsContainer) {
-                tabsContainer.innerHTML = '<span style="color:#c82014;font-size:11px;padding:12px;"><i class="fa-solid fa-triangle-exclamation"></i> Gagal memuat kalender. <button onclick="fetchCalendarData()" style="color:#00754A;background:none;border:none;cursor:pointer;text-decoration:underline;">Coba lagi</button></span>';
+                tabsContainer.innerHTML = '<span style="color:var(--danger);font-size:11px;padding:12px;"><i class="fa-solid fa-triangle-exclamation"></i> Gagal memuat kalender. <button onclick="fetchCalendarData()" style="color:var(--green-accent);background:none;border:none;cursor:pointer;text-decoration:underline;">Coba lagi</button></span>';
             }
         }
     }
@@ -1628,7 +1732,7 @@ body {
             commentsHTML = `
                 <div class="comments-section" id="comments-${index}">
                     <div class="comments-label"><i class="fa-solid fa-comments"></i> Comments</div>
-                    <p class="no-comments" style="color: rgba(0,0,0,0.58);">No comment preview available.</p>
+                    <p class="no-comments" style="color: var(--text-black-soft);">No comment preview available.</p>
                 </div>`;
         }
 
@@ -1855,7 +1959,7 @@ body {
             aiModalContent.innerHTML = marked.parse(markdown);
         } catch (err) {
             console.error('AI analysis error:', err);
-            aiModalContent.innerHTML = `<p style="color:#c82014;">Gagal mendapatkan analisis AI: ${escapeHTML(err.message)}</p>`;
+            aiModalContent.innerHTML = `<p style="color:var(--danger);">Gagal mendapatkan analisis AI: ${escapeHTML(err.message)}</p>`;
         } finally {
             aiAnalysisInProgress = false;
             aiBtn.disabled = false;
@@ -1890,7 +1994,7 @@ body {
             aiModalContent.innerHTML = marked.parse(markdown);
         } catch (err) {
             console.error('AI Agent error:', err);
-            aiModalContent.innerHTML = `<p style="color:#c82014;">AI Agent gagal: ${escapeHTML(err.message)}</p>`;
+            aiModalContent.innerHTML = `<p style="color:var(--danger);">AI Agent gagal: ${escapeHTML(err.message)}</p>`;
         } finally {
             aiAnalysisInProgress = false;
             aiAgentBtn.disabled = false;
@@ -2074,7 +2178,7 @@ body {
             container.innerHTML = '';
 
             if (articles.length === 0) {
-                container.innerHTML = '<p style="text-align:center;color:rgba(0,0,0,0.58);padding:40px;">Tidak ada artikel ditemukan.</p>';
+                container.innerHTML = '<p style="text-align:center;color:var(--text-black-soft);padding:40px;">Tidak ada artikel ditemukan.</p>';
                 countEl.textContent = '0 artikel';
                 return;
             }
@@ -2139,6 +2243,46 @@ body {
                 .catch(err => console.warn('SW gagal:', err));
         });
     }
+
+    // ===== Theme toggle (gelap/terang) =====
+    const THEME_KEY = 'gnews-theme';
+    const themeToggleBtn = document.getElementById('theme-toggle-btn');
+    const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+
+    function applyTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        if (themeToggleBtn) {
+            themeToggleBtn.innerHTML = theme === 'dark'
+                ? '<i class="fa-solid fa-sun"></i>'
+                : '<i class="fa-solid fa-moon"></i>';
+            themeToggleBtn.title = theme === 'dark' ? 'Ganti ke mode terang' : 'Ganti ke mode gelap';
+        }
+        if (themeColorMeta) {
+            themeColorMeta.setAttribute('content', theme === 'dark' ? '#101614' : '#006241');
+        }
+        try {
+            localStorage.setItem(THEME_KEY, theme);
+        } catch (e) { /* private mode */ }
+        // Re-render panel kalender agar warna badge currency menyesuaikan theme
+        if (selectedCalendarDate && calendarEventPanelOpen) {
+            renderEventPanel(selectedCalendarDate);
+        }
+    }
+
+    function getInitialTheme() {
+        try {
+            const saved = localStorage.getItem(THEME_KEY);
+            if (saved === 'dark' || saved === 'light') return saved;
+        } catch (e) { /* private mode */ }
+        return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+
+    function toggleTheme() {
+        const current = document.documentElement.getAttribute('data-theme') || 'light';
+        applyTheme(current === 'dark' ? 'light' : 'dark');
+    }
+
+    applyTheme(getInitialTheme());
 
     function init() {
         fetchCalendarData();
