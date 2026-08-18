@@ -700,7 +700,7 @@
     <!-- Forex Session Tracker -->
     <div class="forex-session-tracker" id="forex-session-tracker">
         <div class="session-tracker-inner" id="session-tracker-inner">
-            <span class="session-tracker-title"><i class="fa-solid fa-globe"></i> Sesi Pasar</span>
+            <span class="session-tracker-title"><i class="fa-solid fa-globe"></i> Sesi Pasar (GMT)</span>
             <!-- Sesi akan dimuat di sini -->
         </div>
     </div>
@@ -1006,10 +1006,10 @@
                 }).join('');
 
                 // Tambahkan ke tracker, pertahankan judul di depan
-                trackerInner.innerHTML = '<span class="session-tracker-title"><i class="fa-solid fa-globe"></i> Sesi Pasar</span>' + sessionHTML;
+                trackerInner.innerHTML = '<span class="session-tracker-title"><i class="fa-solid fa-globe"></i> Sesi Pasar (GMT)</span>' + sessionHTML;
             } catch (err) {
                 console.error('Gagal memuat data sesi:', err);
-                trackerInner.innerHTML = '<span class="session-tracker-title"><i class="fa-solid fa-globe"></i> Sesi Pasar</span> <span style="color:var(--danger);font-size:11px;"><i class="fa-solid fa-triangle-exclamation"></i> Gagal memuat sesi.</span>';
+                trackerInner.innerHTML = '<span class="session-tracker-title"><i class="fa-solid fa-globe"></i> Sesi Pasar (GMT)</span> <span style="color:var(--danger);font-size:11px;"><i class="fa-solid fa-triangle-exclamation"></i> Gagal memuat sesi.</span>';
             }
         }
 
@@ -1080,6 +1080,40 @@
             );
         }
 
+        // ===== Fungsi untuk menukar AM/PM dan mengurangi 1 jam =====
+        // Dari aslinya: PM → AM, AM → PM, lalu kurangi 1 jam
+        function transformCalendarTime(timeStr) {
+            if (!timeStr || timeStr === 'All Day' || timeStr === 'Tentative') return timeStr;
+            // Cocokkan pola seperti "8:30am", "8:30pm", "8:30 AM", "8:30 PM"
+            const match = timeStr.match(/^(\d{1,2}):(\d{2})\s*(am|pm)$/i);
+            if (!match) return timeStr; // jika tidak cocok, kembalikan apa adanya
+
+            let hour = parseInt(match[1], 10);
+            let minute = match[2];
+            let ampm = match[3].toLowerCase();
+
+            // Konversi ke 24 jam
+            let hour24;
+            if (ampm === 'am') {
+                hour24 = (hour === 12) ? 0 : hour;
+            } else { // pm
+                hour24 = (hour === 12) ? 12 : hour + 12;
+            }
+
+            // Tukar AM/PM dan kurangi 1 jam:
+            // Penukaran AM/PM = (hour24 + 12) % 24
+            // Kurangi 1 jam = -1
+            // Gabungan: (hour24 + 12 - 1 + 24) % 24 = (hour24 + 11) % 24
+            const hour24Result = (hour24 + 11) % 24;
+
+            // Konversi kembali ke 12 jam
+            let hour12 = hour24Result % 12;
+            if (hour12 === 0) hour12 = 12;
+            const ampmResult = hour24Result < 12 ? 'am' : 'pm';
+
+            return `${hour12}:${minute} ${ampmResult}`;
+        }
+
         function isDarkTheme() {
             return document.documentElement.getAttribute('data-theme') === 'dark';
         }
@@ -1118,11 +1152,11 @@
 
                 if (dateRegex.test(label) && v1 && timeRegex.test(v1)) {
                     currentDate = label;
-                    currentTime = v1;
+                    currentTime = v1; // simpan original
                     if (!calendar[currentDate]) calendar[currentDate] = [];
                     const eventName = v3 || v4 || '';
                     calendar[currentDate].push({
-                        time: v1,
+                        time: transformCalendarTime(v1), // <-- DIUBAH: tukar AM/PM & kurangi 1 jam
                         currency: v2 || '',
                         event: eventName,
                         important: isImportantEvent(eventName),
@@ -1133,7 +1167,7 @@
                 if (label === '' && currentDate) {
                     const eventName = v3 || v4 || '';
                     calendar[currentDate].push({
-                        time: currentTime || '',
+                        time: transformCalendarTime(currentTime) || '', // <-- DIUBAH: tukar & kurangi
                         currency: v1 || '',
                         event: eventName,
                         important: isImportantEvent(eventName),
@@ -1142,10 +1176,10 @@
                 }
 
                 if ((timeRegex.test(label) || label === 'All Day' || label === 'Tentative') && currentDate) {
-                    currentTime = label;
+                    currentTime = label; // simpan original
                     const eventName = v3 || v4 || '';
                     calendar[currentDate].push({
-                        time: label,
+                        time: transformCalendarTime(label), // <-- DIUBAH: tukar & kurangi
                         currency: v1 || '',
                         event: eventName,
                         important: isImportantEvent(eventName),
